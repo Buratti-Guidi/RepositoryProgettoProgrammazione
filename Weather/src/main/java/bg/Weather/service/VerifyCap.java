@@ -3,7 +3,6 @@
  */
 package bg.Weather.service;
 
-import java.util.HashSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,27 +11,31 @@ import org.json.simple.JSONObject;
  * @author Luca
  *
  */
-public class JSONCapitalParser {
+public class VerifyCap {
 
-	private HashSet<String> capitals = new HashSet<String>();//vettore di capitali
+	private DownloadJSON pippo;
 	
-	
-	public void parseJSON(JSONArray ja) {
+	public boolean verify(String cap) {
+		
+		pippo = new DownloadJSON();
+		pippo.caricaFileArr("capitali.json");
 		
 		try {	
 		
-			for(Object o : ja) {
+			for(Object o : pippo.getArray()) {
 				
 				JSONObject citta = (JSONObject) o;
 				String app = (String)citta.get("capital");
 				
-				capitals.add(app);
+				if(app.equals(cap)) {
+					return true;
+				}
 				
 			}
 		}catch(Exception e) {//non so che tipo di eccezione puo generare
 			System.out.println("Errore sul parsing");
 		}
-
+		return false;
 	}
 
 }
