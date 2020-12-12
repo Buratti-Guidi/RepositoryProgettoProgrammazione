@@ -1,6 +1,7 @@
 package bg.Weather.service;
 
 import bg.Weather.model.City;
+import bg.Weather.model.CityData;
 
 import java.time.Instant;
 import java.util.Date;
@@ -9,12 +10,13 @@ import java.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class JSONWeatherParser implements JSONParser{
+public class JSONWeatherParser{
 	
-	private Vector<City> cities = new Vector<City>();
+	private Vector<CityData> cities = new Vector<CityData>();
 	
 	//Richiede come parametro un file json contenente le informazioni riguardanti una lista di città,
 	//lo "parsa" e assegna i valori di ogni singola città ad un oggetto City
+
 	public void parseJSON(JSONObject jo) {
 		JSONArray citiesList = new JSONArray();
 		citiesList = (JSONArray) jo.get("list");
@@ -22,7 +24,7 @@ public class JSONWeatherParser implements JSONParser{
 		for(Object o : citiesList) {
 			
 			JSONObject city = (JSONObject) o;
-			City citta = new City();
+			CityData citta = new CityData();
 			
 			citta.setId(((Number) city.get("id")).longValue());
 			citta.setNome((String) city.get("name"));
@@ -36,6 +38,11 @@ public class JSONWeatherParser implements JSONParser{
 			citta.setLongitudine(((Number) coord.get("Lon")).doubleValue());
 			citta.setLatitudine(((Number) coord.get("Lat")).doubleValue());
 			
+			JSONObject wind = new JSONObject();
+			
+			wind = (JSONObject) city.get("wind");
+			citta.setWindSpeed(((Number) wind.get("speed")).doubleValue());
+			
 			JSONObject temperatura = new JSONObject();
 			
 			temperatura = (JSONObject) city.get("main");
@@ -46,11 +53,4 @@ public class JSONWeatherParser implements JSONParser{
 		}
 	}
 	
-	public void stampaTutto() {
-		System.out.println(cities);
-		
-		for(City c : cities) {
-			System.out.println(c);
-		}
-	}
 }
