@@ -1,18 +1,17 @@
 package bg.Weather.service;
 
-import bg.Weather.model.City;
 import bg.Weather.model.CityData;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.Vector;
+import java.util.HashSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONWeatherParser{
 	
-	private Vector<CityData> cities = new Vector<CityData>();
+	private HashSet<CityData> cities = new HashSet<CityData>(); //ANDRA' NEL DATABASE
 	
 	//Richiede come parametro un file json contenente le informazioni riguardanti una lista di città,
 	//lo "parsa" e assegna i valori di ogni singola città ad un oggetto City
