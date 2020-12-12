@@ -16,6 +16,8 @@ public class Box {
 	private double lunghezzaBox;
 	private double larghezzaBox;
 	
+	final double km_to_deg = 0.009; //Costante per convertire una grandezza da km in gradi
+	
 	public double getLat_up() {
 		return lat_up;
 	}
@@ -62,13 +64,13 @@ public class Box {
 		if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00)
 			return true;
 		
-		return false;
+		return false;      //DA SOSTITUIRE CON THROW EXCEPTION
 	}
 	
 	public void generaBox() {
 		
-		this.lungh_in_gradi = this.lunghezzaBox * 0.5 * 0.009; //Converto la semi-lunghezza del box in gradi decimali
-		this.largh_in_gradi = this.larghezzaBox * 0.5 * 0.009; //Converto la semi-larghezza del box in gradi decimali
+		this.lungh_in_gradi = this.lunghezzaBox * 0.5 * km_to_deg; //Converto la semi-lunghezza del box in gradi decimali
+		this.largh_in_gradi = this.larghezzaBox * 0.5 * km_to_deg; //Converto la semi-larghezza del box in gradi decimali
 		
 		this.lat_up = lat_centro + lungh_in_gradi;
 		this.lat_down = lat_centro - lungh_in_gradi;
