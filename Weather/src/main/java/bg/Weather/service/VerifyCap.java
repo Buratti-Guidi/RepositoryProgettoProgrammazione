@@ -3,8 +3,6 @@
  */
 package bg.Weather.service;
 
-
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -15,6 +13,7 @@ public class VerifyCap {
 
 	private DownloadJSON pippo;
 	
+	//metodo che dato il nome di una citta verifica che sia quello di una capitale
 	public boolean verify(String cap) {
 		
 		pippo = new DownloadJSON();
