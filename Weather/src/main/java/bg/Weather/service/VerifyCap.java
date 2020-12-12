@@ -11,17 +11,17 @@ import org.json.simple.JSONObject;
  */
 public class VerifyCap {
 
-	private DownloadJSON pippo;
+	private DownloadJSON fileJSON;
 	
 	//metodo che dato il nome di una citta verifica che sia quello di una capitale
 	public boolean verify(String cap) {
 		
-		pippo = new DownloadJSON();
-		pippo.caricaFileArr("capitali.json");
+		fileJSON = new DownloadJSON();
+		fileJSON.caricaFileArr("capitali.json");
 		
 		try {	
 		
-			for(Object o : pippo.getArray()) {
+			for(Object o : fileJSON.getArray()) {
 				
 				JSONObject citta = (JSONObject) o;
 				String app = (String)citta.get("capital");
@@ -34,6 +34,7 @@ public class VerifyCap {
 		}catch(Exception e) {//non so che tipo di eccezione puo generare
 			System.out.println("Errore sul parsing");
 		}
+
 		return false;
 	}
 
