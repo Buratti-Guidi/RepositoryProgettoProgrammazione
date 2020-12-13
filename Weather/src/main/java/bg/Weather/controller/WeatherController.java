@@ -1,5 +1,6 @@
 package bg.Weather.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,21 +12,20 @@ import bg.Weather.model.Box;
 import bg.Weather.model.UserBox;
 import bg.Weather.service.BoxCalculating;
 import bg.Weather.service.VerifyCap;
+import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
 public class WeatherController {
 
+	@Autowired
+	WeatherServiceImpl weatherService;
+	
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> inizialization(@PathVariable("name") String nameCap, @RequestBody UserBox ub) {
 		
-		VerifyCap verifica = new VerifyCap();
-		if(!verifica.verify(nameCap))
-			return new ResponseEntity<>("The city is not a capital", HttpStatus.BAD_REQUEST);
+		weatherService.initialize(nameCap, ub);
 		
-		Box b = new Box();
-		BoxCalculating bc = new BoxCalculating();
-		bc.setLenght(ub.getLenght());
-		bc.setWidth(ub.getWidth());
+		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!!
 		
 	}
 }

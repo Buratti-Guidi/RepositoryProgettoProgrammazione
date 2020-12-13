@@ -34,7 +34,6 @@ public class VerifyCap {
 		}catch(Exception e) {//non so che tipo di eccezione puo generare
 			System.out.println("Errore sul parsing");
 		}
-
 		return false;
 	}
 
