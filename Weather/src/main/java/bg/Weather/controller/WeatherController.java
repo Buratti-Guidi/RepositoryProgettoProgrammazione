@@ -21,11 +21,10 @@ public class WeatherController {
 	WeatherServiceImpl weatherService;
 	
 	@PostMapping(value = "/capital/{name}")
-	public ResponseEntity<Object> inizialization(@PathVariable("name") String nameCap, @RequestBody UserBox ub) {
+	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody UserBox ub) {
 		
 		weatherService.initialize(nameCap, ub);
 		
-
 		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!!
 
 	}

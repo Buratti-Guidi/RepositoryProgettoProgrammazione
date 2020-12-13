@@ -29,12 +29,19 @@ public class WeatherServiceImpl implements WeatherService {
 		if(!verifica.verify(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
 		
+		capital.setNome(cap);
+		
+		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all attributo capital
+		
 		Box b = new Box();
 		BoxCalculating bc = new BoxCalculating();
-		//bc.setLenght(ub.getLenght());  IN ATTESA DELLE COORDINATE DELLA CAPITALE(CENTRO DEL BOX)
+		
+		//coordinate della capitale capital.getLatitudine e capital.getLongitudine
+		
+		//bc.setLenght(ub.getLenght()); 
 		//bc.setWidth(ub.getWidth());
 		if(!bc.verifyBox())
-			return new ResponseEntity<>("The box is too big", HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The box is too big");
 		b = bc.generaBox();
 	}
 }
