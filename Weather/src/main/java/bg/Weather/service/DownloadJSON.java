@@ -42,7 +42,7 @@ public class DownloadJSON {
 	}
 	
 	//Legge da chiamata API un oggetto
-	public void chiamataAPIobj(String url) {
+	public void chiamataAPIObj(String url) {
 		try {
 			URLConnection openConnection = new URL(url).openConnection();
 			InputStream in = openConnection.getInputStream();
@@ -71,7 +71,7 @@ public class DownloadJSON {
 	}
 	
 	//Legge da una chiamata API un array
-	public void chiamataAPIarr(String url) {
+	public void chiamataAPIArr(String url) {
 		try {
 			URLConnection openConnection = new URL(url).openConnection();
 			InputStream in = openConnection.getInputStream();

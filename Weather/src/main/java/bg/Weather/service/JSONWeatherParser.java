@@ -13,10 +13,11 @@ public class JSONWeatherParser{
 	
 	private HashSet<CityData> cities = new HashSet<CityData>(); //ANDRA' NEL DATABASE
 	
+	private double[] coordinates = new double[2]; //Alla posizione [0] contiene la latitudine della città, alla [1] la longitudine
+	
 	//Richiede come parametro un file json contenente le informazioni riguardanti una lista di città,
 	//lo "parsa" e assegna i valori di ogni singola città ad un oggetto City
-
-	public void parseJSON(JSONObject jo) {
+	public void parseBox(JSONObject jo) {
 		JSONArray citiesList = new JSONArray();
 		citiesList = (JSONArray) jo.get("list");
 		
@@ -50,6 +51,21 @@ public class JSONWeatherParser{
 			
 			this.cities.add(citta);
 		}
+	}
+	
+	public void parseCity(JSONObject jo) {
+		JSONObject coord = new JSONObject();
+		coord = (JSONObject) jo.get("coord");
+		this.coordinates[1] = ((Number) coord.get("lon")).doubleValue();
+		this.coordinates[0] = ((Number) coord.get("lat")).doubleValue();
+	}
+	
+	public HashSet<CityData> getCities() {
+		return this.cities;
+	}
+	
+	public double[] getCoordinates() {
+		return this.coordinates;
 	}
 	
 }

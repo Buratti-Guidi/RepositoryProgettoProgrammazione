@@ -25,7 +25,8 @@ public class WeatherController {
 		
 		weatherService.initialize(nameCap, ub);
 		
+
 		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!!
-		
+
 	}
 }
