@@ -26,6 +26,11 @@ public class WeatherController {
 		BoxCalculating bc = new BoxCalculating();
 		bc.setLenght(ub.getLenght());
 		bc.setWidth(ub.getWidth());
+		//bc.setLat_centro(lat_centro);
+		//bc.setLong_centro(long_centro);
+		if(!bc.verifyBox())
+			return new ResponseEntity<>("The box is too big", HttpStatus.BAD_REQUEST);
 		
+		b = bc.generaBox();
 	}
 }

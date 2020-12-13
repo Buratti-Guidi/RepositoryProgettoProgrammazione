@@ -13,12 +13,6 @@ public class BoxCalculating extends UserBox{
 
 	final double km_to_deg = 0.009; //Costante per convertire una grandezza da km in gradi
 	
-	//Il costruttore prende in ingresso i valori della larghezza e della lunghezza (in km) del box rettangolare
-	public BoxCalculating(double lat_centro, double long_centro) {
-		this.lat_centro = lat_centro;
-		this.long_centro = long_centro;
-	}
-	
 	//Metodo che controlla se la grandezza del box è accettabile dall'API
 		public boolean verifyBox() {
 			if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00)
