@@ -1,14 +1,12 @@
 package bg.Weather.service;
 
 import bg.Weather.model.Box;
+import bg.Weather.model.UserBox;
 
-public class BoxCalculating {
+public class BoxCalculating extends UserBox{
 
 	private double lat_centro;
 	private double long_centro;
-	
-	private double lunghezzaBox;
-	private double larghezzaBox;
 	
 	private double lungh_in_gradi;
 	private double largh_in_gradi;
@@ -16,9 +14,7 @@ public class BoxCalculating {
 	final double km_to_deg = 0.009; //Costante per convertire una grandezza da km in gradi
 	
 	//Il costruttore prende in ingresso i valori della larghezza e della lunghezza (in km) del box rettangolare
-	public BoxCalculating(double lunghezzaBox, double larghezzaBox, double lat_centro, double long_centro) {
-		this.lunghezzaBox = lunghezzaBox;
-		this.larghezzaBox = larghezzaBox;
+	public BoxCalculating(double lat_centro, double long_centro) {
 		this.lat_centro = lat_centro;
 		this.long_centro = long_centro;
 	}
@@ -35,14 +31,46 @@ public class BoxCalculating {
 			
 			Box box = new Box();
 			
-			this.lungh_in_gradi = this.lunghezzaBox * 0.5 * km_to_deg; //Converto la semi-lunghezza del box in gradi decimali
-			this.largh_in_gradi = this.larghezzaBox * 0.5 * km_to_deg; //Converto la semi-larghezza del box in gradi decimali
+			this.setLungh_in_gradi(super.getLenght() * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
+			this.setLargh_in_gradi(super.getWidth() * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
 			
-			box.setLatUp(lat_centro + lungh_in_gradi);
-			box.setLatDown(lat_centro - lungh_in_gradi);
-			box.setLonDx(long_centro + largh_in_gradi);
-			box.setLonSx(long_centro - largh_in_gradi);
+			box.setLatUp(this.getLat_centro() + this.getLungh_in_gradi());
+			box.setLatDown(this.getLat_centro() - this.getLungh_in_gradi());
+			box.setLonDx(this.getLong_centro() + this.getLargh_in_gradi());
+			box.setLonSx(this.getLong_centro() - this.getLargh_in_gradi());
 			
 			return box;
+		}
+		
+		public double getLat_centro() {
+			return lat_centro;
+		}
+
+		public void setLat_centro(double lat_centro) {
+			this.lat_centro = lat_centro;
+		}
+
+		public double getLong_centro() {
+			return long_centro;
+		}
+
+		public void setLong_centro(double long_centro) {
+			this.long_centro = long_centro;
+		}
+
+		public double getLungh_in_gradi() {
+			return lungh_in_gradi;
+		}
+
+		public void setLungh_in_gradi(double lungh_in_gradi) {
+			this.lungh_in_gradi = lungh_in_gradi;
+		}
+
+		public double getLargh_in_gradi() {
+			return largh_in_gradi;
+		}
+
+		public void setLargh_in_gradi(double largh_in_gradi) {
+			this.largh_in_gradi = largh_in_gradi;
 		}
 }
