@@ -1,17 +1,17 @@
 package bg.Weather.service;
 
 import bg.Weather.model.CityData;
+import bg.Weather.model.HourCities;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONWeatherParser{
 	
-	private HashSet<CityData> cities = new HashSet<CityData>(); //ANDRA' NEL DATABASE
+	private HourCities cities = new HourCities(); //ANDRA' NEL DATABASE
 	
 	//private double[] coordinates = new double[2]; //Alla posizione [0] contiene la latitudine della città, alla [1] la longitudine
 	
@@ -49,7 +49,7 @@ public class JSONWeatherParser{
 			citta.setTemperatura(((Number) temperatura.get("temp")).doubleValue());
 			citta.setTemp_feels_like(((Number) temperatura.get("feels_like")).doubleValue());
 			
-			this.cities.add(citta);
+			this.cities.addCity(citta);
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class JSONWeatherParser{
 		//this.coordinates[0] = ((Number) coord.get("lat")).doubleValue();
 	}
 	
-	public HashSet<CityData> getCities() {
+	public HourCities getCities() {
 		return this.cities;
 	}
 	
