@@ -1,6 +1,6 @@
 package bg.Weather.model;
 
-public abstract class City {
+public class City {
 
 	private String name;
 	private long id;
@@ -38,9 +38,5 @@ public abstract class City {
 	public void setLongitudine(double lon) {
 		this.lon = lon;
 	}
-	
-	public abstract double getTemperatura();
-	
-	public abstract void setTemperatura(double temp);
 	
 }
