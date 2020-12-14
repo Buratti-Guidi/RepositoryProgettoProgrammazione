@@ -58,8 +58,11 @@ public class JSONWeatherParser{
 		JSONObject coord = new JSONObject();
 		coord = (JSONObject) jo.get("coord");
 		
+		long id = ((Number) jo.get("id")).longValue();
+
 		citta.setLongitudine(((Number) coord.get("lon")).doubleValue());
 		citta.setLatitudine(((Number) coord.get("lat")).doubleValue());
+		citta.setId(id);
 		//this.coordinates[1] = ((Number) coord.get("lon")).doubleValue();
 		//this.coordinates[0] = ((Number) coord.get("lat")).doubleValue();
 	}

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bg.Weather.model.Box;
 import bg.Weather.model.UserBox;
 import bg.Weather.service.BoxCalculating;
-import bg.Weather.service.VerifyCap;
+import bg.Weather.service.CityInfo;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController

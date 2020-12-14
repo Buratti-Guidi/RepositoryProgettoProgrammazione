@@ -22,11 +22,12 @@ public class WeatherServiceImpl implements WeatherService {
 	//Database dataset = new...
 	CityData capital = new CityData();
 	
+	@Override
 	public void initialize(String cap,UserBox box) {
 		
-		VerifyCap verifica = new VerifyCap();
+		CityInfo verifica = new CityInfo();
 		
-		if(!verifica.verify(cap))
+		if(!verifica.verifyCap(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
 		
 		capital.setNome(cap);
@@ -36,7 +37,7 @@ public class WeatherServiceImpl implements WeatherService {
 		Box b = new Box();
 		BoxCalculating bc = new BoxCalculating();
 		
-		//coordinate della capitale capital.getLatitudine e capital.getLongitudine
+		//coordinate della capitale capital.getLatitudine() e capital.getLongitudine()
 		
 		//bc.setLenght(ub.getLenght()); 
 		//bc.setWidth(ub.getWidth());
