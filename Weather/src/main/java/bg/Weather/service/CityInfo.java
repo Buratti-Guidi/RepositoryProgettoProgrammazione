@@ -9,8 +9,8 @@ import bg.Weather.model.CityData;
 import bg.Weather.util.APIKey;
 
 /**
- * @author Luca
- *
+ * @author Luca Guidi
+ * @author Christopher Buratti
  */
 public class CityInfo {
 
@@ -28,8 +28,8 @@ public class CityInfo {
 				
 				JSONObject citta = (JSONObject) o;
 				String app = (String)citta.get("capital");
-				
-				if(app.equals(cap)) {
+				app = app.toUpperCase();				//Mettendo le stringhe tutte in maiuscolo, risolviamo i problemi per cui una capitale non veniva riconosciuta
+				if(app.equals(cap.toUpperCase())) {		//a causa di una lettera maiuscola/minuscola errata
 					return true;
 				}
 				
@@ -46,7 +46,7 @@ public class CityInfo {
 		APIKey apikey = new APIKey();
 		
 		fileJSON = new DownloadJSON();
-		fileJSON.chiamataAPIObj("api.openweathermap.org/data/2.5/weather?q="+ citta.getNome() +"&appid=" + apikey.getAPIKey());
+		fileJSON.chiamataAPIObj("http://api.openweathermap.org/data/2.5/weather?q="+ citta.getNome() +"&appid=" + apikey.getAPIKey());
 		JSONObject jo = fileJSON.getObject();
 		JSONWeatherParser pars = new JSONWeatherParser();
 		pars.parseCity(jo, citta);

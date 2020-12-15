@@ -9,15 +9,18 @@ import java.util.Date;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+/**
+ * Classe che contiene i metodi per "parsare" i file JSON in risposta alle chiamate API
+ * 
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class JSONWeatherParser{
-	
-	private HourCities cities = new HourCities(); //ANDRA' NEL DATABASE
-	
-	//private double[] coordinates = new double[2]; //Alla posizione [0] contiene la latitudine della città, alla [1] la longitudine
 	
 	//Richiede come parametro un file json contenente le informazioni riguardanti una lista di città,
 	//lo "parsa" e assegna i valori di ogni singola città ad un oggetto City
-	public void parseBox(JSONObject jo) {
+	public void parseBox(JSONObject jo, HourCities cities) {
 		JSONArray citiesList = new JSONArray();
 		citiesList = (JSONArray) jo.get("list");
 		
@@ -49,7 +52,7 @@ public class JSONWeatherParser{
 			citta.setTemperatura(((Number) temperatura.get("temp")).doubleValue());
 			citta.setTemp_feels_like(((Number) temperatura.get("feels_like")).doubleValue());
 			
-			this.cities.addCity(citta);
+			cities.addCity(citta);
 		}
 	}
 	
@@ -63,17 +66,6 @@ public class JSONWeatherParser{
 		citta.setLongitudine(((Number) coord.get("lon")).doubleValue());
 		citta.setLatitudine(((Number) coord.get("lat")).doubleValue());
 		citta.setId(id);
-		//this.coordinates[1] = ((Number) coord.get("lon")).doubleValue();
-		//this.coordinates[0] = ((Number) coord.get("lat")).doubleValue();
 	}
 	
-	public HourCities getCities() {
-		return this.cities;
-	}
-	
-	/*
-	public double[] getCoordinates() {
-		return this.coordinates;
-	}
-	*/
 }

@@ -61,7 +61,7 @@ public class DownloadJSON {
 			   in.close();
 			}
 			
-				this.jo = (JSONObject) JSONValue.parseWithException(data);	 //parse JSON Object
+			this.jo = (JSONObject) JSONValue.parseWithException(data);	 //parse JSON Object
 				
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
