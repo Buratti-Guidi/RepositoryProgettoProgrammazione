@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
+import bg.Weather.exception.NotInitializedException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
@@ -22,13 +23,14 @@ import bg.Weather.util.APIKey;
 public class WeatherServiceImpl implements WeatherService {
 
 	Database dataset = new Database();
-	CityData capital = new CityData();
+	
 	Box b = new Box();
 	
 	@Override
 	public void initialize(String cap, UserBox ub) {
 		
 		CityInfo verifica = new CityInfo();
+		CityData capital = new CityData();
 		
 		if(!verifica.verifyCap(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
@@ -45,17 +47,31 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		b = bc.generaBox();
 		
+		this.getCities();
+		
+	}
+	
+	public void getCities() {
+		
 		String url;
 		APIKey ak = new APIKey();
-		url = "http://api.openweathermap.org/data/2.5/box/city?bbox=" + b.getLonSx() + "," + b.getLatDown() + "," + b.getLonDx() + 
-				"," + b.getLatUp() + ",10&appid=" + ak.getAPIKey();
 		DownloadJSON fileJSON = new DownloadJSON();
-		fileJSON.chiamataAPIObj(url);
-		
 		HourCities cities = new HourCities();
 		JSONWeatherParser jwp = new JSONWeatherParser();
-		jwp.parseBox(fileJSON.getObject(), cities);
 		
-		dataset.aggiornaDatabase(cities);
+		url = "http://api.openweathermap.org/data/2.5/box/city?bbox=" + b.getLonSx() + "," + b.getLatDown() + "," + b.getLonDx() + 
+				"," + b.getLatUp() + ",10&appid=" + ak.getAPIKey();
+		
+		fileJSON.chiamataAPIObj(url);//viene chiamata l'api e viene salvato un json object su fileJSON
+		
+		jwp.parseBox(fileJSON.getObject(), cities);//viene parsato il JSONObject e inseriti i dati su cities
+		
+		dataset.aggiornaDatabase(cities);//viene aggiornato il database
 	}
+	
+	//public void funzioneacaso() throws NotInitializedException{
+	//if(Il dataset e' vuoto)
+	//	throw NotInizializedException();
+	//....
+	//}
 }
