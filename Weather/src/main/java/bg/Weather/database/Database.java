@@ -1,13 +1,11 @@
 package bg.Weather.database;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
 public class Database {
@@ -73,6 +71,10 @@ public class Database {
 				return;
 			}
 		}
+	}
+	
+	public LinkedList<HashSet<HourCities>> getDataset() {
+		return this.dataset;
 	}
 	
 }

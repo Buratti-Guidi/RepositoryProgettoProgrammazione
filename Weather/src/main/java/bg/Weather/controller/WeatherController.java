@@ -26,6 +26,11 @@ public class WeatherController {
 		//METODO CHE AVVIA IL TIMER DI UN'ORA
 		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!
 	}
+	
+	
+	
+	
+	
 	/*
 	 * @GetMApping(value = "/boh/{acaso}")
 	 * public ResponseEntity<Object> funzioneAcaso(@PathVariable("acaso") String nameCap) {
