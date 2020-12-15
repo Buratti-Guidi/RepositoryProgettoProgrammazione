@@ -2,11 +2,11 @@ package bg.Weather.model;
 
 public class City {
 
-	private String name;
-	private long id;
+	protected String name;
+	protected long id;
 	
-	private double lat;
-	private double lon;
+	protected double lat;
+	protected double lon;
 	
 	public String getNome() {
 		return name;

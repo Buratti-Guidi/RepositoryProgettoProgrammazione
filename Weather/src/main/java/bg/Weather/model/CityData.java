@@ -9,7 +9,7 @@ public class CityData extends City{
 	
 	private double windSpeed;
 	
-	Date time;
+	private Date time;
 	
 	public Date getTime() {
 		return this.time;

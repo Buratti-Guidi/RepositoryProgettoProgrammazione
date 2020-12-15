@@ -4,7 +4,6 @@
 package bg.Weather.service;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,6 +23,7 @@ public class WeatherServiceImpl implements WeatherService {
 
 	Database dataset = new Database();
 	CityData capital = new CityData();
+	Box b = new Box();
 	
 	@Override
 	public void initialize(String cap, UserBox ub) {
@@ -36,7 +36,6 @@ public class WeatherServiceImpl implements WeatherService {
 		capital.setNome(cap);
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
-		Box b = new Box();
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
 		bc.setLenght(ub.getLenght()); 
 		bc.setWidth(ub.getWidth());
