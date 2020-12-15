@@ -4,6 +4,8 @@
 package bg.Weather.service;
 
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.model.CityData;
 import bg.Weather.util.APIKey;
@@ -20,9 +22,10 @@ public class CityInfo {
 	public boolean verifyCap(String cap) {
 		
 		fileJSON = new DownloadJSON();
-		fileJSON.caricaFileArr("capitali.json");
+		
 		
 		try {	
+			fileJSON.caricaFileArr("capitali.json");
 		
 			for(Object o : fileJSON.getArray()) {
 				
@@ -34,8 +37,11 @@ public class CityInfo {
 				}
 				
 			}
-		}catch(Exception e) {//non so che tipo di eccezione puo generare
-			System.out.println("Errore sul parsing");
+		}catch(NullPointerException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file non e' stato letto correttamente");//PROVA
+		}
+		catch(Exception e) {//non so che tipo di eccezione puo generare
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
 		}
 		return false;
 	}
