@@ -29,4 +29,8 @@ public class HourCities {
 		}
 		return null;
 	}
+	
+	public int getSize() {
+		return this.hourCities.size();
+	}
 }
