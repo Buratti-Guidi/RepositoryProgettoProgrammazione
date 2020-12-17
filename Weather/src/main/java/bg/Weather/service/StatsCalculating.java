@@ -2,9 +2,7 @@ package bg.Weather.service;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Vector;
 
-import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 import bg.Weather.model.Stats;
 
@@ -16,35 +14,50 @@ public class StatsCalculating {
 	private LinkedList<Double> tempMin = new LinkedList<Double>();
 	private LinkedList<Double> variances = new LinkedList<Double>();
 	
-	private Calculate calc;
+	private LinkedList<Stats> stats = new LinkedList<Stats>();
+	
+	private Calculate calc; //Calcolatore utilizzato per eseguire i calcoli per le varie statistiche
 	
 	public StatsCalculating(LinkedList<HashSet<HourCities>> dataset, int numeroGiorni) {
 		calc = new Calculate(dataset, numeroGiorni);
-		this.names = calc.ottieniNomi();
-		this.averages = calc.ottieniMedie();
-		this.tempMax = calc.ottieniMassimi();
-		this.tempMin = calc.ottieniMinimi();
-		this.variances = calc.ottieniVarianze();
 	}
 
 	public LinkedList<String> getNames() {
+		this.names = this.calc.ottieniNomi();
 		return names;
 	}
 
 	public LinkedList<Double> getAverages() {
+		this.averages = this.calc.ottieniMedie();
 		return averages;
 	}
 
 	public LinkedList<Double> getTempMax() {
+		this.tempMax = calc.ottieniMassimi();
 		return tempMax;
 	}
 
 	public LinkedList<Double> getTempMin() {
+		this.tempMin = this.calc.ottieniMinimi();
 		return tempMin;
 	}
 	
 	public LinkedList<Double> getVariances() {
+		this.variances = this.calc.ottieniVarianze();
 		return variances;
+	}
+	
+	public LinkedList<Stats> getStats() {
+		Stats s = new Stats();
+		for(int i = 0; i < this.names.size(); i++) {
+			s.setName(this.names.get(i));
+			s.setAvgTemp(this.averages.get(i));
+			s.setTempMax(this.tempMax.get(i));
+			s.setTempMin(this.tempMin.get(i));
+			s.setVar(this.variances.get(i));
+			this.stats.add(s);
+		}
+		return stats;
 	}
 
 }	

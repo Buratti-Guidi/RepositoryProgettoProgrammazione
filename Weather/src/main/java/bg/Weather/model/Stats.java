@@ -2,12 +2,12 @@ package bg.Weather.model;
 
 public class Stats {
 
-	private String name;
+	private String name; //nome della città
 	
-	private double avgTemp;
-	private double tempMax;
-	private double tempMin;
-	private double var;
+	private double avgTemp; //media delle temperature della città
+	private double tempMax; //temperatura massima della città
+	private double tempMin; //temperatura minima della città
+	private double var; //varianza delle temperature della città
 	
 	public double getAvgTemp() {
 		return avgTemp;
