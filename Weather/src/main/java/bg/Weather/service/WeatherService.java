@@ -3,6 +3,7 @@
  */
 package bg.Weather.service;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import bg.Weather.model.UserBox;
@@ -17,5 +18,5 @@ public interface WeatherService {
 	
 	public void getCities();
 	
-	public JSONObject getData();
+	public JSONArray getData();
 }

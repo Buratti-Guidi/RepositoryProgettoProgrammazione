@@ -1,5 +1,6 @@
 package bg.Weather.controller;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,17 +27,14 @@ public class WeatherController {
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
 		weatherService.initialize(nameCap, ub);
 		//METODO CHE AVVIA IL TIMER DI UN'ORA
-		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!
+		return new ResponseEntity<>("Everything is ok", HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/GetData")
-	public JSONObject getData(){
+	@GetMapping(value = "/getData")
+	public JSONArray getData(){
 		
-	}
-	
-	@GetMapping(value = "/stats/{param}")
-	public void {
-		
+		return weatherService.getData();
+		//return new ResponseEntity<>(weatherService.getData(),HttpStatus.OK);
 	}
 	
 	

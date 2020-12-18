@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +19,6 @@ import bg.Weather.exception.NotInitializedException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
-import bg.Weather.model.UserBox;
 import bg.Weather.util.APIKey;
 
 /**
@@ -37,6 +37,7 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
+		JSONValue jv = new JSONValue();
 		
 		if(!verifica.verifyCap(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
@@ -46,8 +47,9 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
 		
-		Double l = (Double)ub.get("length");
-		Double w = (Double)ub.get("width");
+		
+		Number l = (Number)ub.get("length");
+		Number w = (Number)ub.get("width");
 		
 		try {
 			b = bc.generaBox(l.doubleValue(),w.doubleValue());
@@ -77,18 +79,26 @@ public class WeatherServiceImpl implements WeatherService {
 		dataset.aggiornaDatabase(cities);//viene aggiornato il database
 	}
 	
-	public JSONObject getData() {
-		JSONObject jo = new JSONObject();
+	public JSONArray getData() {
+		
 		JSONArray ja = new JSONArray();
 		
 		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
 		data = this.dataset.getDataset();
 		
+		JSONPrinter jp = new JSONPrinter();
+		
 		for(HashSet<HourCities> hs : data) {
 			for(HourCities hourc : hs) {
-				JSONPrinter jp = new JSONPrinter();
+				try {
+					ja.add(jp.printArr(hourc.getHourCities()));
+					
+				}catch(ClassCastException ex) {
+					throw new ResponseStatusException(HttpStatus.CONFLICT,"Errore nella conversione del dataset in JSON");
+				}
 				
 			}
 		}
+		return ja;
 	}
 }

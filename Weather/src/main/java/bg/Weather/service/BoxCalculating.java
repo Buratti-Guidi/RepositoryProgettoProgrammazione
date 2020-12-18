@@ -28,8 +28,8 @@ public class BoxCalculating {
 		this.setLungh_in_gradi(length * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
 		this.setLargh_in_gradi(width * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
 			
-		if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00 && (this.lungh_in_gradi * this.largh_in_gradi) > 0)
-			throw new GeneralException("Invelid box");
+		if((this.lungh_in_gradi * this.largh_in_gradi) > 25.00 || (this.lungh_in_gradi * this.largh_in_gradi) <= 0)
+			throw new GeneralException("Invalid box");
 		
 		box.setLatUp(this.getLat_centro() + this.getLungh_in_gradi());
 		box.setLatDown(this.getLat_centro() - this.getLungh_in_gradi());
