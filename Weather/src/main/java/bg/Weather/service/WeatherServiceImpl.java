@@ -3,6 +3,10 @@
  */
 package bg.Weather.service;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -74,7 +78,17 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public JSONObject getData() {
+		JSONObject jo = new JSONObject();
+		JSONArray ja = new JSONArray();
 		
+		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
+		data = this.dataset.getDataset();
 		
+		for(HashSet<HourCities> hs : data) {
+			for(HourCities hourc : hs) {
+				JSONPrinter jp = new JSONPrinter();
+				
+			}
+		}
 	}
 }
