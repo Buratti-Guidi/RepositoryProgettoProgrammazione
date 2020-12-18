@@ -55,7 +55,7 @@ public class CityInfo {
 		fileJSON.chiamataAPIObj("http://api.openweathermap.org/data/2.5/weather?q="+ citta.getNome() +"&appid=" + apikey.getAPIKey());
 		JSONObject jo = fileJSON.getObject();
 		JSONWeatherParser pars = new JSONWeatherParser();
-		pars.parseCity(jo, citta);
+		pars.parseCity(jo, citta);						//problemi sul NULL POINT EXCEPTION
 	}
 
 }

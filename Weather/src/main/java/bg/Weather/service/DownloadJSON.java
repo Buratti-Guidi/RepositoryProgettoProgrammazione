@@ -3,6 +3,7 @@ package bg.Weather.service;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,13 +11,16 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
 
 public class DownloadJSON implements Serializable {
 
@@ -104,21 +108,37 @@ public class DownloadJSON implements Serializable {
 	
 	//Legge da file.json un oggetto
 	public void caricaFileObj(String nome_file) {
+		
+		JSONParser parser = new JSONParser();
 		try {
-			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));	
+			//ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));	
+			Object json_file = parser.parse(new FileReader(nome_file));
+			this.jo = (JSONObject) json_file;
 			
-			this.jo = (JSONObject) file_input.readObject();
 			
-			file_input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	//Legge da file.json un array
-	public void caricaFileArr(String nome_file) {
+	public void caricaFileArr(String nome_file) {//PROBLEMA SULLA SERIALIZZAZIONE
+		
+		JSONParser parser = new JSONParser();
+		
+		try {
+			Object json_file = parser.parse(new FileReader(nome_file));
+			this.ja = (JSONArray) json_file;
+		}catch (IOException e) {
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
+		}
+		/*
 		try {
 			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));
 			
@@ -128,10 +148,15 @@ public class DownloadJSON implements Serializable {
 				
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
+		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
 		}
+		*/
 	}
 	
 }

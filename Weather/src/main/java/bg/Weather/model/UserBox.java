@@ -2,22 +2,22 @@ package bg.Weather.model;
 
 public class UserBox{
 
-	private double lenght; //lunghezza in km del box
-	private double width; //larghezza in km del box
+	protected double length; //lunghezza in km del box
+	protected double width; //larghezza in km del box
 	
 	public UserBox() {}
 	
-	public UserBox(double lenght, double width) {
-		this.lenght = lenght;
+	public UserBox(double length, double width) {
+		this.length = length;
 		this.width = width;
 	}
 	
-	public double getLenght() {
-		return lenght;
+	public double getLength() {
+		return length;
 	}
 	
-	public void setLenght(double lenght) {
-		this.lenght = lenght;
+	public void setLength(double length) {
+		this.length = length;
 	}
 	
 	

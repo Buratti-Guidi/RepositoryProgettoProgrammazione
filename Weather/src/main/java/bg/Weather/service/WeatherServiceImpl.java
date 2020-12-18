@@ -3,6 +3,7 @@
  */
 package bg.Weather.service;
 
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,7 +40,7 @@ public class WeatherServiceImpl implements WeatherService {
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
-		bc.setLenght(ub.getLenght()); 
+		bc.setLength(ub.getLength()); 
 		bc.setWidth(ub.getWidth());
 		
 		if(!bc.verifyBox())
@@ -69,9 +70,8 @@ public class WeatherServiceImpl implements WeatherService {
 		dataset.aggiornaDatabase(cities);//viene aggiornato il database
 	}
 	
-	//public void funzioneacaso() throws NotInitializedException{
-	//if(Il dataset e' vuoto)
-	//	throw NotInizializedException();
-	//....
-	//}
+	public JSONObject getData() {
+		
+		
+	}
 }

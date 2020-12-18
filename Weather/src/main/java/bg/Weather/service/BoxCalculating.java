@@ -20,7 +20,9 @@ public class BoxCalculating extends UserBox{
 	
 	//Metodo che controlla se la grandezza del box è accettabile dall'API
 	public boolean verifyBox() {
-		if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00 && (this.lungh_in_gradi * this.largh_in_gradi) > 0)
+		
+		//if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00 && (this.lungh_in_gradi * this.largh_in_gradi) > 0)
+		if((super.length * super.width) <= 300000 && (super.length * super.width) > 0)
 			return true;
 			
 		return false;      //DA SOSTITUIRE CON THROW EXCEPTION
@@ -30,7 +32,7 @@ public class BoxCalculating extends UserBox{
 			
 		Box box = new Box();
 			
-		this.setLungh_in_gradi(super.getLenght() * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
+		this.setLungh_in_gradi(super.getLength() * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
 		this.setLargh_in_gradi(super.getWidth() * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
 			
 		box.setLatUp(this.getLat_centro() + this.getLungh_in_gradi());
