@@ -23,7 +23,7 @@ public class WeatherController {
 	WeatherServiceImpl weatherService;
 	
 	@PostMapping(value = "/capital/{name}")
-	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody UserBox ub) {
+	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
 		weatherService.initialize(nameCap, ub);
 		//METODO CHE AVVIA IL TIMER DI UN'ORA
 		return new ResponseEntity<>("The city is a capital", HttpStatus.OK);//E' UNA PROVA!!
@@ -34,6 +34,10 @@ public class WeatherController {
 		
 	}
 	
+	@GetMapping(value = "/stats/{param}")
+	public void {
+		
+	}
 	
 	
 	

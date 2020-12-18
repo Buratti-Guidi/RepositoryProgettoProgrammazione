@@ -13,7 +13,7 @@ import bg.Weather.model.UserBox;
  */
 public interface WeatherService {
 
-	public void initialize(String cap,UserBox box);
+	public void initialize(String cap,JSONObject ub);
 	
 	public void getCities();
 	

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
+import bg.Weather.exception.GeneralException;
 import bg.Weather.exception.NotInitializedException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
@@ -28,7 +29,7 @@ public class WeatherServiceImpl implements WeatherService {
 	Box b = new Box();
 	
 	@Override
-	public void initialize(String cap, UserBox ub) {
+	public void initialize(String cap, JSONObject ub) {
 		
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
@@ -40,13 +41,15 @@ public class WeatherServiceImpl implements WeatherService {
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
-		bc.setLength(ub.getLength()); 
-		bc.setWidth(ub.getWidth());
 		
-		if(!bc.verifyBox())
+		Double l = (Double)ub.get("length");
+		Double w = (Double)ub.get("width");
+		
+		try {
+			b = bc.generaBox(l.doubleValue(),w.doubleValue());
+		}catch(GeneralException ge) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The box isn't acceptable");
-		
-		b = bc.generaBox();
+		}
 		
 		this.getCities();
 		

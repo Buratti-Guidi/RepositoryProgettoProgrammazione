@@ -1,9 +1,10 @@
 package bg.Weather.service;
 
+import bg.Weather.exception.GeneralException;
 import bg.Weather.model.Box;
 import bg.Weather.model.UserBox;
 
-public class BoxCalculating extends UserBox{
+public class BoxCalculating {
 
 	private double lat_centro;
 	private double long_centro;
@@ -18,23 +19,18 @@ public class BoxCalculating extends UserBox{
 		this.long_centro = long_centro;
 	}
 	
-	//Metodo che controlla se la grandezza del box è accettabile dall'API
-	public boolean verifyBox() {
-		
-		//if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00 && (this.lungh_in_gradi * this.largh_in_gradi) > 0)
-		if((super.length * super.width) <= 300000 && (super.length * super.width) > 0)
-			return true;
-			
-		return false;      //DA SOSTITUIRE CON THROW EXCEPTION
-	}
-		
-	public Box generaBox() {
+	
+	
+	public Box generaBox(double length, double width) throws GeneralException{
 			
 		Box box = new Box();
 			
-		this.setLungh_in_gradi(super.getLength() * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
-		this.setLargh_in_gradi(super.getWidth() * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
+		this.setLungh_in_gradi(length * 0.5 * km_to_deg); //Converto la semi-lunghezza del box in gradi decimali
+		this.setLargh_in_gradi(width * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
 			
+		if((this.lungh_in_gradi * this.largh_in_gradi) <= 25.00 && (this.lungh_in_gradi * this.largh_in_gradi) > 0)
+			throw new GeneralException("Invelid box");
+		
 		box.setLatUp(this.getLat_centro() + this.getLungh_in_gradi());
 		box.setLatDown(this.getLat_centro() - this.getLungh_in_gradi());
 		box.setLonDx(this.getLong_centro() + this.getLargh_in_gradi());
