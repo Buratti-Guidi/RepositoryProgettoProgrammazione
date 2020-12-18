@@ -9,16 +9,14 @@ import bg.Weather.model.HourCities;
 public class Calculate {
 	
 	private int numeroGiorni;
-	private LinkedList<HashSet<HourCities>> dataset = new LinkedList<HashSet<HourCities>>();
 	
-	public Calculate(LinkedList<HashSet<HourCities>> dataset, int numeroGiorni) {
-		this.dataset = dataset;
+	public Calculate(int numeroGiorni) {
 		this.numeroGiorni = numeroGiorni;
 	}
 
-	public LinkedList<String> ottieniNomi() {
+	public LinkedList<String> ottieniNomi(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<String> nomi = new LinkedList<String>();
-		for(HourCities hc: this.dataset.getFirst()) {
+		for(HourCities hc: dataset.getFirst()) {
 			for(CityData c : hc.getHourCities()) {
 				nomi.push(c.getNome());
 			}
@@ -27,7 +25,7 @@ public class Calculate {
 		return nomi;
 	}
 	
-	public LinkedList<Double> ottieniMedie() {
+	public LinkedList<Double> ottieniMedie(LinkedList<HashSet<HourCities>> dataset) {
 		int count = 0; //Numero città del box
 		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e il numero di città (count)
 		
@@ -38,7 +36,7 @@ public class Calculate {
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
 			HashSet<HourCities> temp = new HashSet<HourCities>();
-			temp = this.dataset.get(i);
+			temp = dataset.get(i);
 			for(HourCities hc : temp) {
 				if(!flag) {
 					for(CityData cd : hc.getHourCities()) {
@@ -65,7 +63,7 @@ public class Calculate {
 		return averages;
 	}
 	
-	public LinkedList<Double> ottieniMassimi() {
+	public LinkedList<Double> ottieniMassimi(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> tempMax = new LinkedList<Double>();
 		int count = 0; //Numero città del box
 		boolean flag = false;
@@ -95,7 +93,7 @@ public class Calculate {
 		return tempMax;
 	}
 	
-	public LinkedList<Double> ottieniMinimi() {
+	public LinkedList<Double> ottieniMinimi(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> tempMin = new LinkedList<Double>();
 		int count = 0; //Numero città del box
 		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e mi salva i nomi delle città in names e il numero di città (count)
@@ -125,9 +123,9 @@ public class Calculate {
 		return tempMin;
 	}
 	
-	public LinkedList<Double> ottieniVarianze() {
+	public LinkedList<Double> ottieniVarianze(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> averages = new LinkedList<Double>();
-		averages = this.ottieniMedie();
+		averages = this.ottieniMedie(dataset);
 		
 		LinkedList<Double> variances = new LinkedList<Double>();
 		
@@ -138,7 +136,7 @@ public class Calculate {
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
 			HashSet<HourCities> temp = new HashSet<HourCities>();
-			temp = this.dataset.get(i);
+			temp = dataset.get(i);
 			for(HourCities hc : temp) {
 				if(!flag) {
 					int j = 0;

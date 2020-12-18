@@ -18,32 +18,32 @@ public class StatsCalculating {
 	
 	private Calculate calc; //Calcolatore utilizzato per eseguire i calcoli per le varie statistiche
 	
-	public StatsCalculating(LinkedList<HashSet<HourCities>> dataset, int numeroGiorni) {
-		calc = new Calculate(dataset, numeroGiorni);
+	public StatsCalculating(int numeroGiorni) {
+		calc = new Calculate(numeroGiorni);
 	}
 
-	public LinkedList<String> getNames() {
-		this.names = this.calc.ottieniNomi();
+	public LinkedList<String> getNames(LinkedList<HashSet<HourCities>> dataset) {
+		this.names = this.calc.ottieniNomi(dataset);
 		return names;
 	}
 
-	public LinkedList<Double> getAverages() {
-		this.averages = this.calc.ottieniMedie();
+	public LinkedList<Double> getAverages(LinkedList<HashSet<HourCities>> dataset) {
+		this.averages = this.calc.ottieniMedie(dataset);
 		return averages;
 	}
 
-	public LinkedList<Double> getTempMax() {
-		this.tempMax = calc.ottieniMassimi();
+	public LinkedList<Double> getTempMax(LinkedList<HashSet<HourCities>> dataset) {
+		this.tempMax = calc.ottieniMassimi(dataset);
 		return tempMax;
 	}
 
-	public LinkedList<Double> getTempMin() {
-		this.tempMin = this.calc.ottieniMinimi();
+	public LinkedList<Double> getTempMin(LinkedList<HashSet<HourCities>> dataset) {
+		this.tempMin = this.calc.ottieniMinimi(dataset);
 		return tempMin;
 	}
 	
-	public LinkedList<Double> getVariances() {
-		this.variances = this.calc.ottieniVarianze();
+	public LinkedList<Double> getVariances(LinkedList<HashSet<HourCities>> dataset) {
+		this.variances = this.calc.ottieniVarianze(dataset);
 		return variances;
 	}
 	
