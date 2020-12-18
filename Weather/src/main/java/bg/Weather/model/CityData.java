@@ -1,6 +1,8 @@
 package bg.Weather.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class CityData extends City{
 
@@ -42,10 +44,22 @@ public class CityData extends City{
 		this.windSpeed = windSpeed;
 	}
 	
-	
 	public String toString() {
 		return ("nome: " + super.getNome() + ", id: " + super.getId() + ", latitudine: " + super.getLatitudine() + ", longitudine: " + super.getLongitudine() 
 		+ ", temperatura: " + this.getTemperatura() + ", percepita: " + this.getTemp_feels_like() + ", velocità vento(m/s): " +this.getWindSpeed()
 		+ ", dt: " + this.getTime());
+	}
+	
+	public HashMap<String, Object> getAllHashMap() {
+		HashMap<String, Object> all = new HashMap<String, Object>();
+		all.put("name", super.getNome());
+		all.put("id", super.getId());
+		all.put("lat", super.getLatitudine());
+		all.put("lon", super.getLongitudine());
+		all.put("temp", this.getTemperatura());
+		all.put("temp_feels_like", this.getTemp_feels_like());
+		all.put("windSpeed", this.getWindSpeed());
+		all.put("time", this.getTime());
+		return all;
 	}
 }
