@@ -3,6 +3,7 @@
  */
 package bg.Weather.service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -19,11 +20,12 @@ import bg.Weather.exception.NotInitializedException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
+import bg.Weather.model.Stats;
 import bg.Weather.util.APIKey;
 
 /**
- * @author Luca
- *
+ * @author Luca Guidi
+ * @author Christopher Buratti
  */
 @Service
 public class WeatherServiceImpl implements WeatherService {
@@ -100,5 +102,64 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 		}
 		return tot;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONArray getStats(JSONObject stat) {
+		String param = (String)stat.get("param");
+		Integer numDays = (Integer)stat.get("days");
+		StatsCalculating sc = new StatsCalculating(numDays);
+		JSONArray ja = new JSONArray();
+		
+		switch(param) {
+			case "avg":
+				int i = 0;
+				HashMap<String, Double> avg = new HashMap<String, Double>();
+				for(String name : sc.getNames(dataset.getDataset())) {
+					avg.put(name, sc.getAverages(dataset.getDataset()).get(i));
+					i++;
+				}
+				ja.add(avg);
+				break;
+				
+			case "var":
+				int j = 0;
+				HashMap<String, Double> var = new HashMap<String, Double>();
+				for(String name : sc.getNames(dataset.getDataset())) {
+					var.put(name, sc.getVariances(dataset.getDataset()).get(j));
+					j++;
+				}
+				ja.add(var);
+				break;
+				
+			case "temp_min":
+				int k = 0;
+				HashMap<String, Double> tempMin = new HashMap<String, Double>();
+				for(String name : sc.getNames(dataset.getDataset())) {
+					tempMin.put(name, sc.getTempMin(dataset.getDataset()).get(k));
+					k++;
+				}
+				ja.add(tempMin);
+				break;
+				
+			case "temp_max":
+				int z = 0;
+				HashMap<String, Double> tempMax = new HashMap<String, Double>();
+				for(String name : sc.getNames(dataset.getDataset())) {
+					tempMax.put(name, sc.getTempMax(dataset.getDataset()).get(z));
+					z++;
+				}
+				ja.add(tempMax);
+				break;
+				
+			case "all": //DA CONTROLLARE
+				for(Stats s : sc.getStats()) {
+					ja.add(s.getAllHashMap());
+				}
+				break;
+				
+			default: //throw new Exception();
+		}
+		return ja;
 	}
 }

@@ -142,9 +142,10 @@ public class Calculate {
 					int j = 0;
 					for(CityData cd : hc.getHourCities()) {
 						double scarto;
-						scarto = cd.getTemperatura() - averages.get(count - j - 1);
+						scarto = cd.getTemperatura() - averages.get(averages.size() - j - 1);
 						scarto *= scarto;
 						variances.push(scarto);
+						j++;
 						count++;
 					}
 					tot_hours++;

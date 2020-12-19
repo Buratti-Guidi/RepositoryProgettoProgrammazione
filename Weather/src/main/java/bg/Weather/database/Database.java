@@ -35,6 +35,9 @@ public class Database {
 			//Verifico se il giorno più recente presente è uguale a quello dell'HashSet che voglio inserire (è variata quindi solo l'ora)
 			if(cal.get(Calendar.DAY_OF_MONTH) == cities.getCalendar().get(Calendar.DAY_OF_MONTH) && cal.get(Calendar.MONTH) == cities.getCalendar().get(Calendar.MONTH)) {
 				
+				if(cal.get(Calendar.HOUR_OF_DAY) == cities.getCalendar().get(Calendar.HOUR_OF_DAY)) //Se non è variata l'ora dell'ultima chiamata, non aggiorno il dataset
+					return;
+				
 				HashSet<HourCities> h = new HashSet<HourCities>(); //HashSet temporaneo per aggiornare il giorno più recente (oggi)
 				h = dataset.getFirst(); //Assegno ad h il valore di oggi così da non perdere i dati già salvati in esso
 				
@@ -42,9 +45,11 @@ public class Database {
 				
 				dataset.pollFirst(); //Rimuovo il giorno non aggiornato
 				dataset.push(h); //Assegno ad "oggi" il nuovo Hashset con i valori aggiornati aggiungendo così anche quelli dell'ultima ora
+				return;
 			}
 		}
 		
+		//Se il dataset è pieno...
 		if(dataset.size() == daysMax) {
 			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
 			for(HourCities c : dataset.getFirst()) {
@@ -54,6 +59,9 @@ public class Database {
 			
 			if(cal.get(Calendar.DAY_OF_MONTH) == cities.getCalendar().get(Calendar.DAY_OF_MONTH) && cal.get(Calendar.MONTH) == cities.getCalendar().get(Calendar.MONTH)) {
 				
+				if(cal.get(Calendar.HOUR_OF_DAY) == cities.getCalendar().get(Calendar.HOUR_OF_DAY)) //Se non è variata l'ora dell'ultima chiamata, non aggiorno il dataset
+					return;
+				
 				HashSet<HourCities> h = new HashSet<HourCities>();			//					   /|\
 				h = dataset.getFirst();                                     //					  / | \
 				                                                            //					 /	|  \
@@ -61,6 +69,7 @@ public class Database {
 																			//						|
 				dataset.pollFirst();										//						|
 				dataset.push(h);											//						|
+				return;
 			}
 			else {
 				dataset.pollLast();

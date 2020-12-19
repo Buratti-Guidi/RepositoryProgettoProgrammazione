@@ -31,7 +31,10 @@ public class WeatherController {
 		return weatherService.getData();
 	}
 	
-	
+	@PostMapping(value = "/getStats")
+	public JSONArray postStats(@RequestBody JSONObject stat) {
+		return weatherService.getStats(stat);
+	}
 	
 	/*
 	 * @GetMApping(value = "/boh/{acaso}")

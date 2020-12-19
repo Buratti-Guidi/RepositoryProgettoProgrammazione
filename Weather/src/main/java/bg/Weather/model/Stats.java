@@ -1,5 +1,7 @@
 package bg.Weather.model;
 
+import java.util.HashMap;
+
 public class Stats {
 
 	private String name; //nome della città
@@ -44,5 +46,14 @@ public class Stats {
 		this.name = name;
 	}
 	
+	public HashMap<String, Object> getAllHashMap() {
+		HashMap<String, Object> all = new HashMap<String, Object>();
+		all.put("name", this.getName());
+		all.put("avg", this.getAvgTemp());
+		all.put("var", this.getVar());
+		all.put("temp_max", this.getTempMax());
+		all.put("temp_min", this.getTempMin());
+		return all;
+	}
 	
 }
