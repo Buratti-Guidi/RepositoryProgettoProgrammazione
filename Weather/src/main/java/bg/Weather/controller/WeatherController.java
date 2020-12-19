@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import bg.Weather.model.Box;
-import bg.Weather.model.UserBox;
-import bg.Weather.service.BoxCalculating;
-import bg.Weather.service.CityInfo;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -32,9 +28,7 @@ public class WeatherController {
 	
 	@GetMapping(value = "/getData")
 	public JSONArray getData(){
-		
 		return weatherService.getData();
-		//return new ResponseEntity<>(weatherService.getData(),HttpStatus.OK);
 	}
 	
 	

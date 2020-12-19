@@ -1,6 +1,7 @@
 package bg.Weather.model;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -32,5 +33,11 @@ public class HourCities {
 	
 	public int getSize() {
 		return this.hourCities.size();
+	}
+	
+	public HashMap<String, Object> getDateHashMap() {
+		HashMap<String, Object> date = new HashMap<String, Object>();
+		date.put("time", this.getCalendar());
+		return date;
 	}
 }

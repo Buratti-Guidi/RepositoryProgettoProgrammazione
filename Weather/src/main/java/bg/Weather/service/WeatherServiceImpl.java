@@ -28,12 +28,13 @@ import bg.Weather.util.APIKey;
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
-	Database dataset = new Database();
+	Database dataset;
 	
 	Box b = new Box();
 	
 	@Override
 	public void initialize(String cap, JSONObject ub) {
+		dataset = new Database();
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
 		
@@ -77,26 +78,27 @@ public class WeatherServiceImpl implements WeatherService {
 		dataset.aggiornaDatabase(cities);//viene aggiornato il database
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONArray getData() {
-		
-		JSONArray ja = new JSONArray();
-		JSONArray ja2 = new JSONArray();
+		JSONArray tot = new JSONArray();
 		
 		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
 		data = this.dataset.getDataset();
 		
 		for(HashSet<HourCities> hs : data) {
 			for(HourCities hourc : hs) {
+				JSONArray cittaOrarie = new JSONArray();
+				cittaOrarie.add(hourc.getDateHashMap()); //JSONObject con solo l'ora delle HourCities
 				for(CityData cd : hourc.getHourCities()) {
 					try {
-						ja.add(cd.getAllHashMap());
+						cittaOrarie.add(cd.getAllHashMap());
 					}catch(ClassCastException ex) {
 						throw new ResponseStatusException(HttpStatus.CONFLICT,"Errore nella conversione del dataset in JSON");
 					}
 				}
-				ja2.add(ja);
+				tot.add(cittaOrarie);
 			}
 		}
-		return ja2;
+		return tot;
 	}
 }

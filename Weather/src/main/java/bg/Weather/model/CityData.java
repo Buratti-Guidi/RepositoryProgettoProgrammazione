@@ -62,4 +62,5 @@ public class CityData extends City{
 		all.put("time", this.getTime());
 		return all;
 	}
+	
 }
