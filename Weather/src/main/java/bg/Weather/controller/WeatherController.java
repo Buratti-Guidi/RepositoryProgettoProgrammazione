@@ -28,6 +28,7 @@ public class WeatherController {
 	
 	@GetMapping(value = "/getData")
 	public JSONArray getData(){
+		weatherService.salvaDB();
 		return weatherService.getData();
 	}
 	

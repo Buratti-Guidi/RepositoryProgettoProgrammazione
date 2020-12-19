@@ -30,8 +30,9 @@ import bg.Weather.util.APIKey;
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
+	DownloadJSON fileJSON = new DownloadJSON();
 	Database dataset;
-	
+	String nomeCap;
 	Box b = new Box();
 	
 	@Override
@@ -42,12 +43,12 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		if(!verifica.verifyCap(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
+		this.nomeCap = cap.toUpperCase();
 		
 		capital.setNome(cap);
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
-		
 		
 		Number l = (Number)ub.get("length");
 		Number w = (Number)ub.get("width");
@@ -58,6 +59,7 @@ public class WeatherServiceImpl implements WeatherService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The box isn't acceptable");
 		}
 		
+		this.leggiDB();
 		this.getCities();
 		
 	}
@@ -66,18 +68,22 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		String url;
 		APIKey ak = new APIKey();
-		DownloadJSON fileJSON = new DownloadJSON();
 		HourCities cities = new HourCities();
 		JSONWeatherParser jwp = new JSONWeatherParser();
 		
 		url = "http://api.openweathermap.org/data/2.5/box/city?bbox=" + b.getLonSx() + "," + b.getLatDown() + "," + b.getLonDx() + 
 				"," + b.getLatUp() + ",10&appid=" + ak.getAPIKey();
-		
-		fileJSON.chiamataAPIObj(url);//viene chiamata l'api e viene salvato un json object su fileJSON
-		
-		jwp.parseBox(fileJSON.getObject(), cities);//viene parsato il JSONObject e inseriti i dati su cities
-		
-		dataset.aggiornaDatabase(cities);//viene aggiornato il database
+		try {
+			
+			JSONObject jo = new JSONObject();
+			jo = this.fileJSON.chiamataAPIObj(url);//viene chiamata l'api e viene salvato il json object 
+			
+			jwp.parseBox(jo, cities);//viene parsato il JSONObject e inseriti i dati su cities
+			
+			dataset.aggiornaDatabase(cities);//viene aggiornato il database
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Errore su getCities");
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -90,7 +96,7 @@ public class WeatherServiceImpl implements WeatherService {
 		for(HashSet<HourCities> hs : data) {
 			for(HourCities hourc : hs) {
 				JSONArray cittaOrarie = new JSONArray();
-				cittaOrarie.add(hourc.getDateHashMap()); //JSONObject con solo l'ora delle HourCities
+				//cittaOrarie.add(hourc.getDateHashMap()); //JSONObject con solo l'ora delle HourCities
 				for(CityData cd : hourc.getHourCities()) {
 					try {
 						cittaOrarie.add(cd.getAllHashMap());
@@ -161,5 +167,31 @@ public class WeatherServiceImpl implements WeatherService {
 			default: //throw new Exception();
 		}
 		return ja;
+	}
+	
+	public void salvaDB() {
+		String nome_file = this.nomeCap.replace(" ","_") + ".json";
+		fileJSON.scriviFile(nome_file, this.getData());
+	}
+	
+	public void leggiDB() {
+		
+		JSONArray ja = new JSONArray();
+		
+		String nome_file = this.nomeCap.replace(" ","_") + ".json";
+		JSONWeatherParser jwp = new JSONWeatherParser();
+		
+		ja = fileJSON.caricaFileArr(nome_file);
+		
+		//Scorro il JSONArray e aggiungo ogni hourcities al dataset 
+		for(int i = 0; i< ja.size(); i++) {
+			try {
+				HourCities cities = new HourCities();
+				jwp.parseBoxFile((JSONArray)ja.get(i), cities);
+				this.dataset.aggiornaDatabase(cities);
+			}catch(Exception e) {
+				throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla letura del file");
+			}
+		}
 	}
 }

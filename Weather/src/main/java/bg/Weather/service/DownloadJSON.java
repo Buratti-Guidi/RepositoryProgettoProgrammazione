@@ -1,17 +1,14 @@
 package bg.Weather.service;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,35 +18,14 @@ import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import bg.Weather.database.Database;
 
-public class DownloadJSON implements Serializable {
 
-	private JSONArray ja = null;
-	private JSONObject jo = null;
-	
-	public DownloadJSON() {
-		this.jo = new JSONObject();
-		this.ja = new JSONArray();
-	}
+public class DownloadJSON {
 
-	public JSONArray getArray() {
-		return ja;
-	}
-
-	public void setArray(JSONArray ja) {
-		this.ja = ja;
-	}
-
-	public JSONObject getObject() {
-		return jo;
-	}
-
-	public void setObject(JSONObject jo) {
-		this.jo = jo;
-	}
-	
 	//Legge da chiamata API un oggetto
-	public void chiamataAPIObj(String url) {
+	public JSONObject chiamataAPIObj(String url) {
+		JSONObject jo = new JSONObject();
 		try {
 			URLConnection openConnection = new URL(url).openConnection();
 			InputStream in = openConnection.getInputStream();
@@ -68,18 +44,22 @@ public class DownloadJSON implements Serializable {
 			   in.close();
 			}
 			
-			this.jo = (JSONObject) JSONValue.parseWithException(data);	 //parse JSON Object
-				
+			jo = (JSONObject) JSONValue.parseWithException(data);	 //parse JSON Object
+			return jo;
+			
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un oggetto");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un oggetto");
 		}
 	}
 	
 	//Legge da una chiamata API un array
-	public void chiamataAPIArr(String url) {
+	public JSONArray chiamataAPIArr(String url) {
 		try {
+			JSONArray ja = new JSONArray();
 			URLConnection openConnection = new URL(url).openConnection();
 			InputStream in = openConnection.getInputStream();
 			
@@ -97,40 +77,48 @@ public class DownloadJSON implements Serializable {
 			   in.close();
 			}
 			
-			this.ja = (JSONArray) JSONValue.parseWithException(data);	//parse JSON Array
-				
+			ja = (JSONArray) JSONValue.parseWithException(data);	//parse JSON Array
+			return ja;
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un array");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un array");
 		}
 	}
 	
 	//Legge da file.json un oggetto
-	public void caricaFileObj(String nome_file) {
+	public JSONObject caricaFileObj(String nome_file) {
 		
+		JSONObject jo = new JSONObject();
 		JSONParser parser = new JSONParser();
 		try {
 			//ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));	
 			Object json_file = parser.parse(new FileReader(nome_file));
-			this.jo = (JSONObject) json_file;
-			
+			jo = (JSONObject) json_file;
+			return jo;
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore lettura file.json di un oggetto");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
 		}
 	}
 	
 	//Legge da file.json un array
-	public void caricaFileArr(String nome_file) {//PROBLEMA SULLA SERIALIZZAZIONE
+	public JSONArray caricaFileArr(String nome_file) {
 		
+		JSONArray ja = new JSONArray();
 		JSONParser parser = new JSONParser();
 		
 		try {
 			Object json_file = parser.parse(new FileReader(nome_file));
-			this.ja = (JSONArray) json_file;
+			ja = (JSONArray) json_file;
+			return ja;
+			
 		}catch (IOException e) {
 			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
@@ -138,25 +126,18 @@ public class DownloadJSON implements Serializable {
 			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
 		}
-		/*
+	}
+	
+	public void scriviFile(String nome_file,JSONArray ja) {
+		
+		String txt = ja.toString();
 		try {
-			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));
-			
-			this.ja = (JSONArray) file_input.readObject();//PENSO ESPLODA QUA
-				
-			file_input.close();
-				
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
-		}catch(Exception e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
+			BufferedWriter buf = new BufferedWriter(new FileWriter(nome_file));
+			buf.write(txt);
+			buf.close();
+		}catch(IOException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore scrittura sul file");
 		}
-		*/
 	}
 	
 }

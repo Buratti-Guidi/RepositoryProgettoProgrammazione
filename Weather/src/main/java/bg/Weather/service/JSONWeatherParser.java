@@ -68,4 +68,30 @@ public class JSONWeatherParser{
 		citta.setId(id);
 	}
 	
+	//parsa il jsonArray delle hourcities
+	public void parseBoxFile(JSONArray ja, HourCities ct) {
+		
+		for(Object o : ja) {
+			
+			JSONObject city = (JSONObject) o;
+			CityData citta = new CityData();
+			
+			citta.setNome((String) city.get("name"));
+			citta.setId(((Number) city.get("id")).longValue());
+			
+			String dt = (String)city.get("time");
+			Instant time = Instant.ofEpochSecond((Long)Date.parse(dt)); //PROBLEMA 19/12/2020
+			citta.setTime(Date.from(time) );
+			
+			
+			citta.setLongitudine(((Number) city.get("lon")).doubleValue());
+			citta.setLatitudine(((Number) city.get("lat")).doubleValue());
+			citta.setWindSpeed(((Number) city.get("windSpeed")).doubleValue());
+			citta.setTemperatura(((Number) city.get("temp")).doubleValue());
+			citta.setTemp_feels_like(((Number) city.get("temp_feels_like")).doubleValue());
+			
+			ct.addCity(citta);
+		}
+	}
+	
 }

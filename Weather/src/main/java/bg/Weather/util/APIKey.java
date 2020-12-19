@@ -12,8 +12,7 @@ public class APIKey {
 		
 		DownloadJSON jsonAPI = new DownloadJSON();
 		
-		jsonAPI.caricaFileObj("APIKey.json");
-		JSONObject api = jsonAPI.getObject();
+		JSONObject api = jsonAPI.caricaFileObj("APIKey.json");
 			
 		this.apiKey = (String) api.get("APIKey");
 	}

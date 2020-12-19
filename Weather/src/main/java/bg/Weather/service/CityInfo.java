@@ -3,6 +3,7 @@
  */
 package bg.Weather.service;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,9 +26,9 @@ public class CityInfo {
 		
 		
 		try {	
-			fileJSON.caricaFileArr("capitali.json");
+			JSONArray ja = fileJSON.caricaFileArr("capitali.json");
 		
-			for(Object o : fileJSON.getArray()) {
+			for(Object o : ja) {
 				
 				JSONObject citta = (JSONObject) o;
 				String app = (String)citta.get("capital");
@@ -51,9 +52,7 @@ public class CityInfo {
 		
 		APIKey apikey = new APIKey();
 		
-		fileJSON = new DownloadJSON();
-		fileJSON.chiamataAPIObj("http://api.openweathermap.org/data/2.5/weather?q="+ citta.getNome() +"&appid=" + apikey.getAPIKey());
-		JSONObject jo = fileJSON.getObject();
+		JSONObject jo = fileJSON.chiamataAPIObj("http://api.openweathermap.org/data/2.5/weather?q="+ citta.getNome() +"&appid=" + apikey.getAPIKey());
 		JSONWeatherParser pars = new JSONWeatherParser();
 		pars.parseCity(jo, citta);						//problemi sul NULL POINT EXCEPTION
 	}
