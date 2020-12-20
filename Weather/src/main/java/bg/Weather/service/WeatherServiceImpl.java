@@ -180,18 +180,20 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		String nome_file = this.nomeCap.replace(" ","_") + ".json";
 		JSONWeatherParser jwp = new JSONWeatherParser();
-		
-		ja = fileJSON.caricaFileArr(nome_file);
-		
-		//Scorro il JSONArray e aggiungo ogni hourcities al dataset 
-		for(int i = 0; i< ja.size(); i++) {
-			try {
-				HourCities cities = new HourCities();
-				jwp.parseBoxFile((JSONArray)ja.get(i), cities);
-				this.dataset.aggiornaDatabase(cities);
-			}catch(Exception e) {
-				throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla letura del file");
+		try {
+			ja = fileJSON.caricaFileArr(nome_file);
+			//Scorro il JSONArray e aggiungo ogni hourcities al dataset 
+			for(int i = 0; i< ja.size(); i++) {
+				try {
+					HourCities cities = new HourCities();
+					jwp.parseBoxFile((JSONArray)ja.get(i), cities);
+					this.dataset.aggiornaDatabase(cities);
+				}catch(Exception e) {
+					throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla lettura del file");
+				}
 			}
+		}catch(Exception ex) {
+			
 		}
 	}
 }

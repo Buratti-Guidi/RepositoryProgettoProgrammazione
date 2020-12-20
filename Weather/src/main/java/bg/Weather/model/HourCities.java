@@ -22,12 +22,17 @@ public class HourCities {
 		hourCities.add(c);
 	}
 	
-	public Calendar getCalendar() {
+	public Calendar getCalendar() throws NullPointerException{
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"), Locale.ITALY);
-		for(CityData c : hourCities) {
-			cal.setTime(c.getTime());
-			return cal;
+		try {
+			for(CityData c : hourCities) {
+				cal.setTime(c.getTime());
+				return cal;
+			}
+		}catch(NullPointerException e) {
+			throw e;
 		}
+		
 		return null;
 	}
 	

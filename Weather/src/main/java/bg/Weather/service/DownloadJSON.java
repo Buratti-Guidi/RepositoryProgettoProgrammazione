@@ -104,7 +104,7 @@ public class DownloadJSON {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore lettura file.json di un oggetto");
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore lettura file.json di un oggetto");
 		}
 	}
 	
@@ -121,10 +121,10 @@ public class DownloadJSON {
 			
 		}catch (IOException e) {
 			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su caricaFileArr");
 		}catch(Exception e) {
 			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su caricaFileArr");//PROVA
 		}
 	}
 	

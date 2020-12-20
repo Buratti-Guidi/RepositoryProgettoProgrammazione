@@ -59,7 +59,7 @@ public class CityData extends City{
 		all.put("temp", this.getTemperatura());
 		all.put("temp_feels_like", this.getTemp_feels_like());
 		all.put("windSpeed", this.getWindSpeed());
-		all.put("time", this.getTime());
+		all.put("time", this.getTime().toString());
 		return all;
 	}
 	

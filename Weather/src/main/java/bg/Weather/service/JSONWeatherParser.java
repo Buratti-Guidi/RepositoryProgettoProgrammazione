@@ -3,8 +3,13 @@ package bg.Weather.service;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -78,11 +83,13 @@ public class JSONWeatherParser{
 			
 			citta.setNome((String) city.get("name"));
 			citta.setId(((Number) city.get("id")).longValue());
-			
+		
 			String dt = (String)city.get("time");
-			Instant time = Instant.ofEpochSecond((Long)Date.parse(dt)); //PROBLEMA 19/12/2020
-			citta.setTime(Date.from(time) );
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ROOT);
+			Instant instant = ZonedDateTime.parse(dt, dtf).toInstant();
+			Date data = Date.from(instant);
 			
+			citta.setTime(data);
 			
 			citta.setLongitudine(((Number) city.get("lon")).doubleValue());
 			citta.setLatitudine(((Number) city.get("lat")).doubleValue());

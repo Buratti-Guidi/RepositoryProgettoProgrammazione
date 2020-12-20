@@ -39,10 +39,10 @@ public class CityInfo {
 				
 			}
 		}catch(NullPointerException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file non e' stato letto correttamente");//PROVA
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file delle capitali non e' stato letto correttamente");//PROVA
 		}
 		catch(Exception e) {//non so che tipo di eccezione puo generare
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Altra eccezione");//PROVA
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file delle capitali non e' stato letto correttamente");//PROVA
 		}
 		return false;
 	}
