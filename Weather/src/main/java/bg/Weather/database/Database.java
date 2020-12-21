@@ -61,7 +61,7 @@ public class Database {
 				
 				if(cal.get(Calendar.HOUR_OF_DAY) == cities.getCalendar().get(Calendar.HOUR_OF_DAY)) //Se non è variata l'ora dell'ultima chiamata, non aggiorno il dataset
 					return;
-				
+																			//						^
 				HashSet<HourCities> h = new HashSet<HourCities>();			//					   /|\
 				h = dataset.getFirst();                                     //					  / | \
 				                                                            //					 /	|  \

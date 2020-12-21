@@ -102,7 +102,6 @@ public class WeatherServiceImpl implements WeatherService {
 		for(HashSet<HourCities> hs : data) {
 			for(HourCities hourc : hs) {
 				JSONArray cittaOrarie = new JSONArray();
-				//cittaOrarie.add(hourc.getDateHashMap()); //JSONObject con solo l'ora delle HourCities
 				for(CityData cd : hourc.getHourCities()) {
 					try {
 						cittaOrarie.add(cd.getAllHashMap());
@@ -122,46 +121,52 @@ public class WeatherServiceImpl implements WeatherService {
 		Integer numDays = (Integer)stat.get("days");
 		StatsCalculating sc = new StatsCalculating(numDays);
 		JSONArray ja = new JSONArray();
+		int i;
 		
 		switch(param) {
+			
 			case "avg":
-				int i = 0;
-				HashMap<String, Double> avg = new HashMap<String, Double>();
+				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					avg.put(name, sc.getAverages(dataset.getDataset()).get(i));
+					ja.add(name);
+					HashMap<String, Double> avg = new HashMap<String, Double>();
+					avg.put("avg", sc.getAverages(dataset.getDataset()).get(i));
 					i++;
+					ja.add(avg);
 				}
-				ja.add(avg);
 				break;
 				
 			case "var":
-				int j = 0;
-				HashMap<String, Double> var = new HashMap<String, Double>();
+				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					var.put(name, sc.getVariances(dataset.getDataset()).get(j));
-					j++;
+					ja.add(name);
+					HashMap<String, Double> var = new HashMap<String, Double>();
+					var.put("var", sc.getVariances(dataset.getDataset()).get(i));
+					i++;
+					ja.add(var);
 				}
-				ja.add(var);
 				break;
 				
 			case "temp_min":
-				int k = 0;
-				HashMap<String, Double> tempMin = new HashMap<String, Double>();
+				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					tempMin.put(name, sc.getTempMin(dataset.getDataset()).get(k));
-					k++;
+					ja.add(name);
+					HashMap<String, Double> tempMin = new HashMap<String, Double>();
+					tempMin.put("temp_min", sc.getTempMin(dataset.getDataset()).get(i));
+					i++;
+					ja.add(tempMin);
 				}
-				ja.add(tempMin);
 				break;
 				
 			case "temp_max":
-				int z = 0;
-				HashMap<String, Double> tempMax = new HashMap<String, Double>();
+				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					tempMax.put(name, sc.getTempMax(dataset.getDataset()).get(z));
-					z++;
+					ja.add(name);
+					HashMap<String, Double> tempMax = new HashMap<String, Double>();
+					tempMax.put("temp_max", sc.getTempMax(dataset.getDataset()).get(i));
+					i++;
+					ja.add(tempMax);
 				}
-				ja.add(tempMax);
 				break;
 				
 			case "all":

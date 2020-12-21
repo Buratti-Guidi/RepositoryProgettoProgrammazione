@@ -1,6 +1,6 @@
 package bg.Weather.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Stats {
 
@@ -46,8 +46,8 @@ public class Stats {
 		this.name = name;
 	}
 	
-	public HashMap<String, Object> getAllHashMap() {
-		HashMap<String, Object> all = new HashMap<String, Object>();
+	public LinkedHashMap<String, Object> getAllHashMap() {
+		LinkedHashMap<String, Object> all = new LinkedHashMap<String, Object>();
 		all.put("name", this.getName());
 		all.put("avg", this.getAvgTemp());
 		all.put("var", this.getVar());
@@ -55,5 +55,4 @@ public class Stats {
 		all.put("temp_min", this.getTempMin());
 		return all;
 	}
-	
 }

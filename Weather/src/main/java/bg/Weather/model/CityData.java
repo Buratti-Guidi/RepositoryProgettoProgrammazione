@@ -1,8 +1,7 @@
 package bg.Weather.model;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.LinkedHashMap;
 
 public class CityData extends City{
 
@@ -50,8 +49,8 @@ public class CityData extends City{
 		+ ", dt: " + this.getTime());
 	}
 	
-	public HashMap<String, Object> getAllHashMap() {
-		HashMap<String, Object> all = new HashMap<String, Object>();
+	public LinkedHashMap<String, Object> getAllHashMap() {
+		LinkedHashMap<String, Object> all = new LinkedHashMap<String, Object>();
 		all.put("name", super.getNome());
 		all.put("id", super.getId());
 		all.put("lat", super.getLatitudine());
