@@ -62,6 +62,7 @@ public class WeatherServiceImpl implements WeatherService {
 		this.leggiDB();
 		this.getCities();
 		
+		
 	}
 	
 	public void getCities() {
@@ -85,6 +86,8 @@ public class WeatherServiceImpl implements WeatherService {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Errore su getCities");
 		}
 	}
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public JSONArray getData() {

@@ -1,5 +1,9 @@
 package bg.Weather.controller;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,17 @@ public class WeatherController {
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
 		weatherService.initialize(nameCap, ub);
 		//METODO CHE AVVIA IL TIMER DI UN'ORA
+		
+		Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+							            @Override
+							            public void run() {
+							            	weatherService.getCities();
+							            }
+        }, 0, TimeUnit.HOURS.toMillis(1));
+    
+        
 		return new ResponseEntity<>("Everything is ok", HttpStatus.OK);
 	}
 	
@@ -37,6 +52,10 @@ public class WeatherController {
 		return weatherService.getStats(stat);
 	}
 	
+	@GetMapping(value = "/save")
+	public ResponseEntity<Object> saveDB() {
+		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
+	}
 	/*
 	 * @GetMApping(value = "/boh/{acaso}")
 	 * public ResponseEntity<Object> funzioneAcaso(@PathVariable("acaso") String nameCap) {

@@ -2,7 +2,6 @@ package bg.Weather.service;
 
 import bg.Weather.exception.GeneralException;
 import bg.Weather.model.Box;
-import bg.Weather.model.UserBox;
 
 public class BoxCalculating {
 
