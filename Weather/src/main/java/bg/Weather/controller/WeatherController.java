@@ -21,15 +21,16 @@ import bg.Weather.service.WeatherServiceImpl;
 public class WeatherController {
 
 	@Autowired
-	WeatherServiceImpl weatherService;
+	private WeatherServiceImpl weatherService;
 	
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
-		weatherService.initialize(nameCap, ub);
-		//METODO CHE AVVIA IL TIMER DI UN'ORA
 		
+		weatherService.initialize(nameCap, ub);
+		
+		//METODO CHE AVVIA IL TIMER DI UN'ORA
 		Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
 
 							            @Override
 							            public void run() {
@@ -37,7 +38,6 @@ public class WeatherController {
 							            }
         }, 0, TimeUnit.HOURS.toMillis(1));
     
-        
 		return new ResponseEntity<>("Everything is ok", HttpStatus.OK);
 	}
 	

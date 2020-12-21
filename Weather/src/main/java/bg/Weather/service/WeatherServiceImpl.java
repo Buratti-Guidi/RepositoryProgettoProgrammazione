@@ -58,9 +58,6 @@ public class WeatherServiceImpl implements WeatherService {
 		}
 		
 		this.leggiDB();
-		this.getCities();
-		
-		
 	}
 	
 	public void getCities() {
