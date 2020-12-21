@@ -156,13 +156,14 @@ public class WeatherServiceImpl implements WeatherService {
 				ja.add(tempMax);
 				break;
 				
-			case "all": //DA CONTROLLARE
-				for(Stats s : sc.getStats()) {
+			case "all":
+				for(Stats s : sc.getStats(dataset.getDataset())) {
 					ja.add(s.getAllHashMap());
 				}
 				break;
 				
-			default: //throw new Exception();
+			default:
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Richiesta non corretta");
 		}
 		return ja;
 	}

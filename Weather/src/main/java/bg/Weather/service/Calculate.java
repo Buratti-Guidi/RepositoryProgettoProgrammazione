@@ -112,7 +112,7 @@ public class Calculate {
 				else {
 					int j = 0;
 					for(CityData cd : hc.getHourCities()) {
-						if(tempMin.get(count - j - 1) < cd.getTemperatura())
+						if(tempMin.get(count - j - 1) > cd.getTemperatura())
 							tempMin.set(count - j - 1, cd.getTemperatura());
 						
 						j++;

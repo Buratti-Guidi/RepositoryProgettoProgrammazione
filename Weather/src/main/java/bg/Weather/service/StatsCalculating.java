@@ -47,9 +47,36 @@ public class StatsCalculating {
 		return variances;
 	}
 	
+	public LinkedList<Stats> getStats(LinkedList<HashSet<HourCities>> dataset) {
+		LinkedList<Double> medie = new LinkedList<Double>();
+		medie = this.getAverages(dataset);
+		LinkedList<Double> varianze = new LinkedList<Double>();
+		varianze = this.getVariances(dataset);
+		LinkedList<Double> temperatureMax = new LinkedList<Double>();
+		temperatureMax = this.getTempMax(dataset);
+		LinkedList<Double> temperatureMin = new LinkedList<Double>();
+		temperatureMin = this.getTempMin(dataset);
+		LinkedList<String> nomi = new LinkedList<String>();
+		nomi = this.getNames(dataset);
+		
+		for(int i=0; i<nomi.size(); i++) {
+			Stats s = new Stats();
+			s.setName(nomi.get(i));
+			s.setAvgTemp(medie.get(i));
+			s.setTempMax(temperatureMax.get(i));
+			s.setTempMin(temperatureMin.get(i));
+			s.setVar(varianze.get(i));
+			this.stats.add(s);
+		}
+		return stats;
+	}
+	
+	/*
 	public LinkedList<Stats> getStats() {
 		Stats s = new Stats();
-		for(int i = 0; i < this.names.size(); i++) {
+		LinkedList<String> nomi = new LinkedList<String>();
+		nomi = this.getNames(LinkedList<HashSet<HourCities>> dataset);
+		for(int i = 0; i < ; i++) {
 			s.setName(this.names.get(i));
 			s.setAvgTemp(this.averages.get(i));
 			s.setTempMax(this.tempMax.get(i));
@@ -59,6 +86,7 @@ public class StatsCalculating {
 		}
 		return stats;
 	}
+	*/
 
 }	
 	
