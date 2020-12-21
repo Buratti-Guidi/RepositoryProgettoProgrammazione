@@ -9,14 +9,12 @@ import java.util.LinkedList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
 import bg.Weather.exception.GeneralException;
-import bg.Weather.exception.NotInitializedException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
