@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import bg.Weather.exception.GeneralException;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -26,24 +27,25 @@ public class WeatherController {
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
 		
-		weatherService.initialize(nameCap, ub);
+		//GUARDARE LA GESTIONE DELLE ECCEZIONI
+			weatherService.initialize(nameCap, ub);
+			
+			//METODO CHE AVVIA IL TIMER DI UN'ORA
+			Timer timer = new Timer();
+	        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
+	
+								            @Override
+								            public void run() {
+								            	weatherService.getCities();
+								            }
+	        }, 0, TimeUnit.HOURS.toMillis(1));
 		
-		//METODO CHE AVVIA IL TIMER DI UN'ORA
-		Timer timer = new Timer();
-        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
-
-							            @Override
-							            public void run() {
-							            	weatherService.getCities();
-							            }
-        }, 0, TimeUnit.HOURS.toMillis(1));
-    
 		return new ResponseEntity<>("Everything is ok", HttpStatus.OK);
+		
 	}
 	
 	@GetMapping(value = "/getData")
 	public JSONArray getData(){
-		weatherService.salvaDB();
 		return weatherService.getData();
 	}
 	
@@ -54,6 +56,7 @@ public class WeatherController {
 	
 	@GetMapping(value = "/save")
 	public ResponseEntity<Object> saveDB() {
+		weatherService.salvaDB();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}
 	/*

@@ -30,34 +30,42 @@ public class WeatherServiceImpl implements WeatherService {
 
 	DownloadJSON fileJSON = new DownloadJSON();
 	Database dataset;
-	String nomeCap;
+	String nomeFile;
 	Box b = new Box();
 	
 	@Override
-	public void initialize(String cap, JSONObject ub) {
+	public void initialize(String cap, JSONObject ub){
 		dataset = new Database();
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
+		String nomeCap;
 		
 		if(!verifica.verifyCap(cap))
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
-		this.nomeCap = cap.toUpperCase();
+		nomeCap = cap.toUpperCase();
 		
 		capital.setNome(cap);
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
 		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
 		
-		Number l = (Number)ub.get("length");
-		Number w = (Number)ub.get("width");
-		
 		try {
+			Number l = (Number)ub.get("length");
+			Number w = (Number)ub.get("width");
 			b = bc.generaBox(l.doubleValue(),w.doubleValue());
+			
+			Integer len = (Integer)l;
+			Integer wid = (Integer)w;
+			
+			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json"; 
+			this.getCities();
+			this.leggiDB();
+			
+		}catch(ClassCastException ex) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The body format is incorrect");	
 		}catch(GeneralException ge) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The box isn't acceptable");
 		}
-		
-		this.leggiDB();
 	}
 	
 	public void getCities() {
@@ -169,19 +177,18 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public void salvaDB() {
-		String nome_file = this.nomeCap.replace(" ","_") + ".json";
-		fileJSON.scriviFile(nome_file, this.getData());
+		
+		fileJSON.scriviFile(nomeFile, this.getData());
 	}
 	
 	public void leggiDB() {
 		
 		JSONArray ja = new JSONArray();
-		
-		String nome_file = this.nomeCap.replace(" ","_") + ".json";
+	
 		JSONWeatherParser jwp = new JSONWeatherParser();
 		try {
-			ja = fileJSON.caricaFileArr(nome_file);
-			//Scorro il JSONArray e aggiungo ogni hourcities al dataset 
+			ja = fileJSON.caricaFileArr(nomeFile);
+			//Scorro il JSONArray e aggiungo ogni hourcities al dataset
 			for(int i = 0; i< ja.size(); i++) {
 				try {
 					HourCities cities = new HourCities();

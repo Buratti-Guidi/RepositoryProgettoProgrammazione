@@ -2,6 +2,8 @@ package bg.Weather.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -109,7 +111,7 @@ public class DownloadJSON {
 	}
 	
 	//Legge da file.json un array
-	public JSONArray caricaFileArr(String nome_file) {
+	public JSONArray caricaFileArr(String nome_file) throws Exception{
 		
 		JSONArray ja = new JSONArray();
 		JSONParser parser = new JSONParser();
@@ -119,12 +121,15 @@ public class DownloadJSON {
 			ja = (JSONArray) json_file;
 			return ja;
 			
+		
+		}catch(FileNotFoundException e) {
+			throw new Exception();
 		}catch (IOException e) {
 			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su caricaFileArr");
-		}catch(Exception e) {
+		}catch (ParseException e) {
 			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su caricaFileArr");//PROVA
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su parse caricaFileArr");
 		}
 	}
 	
@@ -132,8 +137,14 @@ public class DownloadJSON {
 		
 		String txt = ja.toString();
 		try {
+			File file = new File(nome_file);
+			
+			if(!file.exists())
+				file.createNewFile();
+			
 			BufferedWriter buf = new BufferedWriter(new FileWriter(nome_file));
 			buf.write(txt);
+			buf.flush();
 			buf.close();
 		}catch(IOException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore scrittura sul file");
