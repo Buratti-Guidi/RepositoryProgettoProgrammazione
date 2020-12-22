@@ -129,7 +129,6 @@ public class WeatherServiceImpl implements WeatherService {
 			
 			case "avg":
 				i = 0;
-				
 				for(String name : sc.getNames(dataset.getDataset())) {
 					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
 					joavg.put("name", name);
@@ -140,39 +139,47 @@ public class WeatherServiceImpl implements WeatherService {
 					ja.add(joavg);
 					i++;
 				}
-				
 				break;
 				
 			case "var":
 				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					ja.add(name);
+					LinkedHashMap<String, Object> jovar = new LinkedHashMap<String, Object>();
+					jovar.put("name", name);
 					HashMap<String, Double> var = new HashMap<String, Double>();
 					var.put("var", sc.getVariances(dataset.getDataset()).get(i));
+					jovar.put("result", var);
+					
+					ja.add(jovar);
 					i++;
-					ja.add(var);
 				}
 				break;
 				
 			case "temp_min":
 				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					ja.add(name);
+					LinkedHashMap<String, Object> jotmin = new LinkedHashMap<String, Object>();
+					jotmin.put("name", name);
 					HashMap<String, Double> tempMin = new HashMap<String, Double>();
 					tempMin.put("temp_min", sc.getTempMin(dataset.getDataset()).get(i));
+					jotmin.put("result", tempMin);
+					
+					ja.add(jotmin);
 					i++;
-					ja.add(tempMin);
 				}
 				break;
 				
 			case "temp_max":
 				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					ja.add(name);
+					LinkedHashMap<String, Object> jotmax = new LinkedHashMap<String, Object>();
+					jotmax.put("name", name);
 					HashMap<String, Double> tempMax = new HashMap<String, Double>();
 					tempMax.put("temp_max", sc.getTempMax(dataset.getDataset()).get(i));
+					jotmax.put("result", tempMax);
+					
+					ja.add(jotmax);
 					i++;
-					ja.add(tempMax);
 				}
 				break;
 				
