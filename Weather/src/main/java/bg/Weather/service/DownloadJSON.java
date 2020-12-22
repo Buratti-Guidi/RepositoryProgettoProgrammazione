@@ -134,7 +134,6 @@ public class DownloadJSON {
 	}
 	
 	public void scriviFile(String nome_file,JSONArray ja) {
-		
 		String txt = ja.toString();
 		try {
 			File file = new File(nome_file);
@@ -144,11 +143,9 @@ public class DownloadJSON {
 			
 			BufferedWriter buf = new BufferedWriter(new FileWriter(nome_file));
 			buf.write(txt);
-			buf.flush();
 			buf.close();
 		}catch(IOException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore scrittura sul file");
 		}
 	}
-	
 }

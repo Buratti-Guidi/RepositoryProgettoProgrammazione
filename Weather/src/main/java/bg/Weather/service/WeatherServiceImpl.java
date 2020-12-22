@@ -57,9 +57,9 @@ public class WeatherServiceImpl implements WeatherService {
 			Integer len = (Integer)l;
 			Integer wid = (Integer)w;
 			
-			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json"; 
-			this.getCities();
+			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json";
 			this.leggiDB();
+			this.getCities();
 			
 		}catch(ClassCastException ex) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The body format is incorrect");	
@@ -125,16 +125,41 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		switch(param) {
 			
-			case "avg":
+		
+		case "avg":
 				i = 0;
 				for(String name : sc.getNames(dataset.getDataset())) {
-					ja.add(name);
+					JSONArray javg = new JSONArray();
+					
+					HashMap<String, String> nome = new HashMap<String, String>();
+					nome.put("name", name);
+					javg.add(nome);
+					
 					HashMap<String, Double> avg = new HashMap<String, Double>();
 					avg.put("avg", sc.getAverages(dataset.getDataset()).get(i));
 					i++;
-					ja.add(avg);
+					javg.add(avg);
+					ja.add(javg);
+				}
+				for(Object o : ja) {
+					JSONArray city = (JSONArray) o;
+					
 				}
 				break;
+				
+		case "avg2":
+			i = 0;
+			for(String name : sc.getNames(dataset.getDataset())) {
+				JSONObject joavg = new JSONObject();
+				joavg.put("name", name);
+				HashMap<String, Double> avg = new HashMap<String, Double>();
+				avg.put("avg", sc.getAverages(dataset.getDataset()).get(i));
+				joavg.put("result", avg);
+				
+				ja.add(joavg);
+				i++;
+			}
+			break;
 				
 			case "var":
 				i = 0;
