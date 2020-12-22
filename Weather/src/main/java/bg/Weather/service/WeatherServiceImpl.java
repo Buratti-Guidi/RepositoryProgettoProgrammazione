@@ -129,6 +129,7 @@ public class WeatherServiceImpl implements WeatherService {
 			
 			case "avg":
 				i = 0;
+				
 				for(String name : sc.getNames(dataset.getDataset())) {
 					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
 					joavg.put("name", name);
@@ -139,6 +140,7 @@ public class WeatherServiceImpl implements WeatherService {
 					ja.add(joavg);
 					i++;
 				}
+				
 				break;
 				
 			case "var":
@@ -188,7 +190,30 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	public void salvaDB() {
 		
-		fileJSON.scriviFile(nomeFile, this.getData());
+		JSONArray tot = new JSONArray();
+		
+		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
+		data = this.dataset.getDataset();
+		
+		for(int i = data.size()-1; i >= 0 ; i--) {
+			JSONArray giornata = new JSONArray();
+					
+			for(HourCities hc : data.get(i)) {
+				
+				JSONArray cittaOrarie = new JSONArray();
+				for(CityData cd : hc.getHourCities()) {
+					try {
+						cittaOrarie.add(cd.getAllHashMap());
+					}catch(ClassCastException ex) {
+						throw new ResponseStatusException(HttpStatus.CONFLICT,"Errore nella conversione del dataset in JSON");
+					}
+				}
+				giornata.add(cittaOrarie);
+			}
+			tot.add(giornata);
+		}
+		
+		fileJSON.scriviFile(nomeFile, tot);
 	}
 	
 	public void leggiDB() {
@@ -198,14 +223,17 @@ public class WeatherServiceImpl implements WeatherService {
 		JSONWeatherParser jwp = new JSONWeatherParser();
 		try {
 			ja = fileJSON.caricaFileArr(nomeFile);
-			//Scorro il JSONArray e aggiungo ogni hourcities al dataset
-			for(int i = 0; i< ja.size(); i++) {
+			
+			for(int i = 0; i < ja.size(); i++) {
+			//for(JSONArray jsonArr : (JSONArray)(ja.get(i))) {
+				for(int j=0; j < ((JSONArray)ja.get(i)).size(); j++) {
 				try {
 					HourCities cities = new HourCities();
-					jwp.parseBoxFile((JSONArray)ja.get(i), cities);
+					jwp.parseBoxFile((JSONArray)ja.get(j), cities);
 					this.dataset.aggiornaDatabase(cities);
 				}catch(Exception e) {
 					throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla lettura del file");
+				}
 				}
 			}
 		}catch(Exception ex) {
