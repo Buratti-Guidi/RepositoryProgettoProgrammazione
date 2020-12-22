@@ -229,7 +229,8 @@ public class WeatherServiceImpl implements WeatherService {
 				for(int j=0; j < ((JSONArray)ja.get(i)).size(); j++) {
 				try {
 					HourCities cities = new HourCities();
-					jwp.parseBoxFile((JSONArray)ja.get(j), cities);
+					JSONArray city = (JSONArray)((JSONArray)((JSONArray)ja.get(i))).get(j);
+					jwp.parseBoxFile(city, cities);
 					this.dataset.aggiornaDatabase(cities);
 				}catch(Exception e) {
 					throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla lettura del file");
