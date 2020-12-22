@@ -98,10 +98,7 @@ public class WeatherServiceImpl implements WeatherService {
 	public JSONArray getData() {
 		JSONArray tot = new JSONArray();
 		
-		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
-		data = this.dataset.getDataset();
-		
-		for(HashSet<HourCities> hs : data) {
+		for(HashSet<HourCities> hs : this.dataset.getDataset()) {
 			for(HourCities hourc : hs) {
 				JSONArray cittaOrarie = new JSONArray();
 				for(CityData cd : hourc.getHourCities()) {
@@ -199,13 +196,10 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		JSONArray tot = new JSONArray();
 		
-		LinkedList<HashSet<HourCities>> data = new LinkedList<HashSet<HourCities>>();
-		data = this.dataset.getDataset();
-		
-		for(int i = data.size()-1; i >= 0 ; i--) {
+		for(int i = this.dataset.getDataset().size()-1; i >= 0 ; i--) {
 			JSONArray giornata = new JSONArray();
 					
-			for(HourCities hc : data.get(i)) {
+			for(HourCities hc : this.dataset.getDataset().get(i)) {
 				
 				JSONArray cittaOrarie = new JSONArray();
 				for(CityData cd : hc.getHourCities()) {
