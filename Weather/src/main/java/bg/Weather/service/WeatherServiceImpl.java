@@ -10,7 +10,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -149,23 +151,7 @@ public class WeatherServiceImpl implements WeatherService {
 				LinkedList<Double> values = new LinkedList<Double>();
 				values = sc.getAverages(dataset.getDataset()); 
 				
-				HashMap mp = new HashMap();//mettere String Double
-				
-				for(int x = 0; x<nomi.size();x++) {
-					mp.put(nomi.get(x), values.get(x));
-				}
-				
-				Object[] ordine = values.toArray();
-				java.util.Arrays.sort(ordine);
-				//nomi.clear();
-				//values.clear();
-				
-				for(int x = 0; x<ordine.length;x++) {
-					
-					nomi.set(x,(String)mp.get(ordine[x])); 
-					values.set(x,(Double)ordine[x]);
-				}
-				
+				sc.sortStats(nomi, values,false);
 				
 				i = 0;
 				

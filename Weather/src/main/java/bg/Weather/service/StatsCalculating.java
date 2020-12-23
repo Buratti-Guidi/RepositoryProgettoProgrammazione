@@ -1,7 +1,9 @@
 package bg.Weather.service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import bg.Weather.model.HourCities;
 import bg.Weather.model.Stats;
@@ -69,5 +71,70 @@ public class StatsCalculating {
 			this.stats.add(s);
 		}
 		return stats;
+	}
+	
+	public void sortStats(LinkedList<String> cityNames, LinkedList<Double> values, boolean ascending) {
+		HashMap<String, Double> mp = new HashMap<String, Double>();
+		
+		for(int x = 0; x < cityNames.size();x++) {
+			mp.put(cityNames.get(x), values.get(x));
+		}
+		Object[] sort = values.toArray();
+		java.util.Arrays.sort(sort);
+		
+		Set<String> n = mp.keySet();
+		Object[] namesArray = n.toArray();
+		
+		
+			for(int x = 0; x < sort.length;x++) {
+				for(int p = 0; p < namesArray.length ; p++) {
+					if(mp.get((String)namesArray[p]) == sort[x]) {
+						cityNames.set(x,(String)namesArray[p]); 
+						break;
+					}	
+				}
+				values.set(x,(Double)sort[x]);
+			}
+			
+			if(!ascending) {
+				int j = 0;
+				for(int x = cityNames.size() - 1; x >= 0 ; x--,j++) {
+					String nomeApp = cityNames.get(j);
+					Double valueApp = values.get(j);
+					
+					cityNames.set(j, cityNames.get(x));
+					values.set(j, values.get(x));
+					
+					cityNames.set(x, nomeApp);
+					values.set(x, valueApp);
+				}
+				
+			}
+		/*
+		if(ascending) {
+			for(int x = 0; x < sort.length;x++) {
+				for(int p = 0; p < namesArray.length ; p++) {
+					if(mp.get((String)namesArray[p]) == sort[x]) {
+						cityNames.set(x,(String)namesArray[p]); 
+						break;
+					}	
+				}
+				values.set(x,(Double)sort[x]);
+			}
+		}
+		else {
+			for(int x = sort.length - 1; x >= 0; x--) {
+				for(int p = 0; p < namesArray.length ; p++) {
+					if(mp.get((String)namesArray[p]) == sort[x]) {
+						cityNames.set(x,(String)namesArray[p]); 
+						break;
+					}	
+				}
+				values.set(x,(Double)sort[x]);
+			}
+		}
+		*/
+		
+		
 	}
 }
