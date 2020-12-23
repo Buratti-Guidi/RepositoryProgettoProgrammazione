@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -131,6 +133,47 @@ public class WeatherServiceImpl implements WeatherService {
 					joavg.put("name", name);
 					HashMap<String, Double> avg = new HashMap<String, Double>();
 					avg.put("avg", sc.getAverages(dataset.getDataset()).get(i));
+					joavg.put("result", avg);
+					
+					ja.add(joavg);
+					i++;
+				}
+				break;
+				
+			case "provAvg":
+				
+				
+				LinkedList<String> nomi = new LinkedList<String>();
+				nomi = sc.getNames(dataset.getDataset()); 
+				
+				LinkedList<Double> values = new LinkedList<Double>();
+				values = sc.getAverages(dataset.getDataset()); 
+				
+				HashMap mp = new HashMap();//mettere String Double
+				
+				for(int x = 0; x<nomi.size();x++) {
+					mp.put(nomi.get(x), values.get(x));
+				}
+				
+				Object[] ordine = values.toArray();
+				java.util.Arrays.sort(ordine);
+				//nomi.clear();
+				//values.clear();
+				
+				for(int x = 0; x<ordine.length;x++) {
+					
+					nomi.set(x,(String)mp.get(ordine[x])); 
+					values.set(x,(Double)ordine[x]);
+				}
+				
+				
+				i = 0;
+				
+				for(String name : nomi) {
+					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
+					joavg.put("name", name);
+					HashMap<String, Double> avg = new HashMap<String, Double>();
+					avg.put("avg", values.get(i));
 					joavg.put("result", avg);
 					
 					ja.add(joavg);
