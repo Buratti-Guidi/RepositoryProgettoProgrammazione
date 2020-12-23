@@ -22,7 +22,7 @@ import bg.Weather.service.WeatherServiceImpl;
 public class WeatherController {
 
 	@Autowired
-	private WeatherServiceImpl weatherService;
+	WeatherServiceImpl weatherService;
 	
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
@@ -59,22 +59,5 @@ public class WeatherController {
 		weatherService.salvaDB();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}
-	/*
-	 * @GetMApping(value = "/boh/{acaso}")
-	 * public ResponseEntity<Object> funzioneAcaso(@PathVariable("acaso") String nameCap) {
-	 * 
-	 * try
-	 * {
-			weatherService.funzioneacaso();
-			
-		}catch(NotInitializedException e)
-		{
-			return new ResponseEntity<>("Non sono ancora stati inseriti i valori", HttpStatus.BAD_REQUEST);
-		}
-		...
-		...
-		return new ResponseEntity<>("E' andato tutto bene", HttpStatus.OK);
-		
-	 */
 	
 }

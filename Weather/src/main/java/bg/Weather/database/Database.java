@@ -38,13 +38,19 @@ public class Database {
 				if(cal.get(Calendar.HOUR_OF_DAY) == cities.getCalendar().get(Calendar.HOUR_OF_DAY)) //Se non è variata l'ora dell'ultima chiamata, non aggiorno il dataset
 					return;
 				
-				HashSet<HourCities> h = new HashSet<HourCities>(); //HashSet temporaneo per aggiornare il giorno più recente (oggi)
-				h = dataset.getFirst(); //Assegno ad h il valore di oggi così da non perdere i dati già salvati in esso
+				HashSet<HourCities> day = new HashSet<HourCities>(); //HashSet temporaneo per aggiornare il giorno più recente (oggi)
+				day = dataset.getFirst(); //Assegno ad h il valore di oggi così da non perdere i dati già salvati in esso
 				
-				h.add(cities); //Aggiorno l'HashSet con l'ultimo HourCities ottenuto in un'ora differente dello stesso giorno (dall'ultima API call)
+				day.add(cities); //Aggiorno l'HashSet con l'ultimo HourCities ottenuto in un'ora differente dello stesso giorno (dall'ultima API call)
 				
 				dataset.pollFirst(); //Rimuovo il giorno non aggiornato
-				dataset.push(h); //Assegno ad "oggi" il nuovo Hashset con i valori aggiornati aggiungendo così anche quelli dell'ultima ora
+				dataset.push(day); //Assegno ad "oggi" il nuovo Hashset con i valori aggiornati aggiungendo così anche quelli dell'ultima ora
+				return;
+			}
+			else {
+				HashSet<HourCities> day = new HashSet<HourCities>();
+				day.add(cities);
+				dataset.push(day);
 				return;
 			}
 		}
