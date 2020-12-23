@@ -126,40 +126,24 @@ public class WeatherServiceImpl implements WeatherService {
 		JSONArray ja = new JSONArray();
 		int i;
 		
+		LinkedList<String> nomi;
+		
 		switch(param) {
 			
 			case "avg":
-				i = 0;
-				for(String name : sc.getNames(dataset.getDataset())) {
-					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-					joavg.put("name", name);
-					HashMap<String, Double> avg = new HashMap<String, Double>();
-					avg.put("avg", sc.getAverages(dataset.getDataset()).get(i));
-					joavg.put("result", avg);
-					
-					ja.add(joavg);
-					i++;
-				}
-				break;
+				nomi = new LinkedList<String>();
+				nomi = sc.getNames(dataset.getDataset());
+				LinkedList<Double> averages = new LinkedList<Double>();
+				averages = sc.getAverages(dataset.getDataset());
 				
-			case "provAvg":
-				
-				
-				LinkedList<String> nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset()); 
-				
-				LinkedList<Double> values = new LinkedList<Double>();
-				values = sc.getAverages(dataset.getDataset()); 
-				
-				sc.sortStats(nomi, values,false);
+				sc.sortStats(nomi, averages, false);
 				
 				i = 0;
-				
 				for(String name : nomi) {
 					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
 					joavg.put("name", name);
 					HashMap<String, Double> avg = new HashMap<String, Double>();
-					avg.put("avg", values.get(i));
+					avg.put("avg", averages.get(i));
 					joavg.put("result", avg);
 					
 					ja.add(joavg);
@@ -168,12 +152,19 @@ public class WeatherServiceImpl implements WeatherService {
 				break;
 				
 			case "var":
+				nomi = new LinkedList<String>();
+				nomi = sc.getNames(dataset.getDataset());
+				LinkedList<Double> variances = new LinkedList<Double>();
+				variances = sc.getVariances(dataset.getDataset());
+				
+				sc.sortStats(nomi, variances, false);
+				
 				i = 0;
-				for(String name : sc.getNames(dataset.getDataset())) {
+				for(String name : nomi) {
 					LinkedHashMap<String, Object> jovar = new LinkedHashMap<String, Object>();
 					jovar.put("name", name);
 					HashMap<String, Double> var = new HashMap<String, Double>();
-					var.put("var", sc.getVariances(dataset.getDataset()).get(i));
+					var.put("var", variances.get(i));
 					jovar.put("result", var);
 					
 					ja.add(jovar);
@@ -182,12 +173,19 @@ public class WeatherServiceImpl implements WeatherService {
 				break;
 				
 			case "temp_min":
+				nomi = new LinkedList<String>();
+				nomi = sc.getNames(dataset.getDataset());
+				LinkedList<Double> temp_min = new LinkedList<Double>();
+				temp_min = sc.getTempMin(dataset.getDataset());
+				
+				sc.sortStats(nomi, temp_min, true);
+				
 				i = 0;
-				for(String name : sc.getNames(dataset.getDataset())) {
+				for(String name : nomi) {
 					LinkedHashMap<String, Object> jotmin = new LinkedHashMap<String, Object>();
 					jotmin.put("name", name);
 					HashMap<String, Double> tempMin = new HashMap<String, Double>();
-					tempMin.put("temp_min", sc.getTempMin(dataset.getDataset()).get(i));
+					tempMin.put("temp_min", temp_min.get(i));
 					jotmin.put("result", tempMin);
 					
 					ja.add(jotmin);
@@ -196,12 +194,19 @@ public class WeatherServiceImpl implements WeatherService {
 				break;
 				
 			case "temp_max":
+				nomi = new LinkedList<String>();
+				nomi = sc.getNames(dataset.getDataset());
+				LinkedList<Double> temp_max = new LinkedList<Double>();
+				temp_max = sc.getTempMin(dataset.getDataset());
+				
+				sc.sortStats(nomi, temp_max, false);
+				
 				i = 0;
-				for(String name : sc.getNames(dataset.getDataset())) {
+				for(String name : nomi) {
 					LinkedHashMap<String, Object> jotmax = new LinkedHashMap<String, Object>();
 					jotmax.put("name", name);
 					HashMap<String, Double> tempMax = new HashMap<String, Double>();
-					tempMax.put("temp_max", sc.getTempMax(dataset.getDataset()).get(i));
+					tempMax.put("temp_max", temp_max.get(i));
 					jotmax.put("result", tempMax);
 					
 					ja.add(jotmax);
