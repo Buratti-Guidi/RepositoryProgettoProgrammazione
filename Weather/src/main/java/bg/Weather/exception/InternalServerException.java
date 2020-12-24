@@ -6,13 +6,13 @@ package bg.Weather.exception;
  * @author Christopher Buratti
  *
  */
-public class GeneralException extends Exception{
+public class InternalServerException extends Exception{
 
-	public GeneralException() {
+	public InternalServerException() {
 		super();
 	}
 	
-	public GeneralException(String message) {
+	public InternalServerException(String message) {
 		super(message);
 	}
 }

@@ -48,7 +48,7 @@ public class CityInfo {
 	}
 	
 	//metodo che inserisce le coordinate dentro la variabile citta passata
-	public void getCoord(CityData citta) {
+	public void getCoord(CityData citta) throws Exception{
 		
 		APIKey apikey = new APIKey();
 		

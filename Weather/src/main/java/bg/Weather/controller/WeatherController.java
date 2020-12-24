@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import bg.Weather.exception.GeneralException;
+import bg.Weather.exception.InternalServerException;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -28,8 +29,11 @@ public class WeatherController {
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
 		
 		//GUARDARE LA GESTIONE DELLE ECCEZIONI
+		try {
 			weatherService.initialize(nameCap, ub);
-			
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore initialize");
+		}
 			//METODO CHE AVVIA IL TIMER DI UN'ORA
 			Timer timer = new Timer();
 	        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
@@ -51,7 +55,13 @@ public class WeatherController {
 	
 	@PostMapping(value = "/getStats")
 	public JSONArray postStats(@RequestBody JSONObject stat) {
+		try {
+			
+		
 		return weatherService.getStats(stat);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore GetStats");
+		}
 	}
 	
 	@GetMapping(value = "/save")

@@ -1,6 +1,6 @@
 package bg.Weather.service;
 
-import bg.Weather.exception.GeneralException;
+import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.Box;
 
 public class BoxCalculating {
@@ -20,7 +20,7 @@ public class BoxCalculating {
 	
 	
 	
-	public Box generaBox(double length, double width) throws GeneralException{
+	public Box generaBox(double length, double width){
 			
 		Box box = new Box();
 			
@@ -28,7 +28,7 @@ public class BoxCalculating {
 		this.setLargh_in_gradi(width * 0.5 * km_to_deg); //Converto la semi-larghezza del box in gradi decimali
 			
 		if((this.lungh_in_gradi * this.largh_in_gradi) > 25.00 || (this.lungh_in_gradi * this.largh_in_gradi) <= 0)
-			throw new GeneralException("Invalid box");
+			throw new UserErrorException("The box isn't acceptable");
 		
 		box.setLatUp(this.getLat_centro() + this.getLungh_in_gradi());
 		box.setLatDown(this.getLat_centro() - this.getLungh_in_gradi());

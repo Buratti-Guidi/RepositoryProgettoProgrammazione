@@ -21,12 +21,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
+import bg.Weather.exception.InternalServerException;
 
 
 public class DownloadJSON {
 
 	//Legge da chiamata API un oggetto
-	public JSONObject chiamataAPIObj(String url) {
+	public JSONObject chiamataAPIObj(String url) throws Exception{
 		JSONObject jo = new JSONObject();
 		try {
 			URLConnection openConnection = new URL(url).openConnection();
@@ -49,12 +50,12 @@ public class DownloadJSON {
 			jo = (JSONObject) JSONValue.parseWithException(data);	 //parse JSON Object
 			return jo;
 			
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un oggetto");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un oggetto");
+		} catch (IOException  e) {
+			throw new IOException("Errore lettura chiamata API di un oggetto");
+		} catch (ParseException ex) {
+			throw new InternalServerException("Errore parsing JSONObject");
+		} catch (Exception exe) {
+			throw new Exception("Errore lettura chiamata API di un oggetto");
 		}
 	}
 	

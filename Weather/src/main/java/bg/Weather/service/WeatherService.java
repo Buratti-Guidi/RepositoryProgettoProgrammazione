@@ -6,7 +6,7 @@ package bg.Weather.service;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import bg.Weather.exception.GeneralException;
+import bg.Weather.exception.InternalServerException;
 
 /**
  * @author Luca
@@ -14,7 +14,7 @@ import bg.Weather.exception.GeneralException;
  */
 public interface WeatherService {
 
-	public void initialize(String cap,JSONObject ub);
+	public void initialize(String cap,JSONObject ub) throws Exception;
 	
 	public void getCities();
 	

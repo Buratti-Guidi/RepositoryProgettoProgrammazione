@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import bg.Weather.exception.InternalServerException;
 import bg.Weather.model.HourCities;
 import bg.Weather.model.Stats;
 
@@ -73,36 +74,40 @@ public class StatsCalculating {
 		return stats;
 	}
 	
-	public void sortStats(LinkedList<String> cityNames, LinkedList<Double> values, boolean ascending) {
+	public void sortStats(LinkedList<String> cityNames, LinkedList<Double> values, boolean ascending) throws InternalServerException{
 		LinkedList<String> n_final = new LinkedList<String>();
 		LinkedList<Double> v_final = new LinkedList<Double>();
 		
-		int cont = 0;
-		do {
-			int indice = 0;
-			Double min = Double.MIN_VALUE;
-			for(int i = 0; i < values.size(); i++) {
-				if(values.get(i) > min) {
-					indice = i;
-					min = values.get(i);
+		try {
+			int cont = 0;
+			do {
+				int indice = 0;
+				Double min = Double.MIN_VALUE;
+				for(int i = 0; i < values.size(); i++) {
+					if(values.get(i) > min) {
+						indice = i;
+						min = values.get(i);
+					}
+				}
+				v_final.push(values.get(indice));
+				n_final.push(cityNames.get(indice));
+				values.set(indice, Double.MIN_VALUE);
+				cont++;
+			} while(cont < values.size());
+			if(ascending) {
+				for(int i = 0; i < values.size(); i++) {
+					values.set(i, v_final.get(i));
+					cityNames.set(i, n_final.get(i));
 				}
 			}
-			v_final.push(values.get(indice));
-			n_final.push(cityNames.get(indice));
-			values.set(indice, Double.MIN_VALUE);
-			cont++;
-		} while(cont < values.size());
-		if(ascending) {
-			for(int i = 0; i < values.size(); i++) {
-				values.set(i, v_final.get(i));
-				cityNames.set(i, n_final.get(i));
+			else {
+				for(int i = values.size() - 1; i >= 0; i--) {
+					values.set(values.size() - i - 1, v_final.get(i));
+					cityNames.set(values.size() - i - 1, n_final.get(i));
+				}
 			}
-		}
-		else {
-			for(int i = values.size() - 1; i >= 0; i--) {
-				values.set(values.size() - i - 1, v_final.get(i));
-				cityNames.set(values.size() - i - 1, n_final.get(i));
-			}
+		}catch(Exception e){
+			throw new InternalServerException("Errore su SortStats");
 		}
 	}
 }

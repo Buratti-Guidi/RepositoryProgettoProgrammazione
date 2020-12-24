@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
-import bg.Weather.exception.GeneralException;
+import bg.Weather.exception.InternalServerException;
+import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
@@ -41,14 +42,14 @@ public class WeatherServiceImpl implements WeatherService {
 	Box b = new Box();
 	
 	@Override
-	public void initialize(String cap, JSONObject ub){
+	public void initialize(String cap, JSONObject ub)throws Exception{
 		dataset = new Database();
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
 		String nomeCap;
 		
 		if(!verifica.verifyCap(cap))
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The city is not a capital");
+			throw new UserErrorException( "The city is not a capital");
 		nomeCap = cap.toUpperCase();
 		
 		capital.setNome(cap);
@@ -68,9 +69,7 @@ public class WeatherServiceImpl implements WeatherService {
 			this.leggiDB();
 			
 		}catch(ClassCastException ex) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The body format is incorrect");	
-		}catch(GeneralException ge) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The box isn't acceptable");
+			throw new UserErrorException("The body format is incorrect");	
 		}
 	}
 	
@@ -119,7 +118,7 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray getStats(JSONObject stat) {
+	public JSONArray getStats(JSONObject stat) throws InternalServerException {
 		Object param = (Object)stat.get("param"); //DA CONTROLLARE SE IL VALORE DEL "PARAM" CONTIENE UNA HASHMAP CON I FILTRI RICHIESTI
 		
 		/* PROBABILMENTE DA CESTINARE
