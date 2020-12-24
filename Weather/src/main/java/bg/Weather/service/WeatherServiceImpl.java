@@ -121,6 +121,9 @@ public class WeatherServiceImpl implements WeatherService {
 	@SuppressWarnings("unchecked")
 	public JSONArray getStats(JSONObject stat) {
 		String param = (String)stat.get("param");
+		
+		//DA CONTROLLARE SE IL VALORE DEL "PARAM" CONTIENE UN JSONOBJECT CON I FILTRI RICHIESTI
+		
 		Integer numDays = (Integer)stat.get("days");
 		StatsCalculating sc = new StatsCalculating(numDays);
 		JSONArray ja = new JSONArray();
