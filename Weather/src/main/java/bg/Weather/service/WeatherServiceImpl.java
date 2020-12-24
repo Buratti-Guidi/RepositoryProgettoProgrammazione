@@ -120,9 +120,22 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	@SuppressWarnings("unchecked")
 	public JSONArray getStats(JSONObject stat) {
-		String param = (String)stat.get("param");
+		Object param = (Object)stat.get("param"); //DA CONTROLLARE SE IL VALORE DEL "PARAM" CONTIENE UNA HASHMAP CON I FILTRI RICHIESTI
 		
-		//DA CONTROLLARE SE IL VALORE DEL "PARAM" CONTIENE UN JSONOBJECT CON I FILTRI RICHIESTI
+		/* PROBABILMENTE DA CESTINARE
+		if(param instanceof JSONObject) {
+			HashMap<String, Integer> filter = new HashMap<String, Integer>();
+			filter = (JSONObject) param;
+			
+			String[] split = new String[2];
+			split = filter.toString().split("=");
+			String key;
+			key = split[0].substring(1);
+			split[1] = split[1].substring(0, split[1].length() - 1);
+			
+			int value = Integer.parseInt(split[1]);
+		}
+		*/
 		
 		Integer numDays = (Integer)stat.get("days");
 		StatsCalculating sc = new StatsCalculating(numDays);
@@ -131,7 +144,7 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		LinkedList<String> nomi;
 		
-		switch(param) {
+		switch((String) param) {
 			
 			case "avg":
 				nomi = new LinkedList<String>();
