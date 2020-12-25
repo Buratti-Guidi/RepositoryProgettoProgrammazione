@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,11 +57,20 @@ public class WeatherController {
 	@PostMapping(value = "/getStats")
 	public JSONArray postStats(@RequestBody JSONObject stat) {
 		try {
-			
-		
 		return weatherService.getStats(stat);
+		
 		}catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore GetStats");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore getStats");
+		}
+	}
+	
+	@PostMapping(value = "/stats/{param}")
+	public JSONArray postStatsWithFilters(@PathVariable("param") String param, @RequestBody JSONObject stat) {
+		try {
+		return weatherService.getStatsWFilters(param, stat);
+		
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore getStatsWFilters");
 		}
 	}
 	

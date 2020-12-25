@@ -8,6 +8,13 @@ import java.util.TimeZone;
 
 import bg.Weather.model.HourCities;
 
+/**
+ * Classe che rappresenta il database contenente i dati di tutte le chiamate orarie effettuate dal servizio in un massimo di 30 giorni
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ *
+ */
+
 public class Database {
 
 	final int daysMax = 30; //Numero di giorni massimo per cui vogliamo salvare tutte le informazioni riguardanti le città appartenenti al box (scelto inizialmente all'avvio del programma)

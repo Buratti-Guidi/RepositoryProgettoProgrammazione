@@ -1,11 +1,18 @@
 package bg.Weather.model;
 
+/**
+ * Classe che contiene i valori delle coordinate in cui il box (scelto dall'utente) è situato nel pianeta, così da essere in grado di effettuare le
+ * chiamate API tramite openweathermap
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class Box {
 
-	private double latUp;
-	private double latDown;
-	private double lonSx;
-	private double lonDx;
+	private double latUp; //Latitudine superiore
+	private double latDown; //Latitudine inferiore
+	private double lonSx; //longitudine sinistra			I valori sono espressi in gradi decimali
+	private double lonDx; //longitudine destra
 	
 	public double getLatUp() {
 		return latUp;

@@ -5,9 +5,15 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * Classe contenente i dati di tutte le città interne al box in ogni chiamata oraria dell'API
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class HourCities {
 
-	private HashSet<CityData> hourCities = new HashSet<CityData>();
+	private HashSet<CityData> hourCities = new HashSet<CityData>(); //HashSet delle città ottenute durante una chiamata
 
 	public HashSet<CityData> getHourCities() {
 		return hourCities;

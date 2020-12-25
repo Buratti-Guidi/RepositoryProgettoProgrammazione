@@ -3,14 +3,20 @@ package bg.Weather.model;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+/**
+ * Classe contenente i dati "variabili" di ogni città
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class CityData extends City{
 
-	private double temp;
-	private double temp_feels_like;
+	private double temp; //temperatura
+	private double temp_feels_like; //temperatura percepita
 	
-	private double windSpeed;
+	private double windSpeed; //velocità del vento (in m/s)
 	
-	private Date time;
+	private Date time; //data in cui sono stati ottenuti i dati
 	
 	public Date getTime() {
 		return this.time;
@@ -23,22 +29,23 @@ public class CityData extends City{
 	public double getTemperatura() {
 		return temp;
 	}
+	
 	public void setTemperatura(double temp) {
 		this.temp = temp;
 	}
 	
-	
 	public double getTemp_feels_like() {
 		return temp_feels_like;
 	}
+	
 	public void setTemp_feels_like(double temp_feels_like) {
 		this.temp_feels_like = temp_feels_like;
 	}
 	
-	
 	public double getWindSpeed() {
 		return windSpeed;
 	}
+	
 	public void setWindSpeed(double windSpeed) {
 		this.windSpeed = windSpeed;
 	}
@@ -61,5 +68,4 @@ public class CityData extends City{
 		all.put("time", this.getTime().toString());
 		return all;
 	}
-	
 }

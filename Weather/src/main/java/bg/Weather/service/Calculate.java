@@ -6,9 +6,16 @@ import java.util.LinkedList;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
+/**
+ * Classe utilizzata per lo svolgimento dei calcoli aritmetici per il calcolo delle statistiche sulle temperature (media, varianza, temperatura massima/minima)
+ * in un "numeroGiorni" di giorni e per l'ottenimento dei nomi delle città ordinato in modo tale da riuscire ad accedere per ogni città alle proprie statistiche
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class Calculate {
 	
-	private int numeroGiorni;
+	private int numeroGiorni; //numero di giorni a partire da oggi in cui ottenere le statistiche
 	
 	public Calculate(int numeroGiorni) {
 		this.numeroGiorni = numeroGiorni;
@@ -27,7 +34,7 @@ public class Calculate {
 	
 	public LinkedList<Double> ottieniMedie(LinkedList<HashSet<HourCities>> dataset) {
 		int count = 0; //Numero città del box
-		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e il numero di città (count)
+		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora)
 		
 		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
 		
@@ -130,7 +137,7 @@ public class Calculate {
 		LinkedList<Double> variances = new LinkedList<Double>();
 		
 		int count = 0; //Numero città del box
-		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e il numero di città (count)
+		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e salva il numero di città (count)
 		
 		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
 		

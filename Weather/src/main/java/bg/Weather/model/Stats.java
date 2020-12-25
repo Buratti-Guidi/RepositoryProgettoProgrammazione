@@ -2,6 +2,12 @@ package bg.Weather.model;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Classe contenente i dati statistici riguardanti una città in un numero x di giorni
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class Stats {
 
 	private String name; //nome della città
