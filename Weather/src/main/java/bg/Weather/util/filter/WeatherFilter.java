@@ -1,5 +1,8 @@
 package bg.Weather.util.filter;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 public class WeatherFilter {
 
 	protected String filter;
@@ -14,7 +17,7 @@ public class WeatherFilter {
 		this.value = value;
 	}
 
-	public void verifyFilter() throws Exception {
+	public void verifyFilter(){
 		switch (this.getFilter()) {
 
 		case "$gt":
@@ -23,7 +26,7 @@ public class WeatherFilter {
 			
 		//case "$gte":
 			
-		default: throw new Exception();
+		default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This filter doesn't exist");
 		}
 	}
 	

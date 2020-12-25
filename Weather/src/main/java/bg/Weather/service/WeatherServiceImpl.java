@@ -114,23 +114,7 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	@SuppressWarnings("unchecked")
 	public JSONArray getStats(JSONObject stat) throws InternalServerException {
-		Object param = (Object)stat.get("param"); //DA CONTROLLARE SE IL VALORE DEL "PARAM" CONTIENE UNA HASHMAP CON I FILTRI RICHIESTI
-		
-		/* PROBABILMENTE DA CESTINARE
-		if(param instanceof JSONObject) {
-			HashMap<String, Integer> filter = new HashMap<String, Integer>();
-			filter = (JSONObject) param;
-			
-			String[] split = new String[2];
-			split = filter.toString().split("=");
-			String key;
-			key = split[0].substring(1);
-			split[1] = split[1].substring(0, split[1].length() - 1);
-			
-			int value = Integer.parseInt(split[1]);
-		}
-		*/
-		
+		Object param = (Object)stat.get("param");
 		Integer numDays = (Integer)stat.get("days");
 		StatsCalculating sc = new StatsCalculating(numDays);
 		JSONArray ja = new JSONArray();
@@ -238,7 +222,7 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	@SuppressWarnings("unchecked")
 	public JSONArray getStatsWFilters(String param, JSONObject stat) throws InternalServerException {
-		Object filter = (JSONObject)stat.get("filter");
+		Object filter = stat.get("filter");
 		String key;
 		double value;
 		WeatherFilter wf = new WeatherFilter();
@@ -249,7 +233,7 @@ public class WeatherServiceImpl implements WeatherService {
 			HashMap<String, Double> fltr = new HashMap<String, Double>();
 			fltr = (JSONObject) filter;
 			String[] split = new String[2];
-			split = fltr.toString().split("=");
+			split = fltr.toString().split(":");
 			
 			key = split[0].substring(1);
 			split[1] = split[1].substring(0, split[1].length() - 1);
@@ -261,7 +245,7 @@ public class WeatherServiceImpl implements WeatherService {
 			try {
 				wf.verifyFilter();
 			} catch(Exception e) {
-				//Filtro non esistente
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This filter doesn't exist");
 			}
 		}
 		
