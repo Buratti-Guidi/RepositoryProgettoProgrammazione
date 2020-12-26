@@ -4,6 +4,8 @@
 package bg.Weather.service;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -11,9 +13,7 @@ import java.util.LinkedList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.database.Database;
 import bg.Weather.exception.InternalServerException;
@@ -24,6 +24,9 @@ import bg.Weather.model.HourCities;
 import bg.Weather.model.Stats;
 import bg.Weather.util.APIKey;
 import bg.Weather.util.filter.WeatherFilter;
+import bg.Weather.util.stats.Stat;
+
+import bg.Weather.util.stats.*; //da lasciare per il cast a una classe generica di questo package
 
 /**
  * @author Luca Guidi
@@ -107,114 +110,53 @@ public class WeatherServiceImpl implements WeatherService {
 		return tot;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public JSONArray getStats(JSONObject stat) throws InternalServerException {
-		Object param = (Object)stat.get("param");
+		String param = (String)stat.get("param");
 		Integer numDays = (Integer)stat.get("days");
-		StatsCalculating sc = new StatsCalculating(numDays);
-		JSONArray ja = new JSONArray();
-		int i;
 		
+		Stat s;
+		
+		LinkedList<Double> statistics;
 		LinkedList<String> nomi;
 		
-		switch((String) param) {
+		JSONArray ja = new JSONArray();
+		
+		String className = "bg.Weather.util.stats." + param.substring(0,1).toUpperCase()+ param.substring(1, param.length()).toLowerCase() + "Stats";
+		try {
+			Class<?> cls = Class.forName(className);
+			Constructor<?> ct = cls.getDeclaredConstructor(int.class);
+			s = (Stat)ct.newInstance(numDays);
 			
-			case "avg":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> averages = new LinkedList<Double>();
-				averages = sc.getAverages(dataset.getDataset());
+			statistics = s.getStats(dataset.getDataset());
+			nomi = s.getNames(dataset.getDataset());
+			s.sortStats(nomi, statistics, false);
+			
+			int i = 0;
+			for(String name : nomi) {
+				LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
+				joavg.put("name", name);
+				HashMap<String, Double> statistic = new HashMap<String, Double>();
+				statistic.put("avg", statistics.get(i));
+				joavg.put("result", statistic);
 				
-				sc.sortStats(nomi, averages, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-					joavg.put("name", name);
-					HashMap<String, Double> avg = new HashMap<String, Double>();
-					avg.put("avg", averages.get(i));
-					joavg.put("result", avg);
-					
-					ja.add(joavg);
-					i++;
-				}
-				break;
-				
-			case "var":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> variances = new LinkedList<Double>();
-				variances = sc.getVariances(dataset.getDataset());
-				
-				sc.sortStats(nomi, variances, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jovar = new LinkedHashMap<String, Object>();
-					jovar.put("name", name);
-					HashMap<String, Double> var = new HashMap<String, Double>();
-					var.put("var", variances.get(i));
-					jovar.put("result", var);
-					
-					ja.add(jovar);
-					i++;
-				}
-				break;
-				
-			case "temp_min":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> temp_min = new LinkedList<Double>();
-				temp_min = sc.getTempMin(dataset.getDataset());
-				
-				sc.sortStats(nomi, temp_min, true);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jotmin = new LinkedHashMap<String, Object>();
-					jotmin.put("name", name);
-					HashMap<String, Double> tempMin = new HashMap<String, Double>();
-					tempMin.put("temp_min", temp_min.get(i));
-					jotmin.put("result", tempMin);
-					
-					ja.add(jotmin);
-					i++;
-				}
-				break;
-				
-			case "temp_max":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> temp_max = new LinkedList<Double>();
-				temp_max = sc.getTempMin(dataset.getDataset());
-				
-				sc.sortStats(nomi, temp_max, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jotmax = new LinkedHashMap<String, Object>();
-					jotmax.put("name", name);
-					HashMap<String, Double> tempMax = new HashMap<String, Double>();
-					tempMax.put("temp_max", temp_max.get(i));
-					jotmax.put("result", tempMax);
-					
-					ja.add(jotmax);
-					i++;
-				}
-				break;
-				
-			case "all":
-				for(Stats s : sc.getStats(dataset.getDataset())) {
-					ja.add(s.getAllHashMap());
-				}
-				break;
-				
-			default:
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Richiesta non corretta");
+				ja.add(joavg);
+				i++;
+			}
+			
+		} catch (ClassNotFoundException e) {
+			throw new UserErrorException("This stat doesn't exist");
 		}
+		catch(InvocationTargetException e) {
+			throw new InternalServerException("Error in getStats");
+		}
+		catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
+			throw new InternalServerException("General error, try later...");
+		}
+		
 		return ja;
 	}
 	
+	/*
 	@SuppressWarnings("unchecked")
 	public JSONArray getStatsWFilters(String param, JSONObject stat) throws InternalServerException {
 		Object filter = stat.get("filter");
@@ -362,6 +304,7 @@ public class WeatherServiceImpl implements WeatherService {
 		}
 		return ja;
 	}
+	*/
 	
 	@SuppressWarnings("unchecked")
 	public void salvaDB() throws InternalServerException {

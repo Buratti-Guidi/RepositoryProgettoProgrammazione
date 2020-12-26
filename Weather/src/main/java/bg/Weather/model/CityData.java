@@ -3,6 +3,8 @@ package bg.Weather.model;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import javax.xml.stream.events.Attribute;
+
 /**
  * Classe contenente i dati "variabili" di ogni città
  * @author Christopher Buratti
