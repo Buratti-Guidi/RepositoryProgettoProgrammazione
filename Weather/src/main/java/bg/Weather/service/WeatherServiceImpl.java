@@ -3,6 +3,7 @@
  */
 package bg.Weather.service;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -37,7 +38,7 @@ public class WeatherServiceImpl implements WeatherService {
 	Box b = new Box();
 	
 	@Override
-	public void initialize(String cap, JSONObject ub)throws Exception{
+	public void initialize(String cap, JSONObject ub)throws UserErrorException,InternalServerException{
 		dataset = new Database();
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
@@ -68,7 +69,7 @@ public class WeatherServiceImpl implements WeatherService {
 		}
 	}
 	
-	public void getCities() {
+	public void getCities() throws InternalServerException {
 		
 		String url;
 		APIKey ak = new APIKey();
@@ -77,7 +78,7 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		url = "http://api.openweathermap.org/data/2.5/box/city?bbox=" + b.getLonSx() + "," + b.getLatDown() + "," + b.getLonDx() + 
 				"," + b.getLatUp() + ",10&appid=" + ak.getAPIKey();
-		try {
+		
 			
 			JSONObject jo = new JSONObject();
 			jo = this.fileJSON.chiamataAPIObj(url);//viene chiamata l'api e viene salvato il json object 
@@ -85,26 +86,20 @@ public class WeatherServiceImpl implements WeatherService {
 			jwp.parseBox(jo, cities);//viene parsato il JSONObject e inseriti i dati su cities
 			
 			dataset.aggiornaDatabase(cities);//viene aggiornato il database
-		}catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Errore su getCities");
-		}
+		
 	}
 	
 	
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray getData() {
+	public JSONArray getData()  {
 		JSONArray tot = new JSONArray();
 		
 		for(HashSet<HourCities> hs : this.dataset.getDataset()) {
 			for(HourCities hourc : hs) {
 				JSONArray cittaOrarie = new JSONArray();
 				for(CityData cd : hourc.getHourCities()) {
-					try {
 						cittaOrarie.add(cd.getAllHashMap());
-					}catch(ClassCastException ex) {
-						throw new ResponseStatusException(HttpStatus.CONFLICT,"Errore nella conversione del dataset in JSON");
-					}
 				}
 				tot.add(cittaOrarie);
 			}
@@ -369,54 +364,50 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void salvaDB() {
-		
+	public void salvaDB() throws InternalServerException {
+
 		JSONArray tot = new JSONArray();
-		
-		for(int i = this.dataset.getDataset().size()-1; i >= 0 ; i--) {
+
+		for (int i = this.dataset.getDataset().size() - 1; i >= 0; i--) {
 			JSONArray giornata = new JSONArray();
-					
-			for(HourCities hc : this.dataset.getDataset().get(i)) {
-				
+
+			for (HourCities hc : this.dataset.getDataset().get(i)) {
+
 				JSONArray cittaOrarie = new JSONArray();
-				for(CityData cd : hc.getHourCities()) {
+				for (CityData cd : hc.getHourCities()) {
 					try {
 						cittaOrarie.add(cd.getAllHashMap());
-					}catch(ClassCastException ex) {
-						throw new ResponseStatusException(HttpStatus.CONFLICT,"Errore nella conversione del dataset in JSON");
+					} catch (ClassCastException ex) {
+						throw new InternalServerException("Errore nella conversione del dataset in JSON");
 					}
 				}
 				giornata.add(cittaOrarie);
 			}
 			tot.add(giornata);
 		}
-		
+
 		fileJSON.scriviFile(nomeFile, tot);
 	}
 	
-	public void leggiDB() {
-		
+	public void leggiDB() throws InternalServerException {
+
 		JSONArray ja = new JSONArray();
-	
+
 		JSONWeatherParser jwp = new JSONWeatherParser();
 		try {
 			ja = fileJSON.caricaFileArr(nomeFile);
-			
-			for(int i = 0; i < ja.size(); i++) {
-			//for(JSONArray jsonArr : (JSONArray)(ja.get(i))) {
-				for(int j=0; j < ((JSONArray)ja.get(i)).size(); j++) {
-					try {
+
+			for (int i = 0; i < ja.size(); i++) {
+				// for(JSONArray jsonArr : (JSONArray)(ja.get(i))) {
+				for (int j = 0; j < ((JSONArray) ja.get(i)).size(); j++) {
 						HourCities cities = new HourCities();
-						JSONArray city = (JSONArray)((JSONArray)((JSONArray)ja.get(i))).get(j);
+						JSONArray city = (JSONArray) ((JSONArray) ((JSONArray) ja.get(i))).get(j);
 						jwp.parseBoxFile(city, cities);
 						this.dataset.aggiornaDatabase(cities);
-					}catch(Exception e) {
-						throw new ResponseStatusException(HttpStatus.CONFLICT, "ERRORE sulla lettura del file");
-					}
 				}
 			}
-		}catch(Exception ex) {
-			
+		} catch (FileNotFoundException ex) {
+			//Se il file non e' stato trovato, verra creato in seguito
 		}
 	}
 }

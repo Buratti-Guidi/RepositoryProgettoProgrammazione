@@ -6,7 +6,7 @@ package bg.Weather.exception;
  * @author Christopher Buratti
  *
  */
-public class InternalServerException extends Exception{
+public class InternalServerException extends RuntimeException{
 
 	public InternalServerException() {
 		super();

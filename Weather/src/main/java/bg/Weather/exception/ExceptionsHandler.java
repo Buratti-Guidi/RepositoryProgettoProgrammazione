@@ -16,23 +16,7 @@ import com.sun.el.parser.ParseException;
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(value = { Exception.class })
-	public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
-		
-		String errorMessageDescription = ex.getLocalizedMessage();
-		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
-		
-		ErrorMessage errorMessage = new ErrorMessage(ex.getClass().toString(),LocalDateTime.now(),errorMessageDescription);
-		
-		return new ResponseEntity<>(
-				errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	
-	
-	
-	@ExceptionHandler(value = { UserErrorException.class, IOException.class,IOException.class ,
-								ParseException.class})
+	@ExceptionHandler(value = { UserErrorException.class, InternalServerException.class })
 	public ResponseEntity<Object> handleUserException(Exception ex, WebRequest request) {
 		
 		String errorMessageDescription = ex.getLocalizedMessage();
@@ -44,15 +28,5 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 				errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ExceptionHandler(value = { InternalServerException.class })
-	public ResponseEntity<Object> handleIOException(InternalServerException ex, WebRequest request) {
-		
-		String errorMessageDescription = ex.getLocalizedMessage();
-		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
-		
-		ErrorMessage errorMessage = new ErrorMessage(ex.getClass().toString(),LocalDateTime.now(),errorMessageDescription);
-		
-		return new ResponseEntity<>(
-				errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	
 }

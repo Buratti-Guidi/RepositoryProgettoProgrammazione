@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.exception.InternalServerException;
+import bg.Weather.exception.UserErrorException;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -27,21 +28,19 @@ public class WeatherController {
 	WeatherServiceImpl weatherService;
 	
 	@PostMapping(value = "/capital/{name}")
-	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) {
+	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) 
+			throws InternalServerException,UserErrorException{
 		
 		//GUARDARE LA GESTIONE DELLE ECCEZIONI
-		try {
 			weatherService.initialize(nameCap, ub);
-		}catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore initialize");
-		}
+		
 			//METODO CHE AVVIA IL TIMER DI UN'ORA
 			Timer timer = new Timer();
 	        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
 	
 								            @Override
 								            public void run() {
-								            	weatherService.getCities();
+								            		weatherService.getCities();
 								            }
 	        }, 0, TimeUnit.HOURS.toMillis(1));
 		
@@ -49,12 +48,12 @@ public class WeatherController {
 		
 	}
 	
-	@GetMapping(value = "/getData")
+	@GetMapping(value = "/data")
 	public JSONArray getData(){
 		return weatherService.getData();
 	}
 	
-	@PostMapping(value = "/getStats")
+	@PostMapping(value = "/stats")
 	public JSONArray postStats(@RequestBody JSONObject stat) {
 		try {
 		return weatherService.getStats(stat);
@@ -75,7 +74,7 @@ public class WeatherController {
 	}
 	
 	@GetMapping(value = "/save")
-	public ResponseEntity<Object> saveDB() {
+	public ResponseEntity<Object> saveDB() throws InternalServerException{
 		weatherService.salvaDB();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}

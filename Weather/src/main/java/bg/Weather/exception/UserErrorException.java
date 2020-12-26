@@ -2,7 +2,7 @@ package bg.Weather.exception;
 
 /**
  * Classe che rappresenta una eccezione personalizzata di tipo
- * NullPOinterException
+ * RuntimeException
  * 
  * @author Luca Guidi
  * @author Christopher Buratti

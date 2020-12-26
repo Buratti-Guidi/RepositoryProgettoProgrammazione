@@ -25,7 +25,7 @@ public class BoxCalculating {
 	}
 	
 	//metodo per ottenere le coodinate del box conoscendo la lunghezza e la larghezza in km (e le coordinate del centro da costruttore)
-	public Box generaBox(double length, double width){
+	public Box generaBox(double length, double width)throws UserErrorException{
 			
 		Box box = new Box();
 			

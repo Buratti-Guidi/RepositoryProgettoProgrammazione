@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ErrorMessage {
+	
 	private String type;
 	private LocalDateTime timestamp;
 	private String message;

@@ -27,7 +27,7 @@ import bg.Weather.exception.InternalServerException;
 public class DownloadJSON {
 
 	//Legge da chiamata API un oggetto
-	public JSONObject chiamataAPIObj(String url) throws Exception{
+	public JSONObject chiamataAPIObj(String url) throws InternalServerException{
 		JSONObject jo = new JSONObject();
 		try {
 			URLConnection openConnection = new URL(url).openConnection();
@@ -51,14 +51,13 @@ public class DownloadJSON {
 			return jo;
 			
 		} catch (IOException  e) {
-			throw new IOException("Errore lettura chiamata API di un oggetto");
+			throw new InternalServerException("Errore lettura chiamata API di un oggetto");
 		} catch (ParseException ex) {
 			throw new InternalServerException("Errore parsing JSONObject");
-		} catch (Exception exe) {
-			throw new Exception("Errore lettura chiamata API di un oggetto");
-		}
+		} 
 	}
 	
+	//DA VEDERE SE SERVE
 	//Legge da una chiamata API un array
 	public JSONArray chiamataAPIArr(String url) {
 		try {
@@ -91,6 +90,7 @@ public class DownloadJSON {
 		}
 	}
 	
+	//DA VEDERE SE SERVE
 	//Legge da file.json un oggetto
 	public JSONObject caricaFileObj(String nome_file) {
 		
@@ -112,41 +112,38 @@ public class DownloadJSON {
 	}
 	
 	//Legge da file.json un array
-	public JSONArray caricaFileArr(String nome_file) throws Exception{
-		
+	public JSONArray caricaFileArr(String nome_file) throws FileNotFoundException, InternalServerException {
+
 		JSONArray ja = new JSONArray();
 		JSONParser parser = new JSONParser();
-		
+
 		try {
 			Object json_file = parser.parse(new FileReader(nome_file));
 			ja = (JSONArray) json_file;
 			return ja;
-			
-		
-		}catch(FileNotFoundException e) {
-			throw new Exception();
-		}catch (IOException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su caricaFileArr");
-		}catch (ParseException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore su parse caricaFileArr");
+
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException();
+		} catch (IOException e) {
+			throw new InternalServerException("Errore su caricaFileArr");
+		} catch (ParseException e) {
+			throw new InternalServerException("Errore su parse caricaFileArr");
 		}
 	}
 	
-	public void scriviFile(String nome_file,JSONArray ja) {
+	public void scriviFile(String nome_file, JSONArray ja) throws InternalServerException {
 		String txt = ja.toString();
 		try {
+
 			File file = new File(nome_file);
-			
-			if(!file.exists())
+			if (!file.exists())
 				file.createNewFile();
-			
+
 			BufferedWriter buf = new BufferedWriter(new FileWriter(nome_file));
 			buf.write(txt);
 			buf.close();
-		}catch(IOException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore scrittura sul file");
+		} catch (IOException e) {
+			throw new InternalServerException("Errore scrittura sul file");
 		}
 	}
 }

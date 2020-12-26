@@ -3,11 +3,14 @@
  */
 package bg.Weather.service;
 
+import java.io.FileNotFoundException;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import bg.Weather.exception.InternalServerException;
 import bg.Weather.model.CityData;
 import bg.Weather.util.APIKey;
 
@@ -20,35 +23,29 @@ public class CityInfo {
 	private DownloadJSON fileJSON;
 	
 	//metodo che dato il nome di una citta verifica che sia quello di una capitale
-	public boolean verifyCap(String cap) {
-		
+	public boolean verifyCap(String cap) throws InternalServerException {
+
 		fileJSON = new DownloadJSON();
-		
-		
-		try {	
+		try {
 			JSONArray ja = fileJSON.caricaFileArr("capitali.json");
-		
-			for(Object o : ja) {
-				
+
+			for (Object o : ja) {
+
 				JSONObject citta = (JSONObject) o;
-				String app = (String)citta.get("capital");
-				app = app.toUpperCase();				//Mettendo le stringhe tutte in maiuscolo, risolviamo i problemi per cui una capitale non veniva riconosciuta
-				if(app.equals(cap.toUpperCase())) {		//a causa di una lettera maiuscola/minuscola errata
+				String app = (String) citta.get("capital");
+				app = app.toUpperCase();
+				if (app.equals(cap.toUpperCase())) {
 					return true;
 				}
-				
 			}
-		}catch(NullPointerException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file delle capitali non e' stato letto correttamente");//PROVA
-		}
-		catch(Exception e) {//non so che tipo di eccezione puo generare
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Il file delle capitali non e' stato letto correttamente");//PROVA
+		} catch (FileNotFoundException e) {
+			throw new InternalServerException("Errore sulla lettura file delle capitali");
 		}
 		return false;
 	}
 	
 	//metodo che inserisce le coordinate dentro la variabile citta passata
-	public void getCoord(CityData citta) throws Exception{
+	public void getCoord(CityData citta) throws InternalServerException {
 		
 		APIKey apikey = new APIKey();
 		
