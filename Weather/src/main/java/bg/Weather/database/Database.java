@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.json.simple.JSONArray;
+
+import bg.Weather.exception.InternalServerException;
+import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
 /**
@@ -97,6 +101,25 @@ public class Database {
 	
 	public LinkedList<HashSet<HourCities>> getDataset() {
 		return this.dataset;
+	}
+	
+	
+	public HashSet<HourCities> getDay(Calendar cal)throws InternalServerException{
+		
+		boolean flag = false;
+		
+		for(HashSet<HourCities> hs : this.dataset) {
+			for(HourCities hourc : hs) {
+				
+				if(hourc.getCalendar().DAY_OF_MONTH == cal.DAY_OF_MONTH && hourc.getCalendar().MONTH == cal.MONTH) { 
+					flag = true;
+					break;
+				}
+			}
+			if(flag) return hs;
+		}
+		
+		throw new InternalServerException("Il giorno non e' presente nel database");
 	}
 	
 }

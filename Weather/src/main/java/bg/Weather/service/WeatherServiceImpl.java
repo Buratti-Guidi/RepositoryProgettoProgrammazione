@@ -6,6 +6,11 @@ package bg.Weather.service;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -67,13 +72,12 @@ public class WeatherServiceImpl implements WeatherService {
 			
 			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json";
 			this.leggiDB();
-			
 		}catch(ClassCastException ex) {
 			throw new UserErrorException("The body format is incorrect");	
 		}
 	}
 	
-	public void getCities() throws InternalServerException {
+	public HashSet<CityData> getCities() throws InternalServerException {
 		
 		String url;
 		APIKey ak = new APIKey();
@@ -90,25 +94,72 @@ public class WeatherServiceImpl implements WeatherService {
 			jwp.parseBox(jo, cities);//viene parsato il JSONObject e inseriti i dati su cities
 			
 			dataset.aggiornaDatabase(cities);//viene aggiornato il database
-		
+			return cities.getHourCities();
 	}
 	
 	
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray getData()  {
+	public JSONArray getData() {
 		JSONArray tot = new JSONArray();
-		
-		for(HashSet<HourCities> hs : this.dataset.getDataset()) {
-			for(HourCities hourc : hs) {
-				JSONArray cittaOrarie = new JSONArray();
-				for(CityData cd : hourc.getHourCities()) {
+		try {
+			for (HashSet<HourCities> hs : this.dataset.getDataset()) {
+				for (HourCities hourc : hs) {
+					JSONArray cittaOrarie = new JSONArray();
+					for (CityData cd : hourc.getHourCities()) {
 						cittaOrarie.add(cd.getAllHashMap());
+					}
+					tot.add(cittaOrarie);
 				}
-				tot.add(cittaOrarie);
 			}
+			return tot;
+		} catch (NullPointerException e) {
+			throw new UserErrorException("Capital initialization is needed");
 		}
-		return tot;
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public JSONArray postData(JSONObject jo)  {
+		
+		String from = (String)jo.get("from");
+		String to = (String)jo.get("to");
+		try {
+			
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			
+			Date fromDate = df.parse(from);
+			Calendar fromCal = Calendar.getInstance();
+			fromCal.setTime(fromDate);
+			
+			Date toDate = df.parse(to);
+			Calendar toCal = Calendar.getInstance();
+			toCal.setTime(toDate);
+			
+			
+			if(fromCal.compareTo(toCal) > 0)
+				throw new UserErrorException("Formato della data non corretto");
+			
+			JSONArray tot = new JSONArray();
+			
+			for(HashSet<HourCities> hs : this.dataset.getDataset()) {
+				for(HourCities hourc : hs) {
+					Number f = fromCal.compareTo(hourc.getCalendar());
+					Number t = toCal.compareTo(hourc.getCalendar());
+					
+					if((Integer)f <= 0 && (Integer)t >= 0) { //Se la data in esame e' compresa nell'interv. viene aggiunta al JSONArray
+						JSONArray cittaOrarie = new JSONArray();
+						for(CityData cd : hourc.getHourCities()) {
+								cittaOrarie.add(cd.getAllHashMap());
+						}
+						tot.add(cittaOrarie);
+					}
+				}
+			}
+			return tot;
+		}catch(ParseException e) {
+			throw new UserErrorException("Formato della data non corretto");
+		}
 	}
 	
 	public JSONArray getStats(JSONObject stat) throws InternalServerException {

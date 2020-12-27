@@ -1,5 +1,7 @@
 package bg.Weather.controller;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
+import bg.Weather.model.CityData;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -26,43 +30,59 @@ public class WeatherController {
 
 	@Autowired
 	WeatherServiceImpl weatherService;
-	
+
 	@PostMapping(value = "/capital/{name}")
-	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub) 
-			throws InternalServerException,UserErrorException{
+	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub)
+			throws InternalServerException, UserErrorException {
+
+		weatherService.initialize(nameCap, ub);
 		
-		//GUARDARE LA GESTIONE DELLE ECCEZIONI
-			weatherService.initialize(nameCap, ub);
-		
-			//METODO CHE AVVIA IL TIMER DI UN'ORA
-			Timer timer = new Timer();
-	        timer.schedule(new TimerTask() {	//Classe ANONIMA PER LA TASK ORARIA
-	
-								            @Override
-								            public void run() {
-								            		weatherService.getCities();
-								            }
-	        }, 0, TimeUnit.HOURS.toMillis(1));
-		
-		return new ResponseEntity<>("Everything is ok", HttpStatus.OK);
-		
+		HashSet<CityData> hs = weatherService.getCities();
+		HashSet<HashMap<String, Object>> towns = new HashSet<HashMap<String, Object>>();
+		for (CityData ct : hs) {
+			towns.add(ct.getAllHashMap());
+		}
+		// METODO CHE AVVIA IL TIMER DI UN'ORA
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() { // Classe ANONIMA PER LA TASK ORARIA
+
+			@Override
+			public void run() {
+				weatherService.getCities();
+			}
+		}, TimeUnit.HOURS.toMillis(1), TimeUnit.HOURS.toMillis(1));
+
+		return new ResponseEntity<>(towns, new HttpHeaders(), HttpStatus.OK);
+
 	}
-	
+
 	@GetMapping(value = "/data")
-	public JSONArray getData(){
+	public JSONArray getData() throws InternalServerException, UserErrorException{
+		if (weatherService.getData() == null) {}
+
 		return weatherService.getData();
 	}
-	
+
+	@PostMapping(value = "/data")
+	public JSONArray postData(@RequestBody JSONObject from_to) throws UserErrorException, InternalServerException {
+		if (weatherService.getData() == null) {}
+
+		return weatherService.postData(from_to);
+	}
+
 	@PostMapping(value = "/stats")
-	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException{
+	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException {
+		if (weatherService.getData() == null) {}
 
 		return weatherService.getStats(stat);
 	}
-	
+
 	@GetMapping(value = "/save")
-	public ResponseEntity<Object> saveDB() throws InternalServerException{
+	public ResponseEntity<Object> saveDB() throws InternalServerException,UserErrorException {
+		if (weatherService.getData() == null) {}
+
 		weatherService.salvaDB();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}
-	
+
 }
