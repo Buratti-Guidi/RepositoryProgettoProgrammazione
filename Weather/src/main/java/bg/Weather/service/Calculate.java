@@ -172,8 +172,8 @@ public class Calculate {
 			}
 		}
 		
-		for(Double d : variances)
-			d /= tot_hours;
+		for(int i = 0; i < variances.size(); i++)
+			variances.set(i, variances.get(i)/tot_hours);
 		
 		return variances;
 	}

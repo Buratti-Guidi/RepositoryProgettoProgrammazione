@@ -22,11 +22,9 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 		String errorMessageDescription = ex.getLocalizedMessage();
 		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
 		
-		ErrorMessage errorMessage = new ErrorMessage(ex.getClass().toString(),LocalDateTime.now(),errorMessageDescription);
+		ErrorMessage errorMessage = new ErrorMessage(ex.getClass().getCanonicalName(),LocalDateTime.now(),errorMessageDescription);
 		
 		return new ResponseEntity<>(
 				errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	
 }

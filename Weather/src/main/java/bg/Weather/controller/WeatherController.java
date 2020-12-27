@@ -54,13 +54,9 @@ public class WeatherController {
 	}
 	
 	@PostMapping(value = "/stats")
-	public JSONArray postStats(@RequestBody JSONObject stat) {
-		try {
+	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException{
+
 		return weatherService.getStats(stat);
-		
-		}catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore getStats");
-		}
 	}
 	
 	/*

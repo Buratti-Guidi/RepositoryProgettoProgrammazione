@@ -111,7 +111,7 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public JSONArray getStats(JSONObject stat) throws InternalServerException {
-		String param = (String)stat.get("param");
+		String param = (String)stat.get("stat");
 		Integer numDays = (Integer)stat.get("days");
 		
 		Stat s;
@@ -121,7 +121,7 @@ public class WeatherServiceImpl implements WeatherService {
 		
 		JSONArray ja = new JSONArray();
 		
-		String className = "bg.Weather.util.stats." + param.substring(0,1).toUpperCase()+ param.substring(1, param.length()).toLowerCase() + "Stats";
+		String className = "bg.Weather.util.stats." + param.substring(0,1).toUpperCase() + param.substring(1, param.length()).toLowerCase() + "Stats";
 		try {
 			Class<?> cls = Class.forName(className);
 			Constructor<?> ct = cls.getDeclaredConstructor(int.class);
