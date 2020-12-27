@@ -136,7 +136,7 @@ public class WeatherServiceImpl implements WeatherService {
 				LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
 				joavg.put("name", name);
 				HashMap<String, Double> statistic = new HashMap<String, Double>();
-				statistic.put("avg", statistics.get(i));
+				statistic.put(param, statistics.get(i));
 				joavg.put("result", statistic);
 				
 				ja.add(joavg);

@@ -63,6 +63,7 @@ public class WeatherController {
 		}
 	}
 	
+	/*
 	@PostMapping(value = "/stats/{param}")
 	public JSONArray postStatsWithFilters(@PathVariable("param") String param, @RequestBody JSONObject stat) {
 		try {
@@ -72,6 +73,7 @@ public class WeatherController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Errore getStatsWFilters");
 		}
 	}
+	*/
 	
 	@GetMapping(value = "/save")
 	public ResponseEntity<Object> saveDB() throws InternalServerException{
