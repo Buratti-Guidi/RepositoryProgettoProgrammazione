@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -111,37 +112,53 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public JSONArray getStats(JSONObject stat) throws InternalServerException {
-		String param = (String)stat.get("stat");
+		Vector<String> param = new Vector<String>();
+		boolean flag = true;
+		for(int i = 1; flag; i++) {
+			String s = (String)stat.get("stat" + i);
+			param.add(i-1, s);
+			if(param.get(i-1) == null) {
+				param.remove(i-1);
+				flag = false;
+			}
+		}
 		Integer numDays = (Integer)stat.get("days");
 		
 		Stat s;
 		
-		LinkedList<Double> statistics;
-		LinkedList<String> nomi;
+		LinkedList<LinkedList<Double>> statistics = new LinkedList<LinkedList<Double>>();
+		LinkedList<String> nomi = new LinkedList<String>();
 		
 		JSONArray ja = new JSONArray();
 		
-		String className = "bg.Weather.util.stats." + param.substring(0,1).toUpperCase() + param.substring(1, param.length()).toLowerCase() + "Stats";
+		
 		try {
-			Class<?> cls = Class.forName(className);
-			Constructor<?> ct = cls.getDeclaredConstructor(int.class);
-			s = (Stat)ct.newInstance(numDays);
-			
-			statistics = s.getStats(dataset.getDataset());
-			nomi = s.getNames(dataset.getDataset());
-			s.sortStats(nomi, statistics, false);
-			
+			for(int j = 0; j < param.size(); j++) {
+				String className = "bg.Weather.util.stats." + param.get(j).substring(0,1).toUpperCase() + param.get(j).substring(1, param.get(j).length()).toLowerCase() + "Stats";
+				Class<?> cls = Class.forName(className);
+				Constructor<?> ct = cls.getDeclaredConstructor(int.class);
+				s = (Stat)ct.newInstance(numDays);
+				statistics.add(s.getStats(dataset.getDataset()));
+				nomi = s.getNames(dataset.getDataset());
+				
+				if(param.size() == 1)
+					s.sortStats(nomi, statistics.get(j), false);
+			}
 			int i = 0;
 			for(String name : nomi) {
 				LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
 				joavg.put("name", name);
-				HashMap<String, Double> statistic = new HashMap<String, Double>();
-				statistic.put(param, statistics.get(i));
+				LinkedHashMap<String, Double> statistic = new LinkedHashMap<String, Double>();
+				
+				for(int j = 0; j < param.size(); j++)
+					statistic.put(param.get(j), statistics.get(j).get(i));
+				
 				joavg.put("result", statistic);
 				
 				ja.add(joavg);
 				i++;
 			}
+			
 			
 		} catch (ClassNotFoundException e) {
 			throw new UserErrorException("This stat doesn't exist");
