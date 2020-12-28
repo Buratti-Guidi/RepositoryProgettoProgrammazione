@@ -102,20 +102,20 @@ public class WeatherServiceImpl implements WeatherService {
 	@SuppressWarnings("unchecked")
 	public JSONArray getData() {
 		JSONArray tot = new JSONArray();
-		try {
-			for (HashSet<HourCities> hs : this.dataset.getDataset()) {
-				for (HourCities hourc : hs) {
-					JSONArray cittaOrarie = new JSONArray();
-					for (CityData cd : hourc.getHourCities()) {
-						cittaOrarie.add(cd.getAllHashMap());
-					}
-					tot.add(cittaOrarie);
+		
+		if(this.dataset.getDataset() == null)throw new UserErrorException("Capital initialization is needed");
+			
+		for (HashSet<HourCities> hs : this.dataset.getDataset()) {
+			for (HourCities hourc : hs) {
+				JSONArray cittaOrarie = new JSONArray();
+				for (CityData cd : hourc.getHourCities()) {
+					cittaOrarie.add(cd.getAllHashMap());
 				}
+				tot.add(cittaOrarie);
 			}
-			return tot;
-		} catch (NullPointerException e) {
-			throw new UserErrorException("Capital initialization is needed");
 		}
+		return tot;
+		
 	}
 	
 
@@ -125,39 +125,39 @@ public class WeatherServiceImpl implements WeatherService {
 		String from = (String)jo.get("from");
 		String to = (String)jo.get("to");
 		try {
-			
+
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-			
+
 			Date fromDate = df.parse(from);
 			Calendar fromCal = Calendar.getInstance();
 			fromCal.setTime(fromDate);
-			
+
 			Date toDate = df.parse(to);
 			Calendar toCal = Calendar.getInstance();
 			toCal.setTime(toDate);
+			toCal.add(Calendar.DAY_OF_MONTH, 1); // aggiungiamo un giorno perche altrimenti non lo prende
 			
-			
-			if(fromCal.compareTo(toCal) > 0)
+			if (fromCal.compareTo(toCal) > 0)
 				throw new UserErrorException("Formato della data non corretto");
-			
+
 			JSONArray tot = new JSONArray();
-			
-			for(HashSet<HourCities> hs : this.dataset.getDataset()) {
-				for(HourCities hourc : hs) {
-					Number f = fromCal.compareTo(hourc.getCalendar());
-					Number t = toCal.compareTo(hourc.getCalendar());
+
+			for (HashSet<HourCities> hs : this.dataset.getDataset()) {
+				for (HourCities hourc : hs) {
 					
-					if((Integer)f <= 0 && (Integer)t >= 0) { //Se la data in esame e' compresa nell'interv. viene aggiunta al JSONArray
+					if (fromCal.compareTo(hourc.getCalendar()) <= 0 && 
+						toCal.compareTo(hourc.getCalendar()) >= 0) { // Se la data in esame e' compresa nell'interv. viene
+																	 // aggiunta al JSONArray
 						JSONArray cittaOrarie = new JSONArray();
-						for(CityData cd : hourc.getHourCities()) {
-								cittaOrarie.add(cd.getAllHashMap());
+						for (CityData cd : hourc.getHourCities()) {
+							cittaOrarie.add(cd.getAllHashMap());
 						}
 						tot.add(cittaOrarie);
 					}
 				}
 			}
 			return tot;
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			throw new UserErrorException("Formato della data non corretto");
 		}
 	}

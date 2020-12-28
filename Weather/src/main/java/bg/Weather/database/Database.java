@@ -106,7 +106,7 @@ public class Database {
 	
 	public HashSet<HourCities> getDay(Calendar cal)throws InternalServerException{
 		
-		boolean flag = false;
+		boolean flag = false; //quando un hourcities di un giorno ha lo stesso giorno del param ritorna l intero giorno
 		
 		for(HashSet<HourCities> hs : this.dataset) {
 			for(HourCities hourc : hs) {
