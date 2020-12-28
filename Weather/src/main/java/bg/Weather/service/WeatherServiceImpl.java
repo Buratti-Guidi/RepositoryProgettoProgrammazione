@@ -171,53 +171,35 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 		}
 		Integer numDays = (Integer)stat.get("days");
-		
+		StatsService sc = new StatsService();
 		Stat s;
 		
 		LinkedList<LinkedList<Double>> statistics = new LinkedList<LinkedList<Double>>();
 		LinkedList<String> nomi = new LinkedList<String>();
 		
 		JSONArray ja = new JSONArray();
-		
-		
-		try {
-			for(int j = 0; j < param.size(); j++) {
-				String className = "bg.Weather.util.stats." + param.get(j).substring(0,1).toUpperCase() + param.get(j).substring(1, param.get(j).length()).toLowerCase() + "Stats";
-				Class<?> cls = Class.forName(className);
-				Constructor<?> ct = cls.getDeclaredConstructor(int.class);
-				s = (Stat)ct.newInstance(numDays);
-				statistics.add(s.getStats(dataset.getDataset()));
-				nomi = s.getNames(dataset.getDataset());
-				
-				if(param.size() == 1)
-					s.sortStats(nomi, statistics.get(j), false);
-			}
-			int i = 0;
-			for(String name : nomi) {
-				LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-				joavg.put("name", name);
-				LinkedHashMap<String, Double> statistic = new LinkedHashMap<String, Double>();
-				
-				for(int j = 0; j < param.size(); j++)
-					statistic.put(param.get(j), statistics.get(j).get(i));
-				
-				joavg.put("result", statistic);
-				
-				ja.add(joavg);
-				i++;
-			}
+
+		for(int j = 0; j < param.size(); j++) {
+			s = sc.getStat(param.get(j), numDays);
+			statistics.add(s.getStats(dataset.getDataset()));
+			nomi = s.getNames(dataset.getDataset());
 			
+			if(param.size() == 1)
+				s.sortStats(nomi, statistics.get(j), false);
+		}	
+		int i = 0;
+		for(String name : nomi) {
+			LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
+			joavg.put("name", name);
+			LinkedHashMap<String, Double> statistic = new LinkedHashMap<String, Double>();
 			
-		} catch (ClassNotFoundException e) {
-			throw new UserErrorException("This stat doesn't exist");
+			for(int j = 0; j < param.size(); j++)
+				statistic.put(param.get(j), statistics.get(j).get(i));
+				
+			joavg.put("result", statistic);
+			ja.add(joavg);
+			i++;
 		}
-		catch(InvocationTargetException e) {
-			throw new InternalServerException("Error in getStats");
-		}
-		catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
-			throw new InternalServerException("General error, try later...");
-		}
-		
 		return ja;
 	}
 	

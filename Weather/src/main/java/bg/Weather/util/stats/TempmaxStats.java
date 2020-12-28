@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.model.HourCities;
-import bg.Weather.service.StatsCalculating;
+import bg.Weather.service.StatsService;
 
-public class TempmaxStats extends StatsCalculating implements Stat{
+public class TempmaxStats extends StatsService implements Stat{
 
 	private LinkedList<Double> tempMax = new LinkedList<Double>();
 	

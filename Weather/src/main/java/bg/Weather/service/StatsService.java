@@ -1,10 +1,14 @@
 package bg.Weather.service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.exception.InternalServerException;
+import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.HourCities;
+import bg.Weather.util.stats.Stat;
 
 /**
  * Classe che si occupa di restituire i dati riguardanti le statistiche richieste dall'utente
@@ -12,14 +16,36 @@ import bg.Weather.model.HourCities;
  * @author Luca Guidi
  */
 
-public class StatsCalculating {
+public class StatsService {
 	
 	private LinkedList<String> names = new LinkedList<String>();
 	
 	protected Calculate calc; //Calcolatore utilizzato per eseguire i calcoli per le varie statistiche
 	
-	public StatsCalculating(int numeroGiorni) {
+	public StatsService() {}
+	
+	public StatsService(int numeroGiorni) {
 		calc = new Calculate(numeroGiorni);
+	}
+	
+	public Stat getStat(String statType, int numDays) throws UserErrorException, InternalServerException{
+		try {
+			String className = "bg.Weather.util.stats." + statType.substring(0,1).toUpperCase() + statType.substring(1, statType.length()).toLowerCase() + "Stats";
+			Stat s;
+			Class<?> cls = Class.forName(className);
+			Constructor<?> ct = cls.getDeclaredConstructor(int.class);
+			s = (Stat)ct.newInstance(numDays);
+			return s;
+			
+		} catch (ClassNotFoundException e) {
+			throw new UserErrorException("This stat doesn't exist");
+		}
+		catch(InvocationTargetException e) {
+			throw new InternalServerException("Error in getStats");
+		}
+		catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
+			throw new InternalServerException("General error, try later...");
+		}
 	}
 
 	public LinkedList<String> getNames(LinkedList<HashSet<HourCities>> dataset) {

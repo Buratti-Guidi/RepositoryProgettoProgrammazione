@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.model.HourCities;
-import bg.Weather.service.StatsCalculating;
+import bg.Weather.service.StatsService;
 
-public class AvgStats extends StatsCalculating implements Stat{
+public class AvgStats extends StatsService implements Stat{
 
 	private LinkedList<Double> averages = new LinkedList<Double>();
 	
