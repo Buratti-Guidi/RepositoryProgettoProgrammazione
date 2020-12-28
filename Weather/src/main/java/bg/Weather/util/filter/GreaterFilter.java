@@ -1,9 +1,20 @@
 package bg.Weather.util.filter;
 
+import bg.Weather.exception.InternalServerException;
+
 public class GreaterFilter extends WeatherFilter implements Filter{
 
-	public boolean response(double vrfValue) {
-		if(vrfValue > super.getValue())
+	private double vrfValue;
+	
+	public GreaterFilter(double vrfValue) {
+		this.vrfValue = vrfValue;
+	}
+	
+	public boolean response() {
+		if(super.getValue().size() != 1)
+			throw new InternalServerException("Number of values wrong in GreaterFilter");
+		
+		if(this.vrfValue > super.getValue().firstElement().doubleValue())
 			return true;
 		return false;
 	}

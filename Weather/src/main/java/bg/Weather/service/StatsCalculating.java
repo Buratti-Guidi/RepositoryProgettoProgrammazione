@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.model.HourCities;
-import bg.Weather.model.Stats;
 
 /**
  * Classe che si occupa di restituire i dati riguardanti le statistiche richieste dall'utente

@@ -11,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -27,10 +26,8 @@ import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
-import bg.Weather.model.Stats;
 import bg.Weather.util.APIKey;
 import bg.Weather.util.filter.WeatherFilter;
-import bg.Weather.util.stats.Stat;
 
 import bg.Weather.util.stats.*; //da lasciare per il cast a una classe generica di questo package
 
