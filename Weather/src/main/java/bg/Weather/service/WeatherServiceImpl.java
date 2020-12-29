@@ -203,155 +203,18 @@ public class WeatherServiceImpl implements WeatherService {
 		return ja;
 	}
 	
-	/*
-	@SuppressWarnings("unchecked")
-	public JSONArray getStatsWFilters(String param, JSONObject stat) throws InternalServerException {
-		Object filter = stat.get("filter");
-		String key;
-		double value;
-		WeatherFilter wf = new WeatherFilter();
+	public JSONArray getFilteredStats(JSONObject jo)throws UserErrorException,InternalServerException {
 		
-		boolean flag = false;
-		
-		if(filter != null) {
-			HashMap<String, Double> fltr = new HashMap<String, Double>();
-			fltr = (JSONObject) filter;
-			String[] split = new String[2];
-			split = fltr.toString().split(":");
-			
-			key = split[0].substring(1);
-			split[1] = split[1].substring(0, split[1].length() - 1);
-			value = Double.parseDouble(split[1]);
-			
-			flag = true;
-			
-			wf = new WeatherFilter(key, value);
-			try {
-				wf.verifyFilter();
-			} catch(Exception e) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This filter doesn't exist");
-			}
-		}
-		
-		Integer numDays = (Integer)stat.get("days");
-		StatsCalculating sc = new StatsCalculating(numDays);
-		JSONArray ja = new JSONArray();
-		int i;
-		
-		LinkedList<String> nomi;
-		
-		switch(param) {
-			
-			case "avg":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> averages = new LinkedList<Double>();
-				averages = sc.getAverages(dataset.getDataset());
-				
-				sc.sortStats(nomi, averages, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					if(flag){
-						if(wf.getResponse(averages.get(i))) {
-							LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-							joavg.put("name", name);
-							HashMap<String, Double> avg = new HashMap<String, Double>();
-							avg.put("avg", averages.get(i));
-							joavg.put("result", avg);
-							
-							ja.add(joavg);
-							i++;
-						}
-					}
-					else {
-						LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-						joavg.put("name", name);
-						HashMap<String, Double> avg = new HashMap<String, Double>();
-						avg.put("avg", averages.get(i));
-						joavg.put("result", avg);
-						
-						ja.add(joavg);
-						i++;
-					}
-				}
-				break;
-				
-			case "var":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> variances = new LinkedList<Double>();
-				variances = sc.getVariances(dataset.getDataset());
-				
-				sc.sortStats(nomi, variances, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jovar = new LinkedHashMap<String, Object>();
-					jovar.put("name", name);
-					HashMap<String, Double> var = new HashMap<String, Double>();
-					var.put("var", variances.get(i));
-					jovar.put("result", var);
-					
-					ja.add(jovar);
-					i++;
-				}
-				break;
-				
-			case "temp_min":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> temp_min = new LinkedList<Double>();
-				temp_min = sc.getTempMin(dataset.getDataset());
-				
-				sc.sortStats(nomi, temp_min, true);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jotmin = new LinkedHashMap<String, Object>();
-					jotmin.put("name", name);
-					HashMap<String, Double> tempMin = new HashMap<String, Double>();
-					tempMin.put("temp_min", temp_min.get(i));
-					jotmin.put("result", tempMin);
-					
-					ja.add(jotmin);
-					i++;
-				}
-				break;
-				
-			case "temp_max":
-				nomi = new LinkedList<String>();
-				nomi = sc.getNames(dataset.getDataset());
-				LinkedList<Double> temp_max = new LinkedList<Double>();
-				temp_max = sc.getTempMin(dataset.getDataset());
-				
-				sc.sortStats(nomi, temp_max, false);
-				
-				i = 0;
-				for(String name : nomi) {
-					LinkedHashMap<String, Object> jotmax = new LinkedHashMap<String, Object>();
-					jotmax.put("name", name);
-					HashMap<String, Double> tempMax = new HashMap<String, Double>();
-					tempMax.put("temp_max", temp_max.get(i));
-					jotmax.put("result", tempMax);
-					
-					ja.add(jotmax);
-					i++;
-				}
-				break;
-				
-			case "all":
-				for(Stats s : sc.getStats(dataset.getDataset())) {
-					ja.add(s.getAllHashMap());
-				}
-				break;
-				
-			default:
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Richiesta non corretta");
-		}
-		return ja;
+		FilterService fs = new FilterService(jo);
+		JSONArray response = new JSONArray();
+		 fs.filterParser(dataset.getDataset());
+		 //...
+		return response;
 	}
-	*/
+	
+	
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public void salvaDB() throws InternalServerException {
