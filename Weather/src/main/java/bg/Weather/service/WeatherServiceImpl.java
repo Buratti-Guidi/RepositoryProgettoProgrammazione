@@ -190,15 +190,15 @@ public class WeatherServiceImpl implements WeatherService {
 		}	
 		int i = 0;
 		for(String name : nomi) {
-			LinkedHashMap<String, Object> joavg = new LinkedHashMap<String, Object>();
-			joavg.put("name", name);
+			LinkedHashMap<String, Object> jo = new LinkedHashMap<String, Object>();
+			jo.put("name", name);
 			LinkedHashMap<String, Double> statistic = new LinkedHashMap<String, Double>();
 			
 			for(int j = 0; j < param.size(); j++)
 				statistic.put(param.get(j), statistics.get(j).get(i));
 				
-			joavg.put("result", statistic);
-			ja.add(joavg);
+			jo.put("result", statistic);
+			ja.add(jo);
 			i++;
 		}
 		return ja;
@@ -207,14 +207,9 @@ public class WeatherServiceImpl implements WeatherService {
 	public JSONArray getFilteredStats(JSONObject jo)throws UserErrorException,InternalServerException {
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
-		Vector<String> namesAcc = new Vector<String>();
-		namesAcc = fs.filterParser(dataset.getDataset());
 		
-		for(String name : namesAcc) {
-			HashMap<String, String> names = new HashMap<String, String>();
-			names.put("name", name);
-			response.add(names);
-		}
+		response = fs.response(dataset.getDataset());
+		
 		return response;
 	}
 	
