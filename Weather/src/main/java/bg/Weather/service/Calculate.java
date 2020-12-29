@@ -177,4 +177,16 @@ public class Calculate {
 		
 		return variances;
 	}
+	
+	//DA CONTROLLARE
+	public void truncateTo(LinkedList<Double> unroundedNumber, int decimalPlaces){
+		LinkedList<Integer> truncatedNumberInt = new LinkedList<Integer>();
+		LinkedList<Double> truncatedNumber = new LinkedList<Double>();
+		for(int i = unroundedNumber.size() - 1; i >= 0; i--) {
+			truncatedNumberInt.add((int)(unroundedNumber.get(i) * Math.pow(10, decimalPlaces)));
+			truncatedNumber.add((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));
+		}
+		unroundedNumber.clear();
+		unroundedNumber.addAll(truncatedNumber);
+	}
 }

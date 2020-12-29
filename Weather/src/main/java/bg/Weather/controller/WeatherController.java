@@ -76,6 +76,13 @@ public class WeatherController {
 
 		return weatherService.getStats(stat);
 	}
+	
+	@PostMapping(value = "/filters")
+	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException {
+		if (weatherService.getData() == null) {}
+		
+		return weatherService.getFilteredStats(filters);
+	}
 
 	@GetMapping(value = "/save")
 	public ResponseEntity<Object> saveDB() throws InternalServerException,UserErrorException {
