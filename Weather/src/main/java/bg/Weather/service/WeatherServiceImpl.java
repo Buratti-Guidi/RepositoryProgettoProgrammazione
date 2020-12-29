@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -204,21 +205,21 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public JSONArray getFilteredStats(JSONObject jo)throws UserErrorException,InternalServerException {
-		
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
-		 fs.filterParser(dataset.getDataset());
-		 //...
+		Vector<String> namesAcc = new Vector<String>();
+		namesAcc = fs.filterParser(dataset.getDataset());
+		
+		for(String name : namesAcc) {
+			HashMap<String, String> names = new HashMap<String, String>();
+			names.put("name", name);
+			response.add(names);
+		}
 		return response;
 	}
 	
-	
-	
-	
-	
 	@SuppressWarnings("unchecked")
 	public void salvaDB() throws InternalServerException {
-
 		JSONArray tot = new JSONArray();
 
 		for (int i = this.dataset.getDataset().size() - 1; i >= 0; i--) {
@@ -243,7 +244,6 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	public void leggiDB() throws InternalServerException {
-
 		JSONArray ja = new JSONArray();
 
 		JSONWeatherParser jwp = new JSONWeatherParser();
