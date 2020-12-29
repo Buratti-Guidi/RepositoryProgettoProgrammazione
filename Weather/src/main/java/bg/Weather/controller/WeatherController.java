@@ -30,11 +30,13 @@ public class WeatherController {
 
 	@Autowired
 	WeatherServiceImpl weatherService;
+	private boolean inizialized = false;
 
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject ub)
 			throws InternalServerException, UserErrorException {
 
+		this.inizialized = true;
 		weatherService.initialize(nameCap, ub);
 		
 		HashSet<CityData> hs = weatherService.getCities();
@@ -58,35 +60,35 @@ public class WeatherController {
 
 	@GetMapping(value = "/data")
 	public JSONArray getData() throws InternalServerException, UserErrorException{
-		if (weatherService.getData() == null) {}
+		if (this.inizialized == false) throw new UserErrorException("Capital initialization is needed");
 
 		return weatherService.getData();
 	}
 
 	@PostMapping(value = "/data")
 	public JSONArray postData(@RequestBody JSONObject from_to) throws UserErrorException, InternalServerException {
-		if (weatherService.getData() == null) {}
+		if (this.inizialized == false) throw new UserErrorException("Capital initialization is needed");
 
 		return weatherService.postData(from_to);
 	}
 
 	@PostMapping(value = "/stats")
 	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException {
-		if (weatherService.getData() == null) {}
+		if (this.inizialized == false) throw new UserErrorException("Capital initialization is needed");
 
 		return weatherService.getStats(stat);
 	}
 	
 	@PostMapping(value = "/filters")
 	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException {
-		if (weatherService.getData() == null) {}
+		if (this.inizialized == false) throw new UserErrorException("Capital initialization is needed");
 		
 		return weatherService.getFilteredStats(filters);
 	}
 
 	@GetMapping(value = "/save")
 	public ResponseEntity<Object> saveDB() throws InternalServerException,UserErrorException {
-		if (weatherService.getData() == null) {}
+		if (this.inizialized == false) throw new UserErrorException("Capital initialization is needed");
 
 		weatherService.salvaDB();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);

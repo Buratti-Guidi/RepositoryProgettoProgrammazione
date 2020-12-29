@@ -80,6 +80,7 @@ public class FilterService {
 	}
 	
 	public JSONArray response(LinkedList<HashSet<HourCities>> dataset) {
+		Vector<String> final_names = this.filterParser(dataset);
 		JSONArray result = new JSONArray();
 		Stat s;
 		StatsService ss = new StatsService(this.days);
@@ -107,7 +108,6 @@ public class FilterService {
 		LinkedList<String> names = new LinkedList<String>();
 		names = s.getNames(dataset);
 		
-		Vector<String> final_names = this.filterParser(dataset);
 		
 		for(String str : final_names) {
 			for(int i = 0; i < names.size(); i++) {

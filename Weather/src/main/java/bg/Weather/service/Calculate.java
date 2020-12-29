@@ -67,6 +67,8 @@ public class Calculate {
 		for(int x = 0; x < count; x++)
 			averages.push(sums.get(count - x - 1) / tot_hours);
 		
+		//this.truncateTo(averages, 2);
+		
 		return averages;
 	}
 	
@@ -175,6 +177,8 @@ public class Calculate {
 		for(int i = 0; i < variances.size(); i++)
 			variances.set(i, variances.get(i)/tot_hours);
 		
+		this.truncateTo(variances, 2);
+		
 		return variances;
 	}
 	
@@ -184,7 +188,7 @@ public class Calculate {
 		LinkedList<Double> truncatedNumber = new LinkedList<Double>();
 		for(int i = unroundedNumber.size() - 1; i >= 0; i--) {
 			truncatedNumberInt.add((int)(unroundedNumber.get(i) * Math.pow(10, decimalPlaces)));
-			truncatedNumber.add((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));
+			truncatedNumber.add((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));//DA PROVARE CON PUSH
 		}
 		unroundedNumber.clear();
 		unroundedNumber.addAll(truncatedNumber);

@@ -101,7 +101,7 @@ public class WeatherServiceImpl implements WeatherService {
 	public JSONArray getData() {
 		JSONArray tot = new JSONArray();
 		
-		if(this.dataset.getDataset() == null)throw new UserErrorException("Capital initialization is needed");
+		//if(this.dataset.getDataset() == null)throw new UserErrorException("Capital initialization is needed");
 			
 		for (HashSet<HourCities> hs : this.dataset.getDataset()) {
 			for (HourCities hourc : hs) {
