@@ -15,10 +15,7 @@ public class StdStats extends StatsService implements Stat{
 	}
 	
 	public LinkedList<Double> getStats(LinkedList<HashSet<HourCities>> dataset) {
-		this.devStd = super.calc.ottieniVarianze(dataset);
-		for(int i = 0; i < devStd.size(); i++) 
-			devStd.set(i, Math.sqrt(devStd.get(i)));
-		
-		return this.devStd;
+		this.devStd = super.calc.ottieniDevStd(dataset);
+		return devStd;
 	}
 }

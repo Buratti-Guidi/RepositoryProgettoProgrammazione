@@ -72,11 +72,9 @@ public class FilterService {
 						LinkedHashMap<String, Object> joValueOne = new LinkedHashMap<String, Object>();
 						joValueOne = (LinkedHashMap<String, Object>)joValue.get(stkey);
 						
-						//joValueOne.put(stkey, joValue.get(stkey));
-						
 						Stat s = this.statParser(joValueOne, stkey, filterValue, filterName);
 						LinkedList<Double> stats = s.getStats(dataset);
-						wf = new WeatherFilter(filterName.toString(), filterValue);//ce una stat e non un filtro
+						wf = new WeatherFilter(filterName.toString(), filterValue);
 						int i = 0;
 						tot_names = s.getNames(dataset);
 						for(String name : s.getNames(dataset)) {
@@ -94,6 +92,7 @@ public class FilterService {
 							final_names.add(name);
 						j++;
 					}
+					o.clearVector();
 					return final_names;
 					
 				} catch (ClassNotFoundException e) {
@@ -119,11 +118,19 @@ public class FilterService {
 			filterName.insert(0, filterN);
 			Object filterValue = joValue.get(filterN);
 			if(filterValue instanceof Number) {
-				valore.add((Double)filterValue);    //Se è Integer non viene castato a Double
+				if(filterValue instanceof Integer)
+					valore.add(((Integer)filterValue).doubleValue());
+				
+				if(filterValue instanceof Double)
+					valore.add((Double)filterValue);
 			}
 			if(filterValue instanceof Collection) {
 				for(Object elem : (Collection)filterValue) {
-					valore.add((Double)elem);
+					if(elem instanceof Integer)
+						valore.add(((Integer)elem).doubleValue());
+					
+					if(elem instanceof Double)
+						valore.add((Double)elem);
 				}
 			}
 		break;

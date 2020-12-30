@@ -76,7 +76,7 @@ public class Calculate {
 		for(int x = 0; x < names.size(); x++)
 			averages.add(x,sums.get(x) / tot_hours);
 		
-		this.truncateTo(averages, 4);
+		this.truncateTo(averages, 3);
 		
 		return averages;
 	}
@@ -195,18 +195,26 @@ public class Calculate {
 		for(int i = 0; i < names.size(); i++)
 			variances.set(i, variances.get(i)/tot_hours);
 		
-		this.truncateTo(variances, 4);
+		this.truncateTo(variances, 3);
 		
 		return variances;
 	}
 	
-	//DA CONTROLLARE
+	public LinkedList<Double> ottieniDevStd(LinkedList<HashSet<HourCities>> dataset) {
+		LinkedList<Double> std = this.ottieniVarianze(dataset);
+		for(int i = 0; i < std.size(); i++) 
+			std.set(i, Math.sqrt(std.get(i)));
+		
+		this.truncateTo(std, 3);
+		return std;
+	}
+	
 	public void truncateTo(LinkedList<Double> unroundedNumber, int decimalPlaces){
 		LinkedList<Integer> truncatedNumberInt = new LinkedList<Integer>();
 		LinkedList<Double> truncatedNumber = new LinkedList<Double>();
 		for(int i = unroundedNumber.size() - 1; i >= 0; i--) {
 			truncatedNumberInt.add((int)(unroundedNumber.get(i) * Math.pow(10, decimalPlaces)));
-			truncatedNumber.push((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));//DA PROVARE CON PUSH
+			truncatedNumber.push((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));
 		}
 		unroundedNumber.clear();
 		unroundedNumber.addAll(truncatedNumber);

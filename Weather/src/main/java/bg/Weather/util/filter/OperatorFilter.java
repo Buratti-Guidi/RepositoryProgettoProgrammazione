@@ -8,23 +8,13 @@ public class OperatorFilter {
 	
 	public OperatorFilter() {}
 	
-	/*
-	public OperatorFilter(Vector<Boolean> cond) {
-		conditions.clear();
-		conditions = cond;
-	}
-	
-	public void setConditions(Vector<Boolean> cond) {
-		conditions.clear();
-		conditions = cond;
-	}
-	*/
-	
 	public void addCondition(Boolean condition, int index) {
-		this.conditions.get(index).add(condition);
+		if(conditions.size() == index)
+			conditions.add(index, new Vector<Boolean>());
+		conditions.get(index).add(condition);
 	}
 	
 	public void clearVector() {
-		this.conditions.clear();
+		conditions.clear();
 	}
 }
