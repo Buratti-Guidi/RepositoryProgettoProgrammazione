@@ -4,7 +4,7 @@ import java.util.Vector;
 
 public class OperatorFilter {
 
-	protected Vector<Vector<Boolean>> conditions = new Vector<Vector<Boolean>>();
+	protected static Vector<Vector<Boolean>> conditions = new Vector<Vector<Boolean>>();
 	
 	public OperatorFilter() {}
 	

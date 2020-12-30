@@ -33,10 +33,11 @@ public class Calculate {
 	}
 	
 	public LinkedList<Double> ottieniMedie(LinkedList<HashSet<HourCities>> dataset) {
-		int count = 0; //Numero città del box
 		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora)
 		
 		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
+		
+		LinkedList<String> names = this.ottieniNomi(dataset);
 		
 		LinkedList<Double> sums = new LinkedList<Double>();
 		LinkedList<Double> averages = new LinkedList<Double>();
@@ -46,35 +47,44 @@ public class Calculate {
 			temp = dataset.get(i);
 			for(HourCities hc : temp) {
 				if(!flag) {
-					for(CityData cd : hc.getHourCities()) {
-						sums.push(cd.getTemperatura());
-						count++;
-					}
+						for(int k = 0; k < names.size(); k++) {
+							for(CityData cd : hc.getHourCities()) {
+								if(names.get(k).equals(cd.getNome())) {
+									sums.add(k,cd.getTemperatura());		
+									break;
+								}
+							}	
+						}
 					tot_hours++;
 					flag = true;
 				}
 				else {
-					int j = 0;
-					for(CityData cd : hc.getHourCities()) {
-						sums.set(count - j - 1, sums.get(count - j - 1) + cd.getTemperatura());
-						j++;
-					}
+					for(int k = 0; k < names.size(); k++) {
+						for(CityData cd : hc.getHourCities()) {
+							if(names.get(k).equals(cd.getNome())) {
+								sums.set(k,sums.get(k) + cd.getTemperatura());		
+								break;
+					
+								}
+							}
+						}
 					tot_hours++;
-				}
+					}	
 			}
 		}
 
-		for(int x = 0; x < count; x++)
-			averages.push(sums.get(count - x - 1) / tot_hours);
+		for(int x = 0; x < names.size(); x++)
+			averages.add(x,sums.get(x) / tot_hours);
 		
-		//this.truncateTo(averages, 2);
+		this.truncateTo(averages, 4);
 		
 		return averages;
 	}
 	
 	public LinkedList<Double> ottieniMassimi(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> tempMax = new LinkedList<Double>();
-		int count = 0; //Numero città del box
+		LinkedList<String> names = this.ottieniNomi(dataset);
+		
 		boolean flag = false;
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
@@ -82,20 +92,28 @@ public class Calculate {
 			temp = dataset.get(i);
 			for(HourCities hc : temp) {
 				if(!flag) {
-					for(CityData cd : hc.getHourCities()) {
-						tempMax.push(cd.getTemperatura());
-						count++;
+					
+					for(int k = 0; k < names.size(); k++) {
+						for(CityData cd : hc.getHourCities()) {
+							if(names.get(k).equals(cd.getNome())) {
+								tempMax.add(k,cd.getTemperatura());		
+								break;
+							}
+						}	
 					}
 					flag = true;
 				}
 				else {
-					int j = 0;
-					for(CityData cd : hc.getHourCities()) {
-						if(tempMax.get(count - j - 1) < cd.getTemperatura())
-							tempMax.set(count - j - 1, cd.getTemperatura());
-						
-						j++;
-					}
+					
+					for(int k = 0; k < names.size(); k++) {
+						for(CityData cd : hc.getHourCities()) {
+							if(names.get(k).equals(cd.getNome())) {
+								if(tempMax.get(k) < cd.getTemperatura())
+									tempMax.set(k, cd.getTemperatura());	
+								break;
+								}
+							}
+						}
 				}
 			}
 		}
@@ -104,28 +122,37 @@ public class Calculate {
 	
 	public LinkedList<Double> ottieniMinimi(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> tempMin = new LinkedList<Double>();
-		int count = 0; //Numero città del box
-		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e mi salva i nomi delle città in names e il numero di città (count)
+		LinkedList<String> names = this.ottieniNomi(dataset);
+		
+		boolean flag = false;
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
 			HashSet<HourCities> temp = new HashSet<HourCities>();
 			temp = dataset.get(i);
 			for(HourCities hc : temp) {
 				if(!flag) {
-					for(CityData cd : hc.getHourCities()) {
-						tempMin.push(cd.getTemperatura());
-						count++;
+					
+					for(int k = 0; k < names.size(); k++) {
+						for(CityData cd : hc.getHourCities()) {
+							if(names.get(k).equals(cd.getNome())) {
+								tempMin.add(k,cd.getTemperatura());		
+								break;
+							}
+						}	
 					}
 					flag = true;
 				}
 				else {
-					int j = 0;
-					for(CityData cd : hc.getHourCities()) {
-						if(tempMin.get(count - j - 1) > cd.getTemperatura())
-							tempMin.set(count - j - 1, cd.getTemperatura());
-						
-						j++;
-					}
+					
+					for(int k = 0; k < names.size(); k++) {
+						for(CityData cd : hc.getHourCities()) {
+							if(names.get(k).equals(cd.getNome())) {
+								if(tempMin.get(k) > cd.getTemperatura())
+									tempMin.set(k, cd.getTemperatura());	
+								break;
+								}
+							}
+						}
 				}
 			}
 		}
@@ -133,12 +160,11 @@ public class Calculate {
 	}
 	
 	public LinkedList<Double> ottieniVarianze(LinkedList<HashSet<HourCities>> dataset) {
-		LinkedList<Double> averages = new LinkedList<Double>();
-		averages = this.ottieniMedie(dataset);
+		LinkedList<Double> averages = this.ottieniMedie(dataset);
+		LinkedList<String> names = this.ottieniNomi(dataset);
 		
 		LinkedList<Double> variances = new LinkedList<Double>();
 		
-		int count = 0; //Numero città del box
 		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e salva il numero di città (count)
 		
 		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
@@ -147,37 +173,29 @@ public class Calculate {
 			HashSet<HourCities> temp = new HashSet<HourCities>();
 			temp = dataset.get(i);
 			for(HourCities hc : temp) {
-				if(!flag) {
-					int j = 0;
+				
+				for(int k = 0; k < names.size(); k++) {
+					
 					for(CityData cd : hc.getHourCities()) {
-						double scarto;
-						scarto = cd.getTemperatura() - averages.get(averages.size() - j - 1);
-						scarto *= scarto;
-						variances.push(scarto);
-						j++;
-						count++;
-					}
-					tot_hours++;
-					flag = true;
+						if(names.get(k).equals(cd.getNome())) {
+								
+							double scarto;
+							scarto = cd.getTemperatura() - averages.get(k);
+							scarto *= scarto;
+							variances.add(k,scarto);
+							break;
+						}
+					}	
 				}
-				else {
-					int j = 0;
-					for(CityData cd : hc.getHourCities()) {
-						double scarto;
-						scarto = cd.getTemperatura() - averages.get(count - j - 1);
-						scarto *= scarto;
-						variances.set(count - j - 1, variances.get(count - j - 1) + scarto);
-						j++;
-					}
-					tot_hours++;
-				}
+				tot_hours++;
 			}
 		}
 		
-		for(int i = 0; i < variances.size(); i++)
+		
+		for(int i = 0; i < names.size(); i++)
 			variances.set(i, variances.get(i)/tot_hours);
 		
-		this.truncateTo(variances, 2);
+		this.truncateTo(variances, 4);
 		
 		return variances;
 	}
@@ -188,7 +206,7 @@ public class Calculate {
 		LinkedList<Double> truncatedNumber = new LinkedList<Double>();
 		for(int i = unroundedNumber.size() - 1; i >= 0; i--) {
 			truncatedNumberInt.add((int)(unroundedNumber.get(i) * Math.pow(10, decimalPlaces)));
-			truncatedNumber.add((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));//DA PROVARE CON PUSH
+			truncatedNumber.push((double)(truncatedNumberInt.get(unroundedNumber.size() - i - 1) / Math.pow(10, decimalPlaces)));//DA PROVARE CON PUSH
 		}
 		unroundedNumber.clear();
 		unroundedNumber.addAll(truncatedNumber);

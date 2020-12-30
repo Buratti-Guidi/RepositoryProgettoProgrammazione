@@ -31,6 +31,8 @@ public class FilterService {
 	
 	public Vector<String> filterParser(LinkedList<HashSet<HourCities>> dataset) {
 		Vector<String> final_names = new Vector<String>();
+		LinkedList<String> tot_names = new LinkedList<String>();
+		
 		Set<String> keys = this.jof.keySet();
 		days = (Integer)this.jof.get("days");
 		keys.remove("days");
@@ -68,11 +70,15 @@ public class FilterService {
 						Vector<Double> filterValue = new Vector<Double>();
 						StringBuffer filterName = new StringBuffer();
 						LinkedHashMap<String, Object> joValueOne = new LinkedHashMap<String, Object>();
-						joValueOne.put(stkey, joValue.get(stkey));
+						joValueOne = (LinkedHashMap<String, Object>)joValue.get(stkey);
+						
+						//joValueOne.put(stkey, joValue.get(stkey));
+						
 						Stat s = this.statParser(joValueOne, stkey, filterValue, filterName);
 						LinkedList<Double> stats = s.getStats(dataset);
-						wf= new WeatherFilter(filterName.toString(), filterValue);
+						wf = new WeatherFilter(filterName.toString(), filterValue);//ce una stat e non un filtro
 						int i = 0;
+						tot_names = s.getNames(dataset);
 						for(String name : s.getNames(dataset)) {
 							if(wf.getResponse(stats.get(i))) {
 								o.addCondition(true, i);
@@ -83,7 +89,7 @@ public class FilterService {
 						}
 					}
 					int j = 0;
-					for(String name : s.getNames(dataset)) {
+					for(String name : tot_names) {
 						if(o.getResponse(j))
 							final_names.add(name);
 						j++;
