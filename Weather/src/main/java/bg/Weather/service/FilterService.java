@@ -1,5 +1,7 @@
 package bg.Weather.service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -10,7 +12,10 @@ import java.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import bg.Weather.exception.InternalServerException;
+import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.HourCities;
+import bg.Weather.util.filter.Operator;
 import bg.Weather.util.filter.WeatherFilter;
 import bg.Weather.util.stats.Stat;
 
@@ -25,40 +30,81 @@ public class FilterService {
 	}
 	
 	public Vector<String> filterParser(LinkedList<HashSet<HourCities>> dataset) {
+		Vector<String> final_names = new Vector<String>();
 		Set<String> keys = this.jof.keySet();
 		days = (Integer)this.jof.get("days");
 		keys.remove("days");
 		
-		for(String key : keys) {
+		for(String key : keys) { //finto for che scorre per ottenere la chiave "esterna" oltre a "days"
 			Object value = this.jof.get(key);
 			LinkedHashMap<String, Object> joValue = (LinkedHashMap<String, Object>)value;
 			
 			if(joValue.size() == 1) {
 				Vector<Double> filterValue = new Vector<Double>();
 				StringBuffer filterName = new StringBuffer();
-				
-				Stat s = statParser(joValue,key,filterValue,filterName);
-				Vector<String> final_names = new Vector<String>();
+				Stat s = this.statParser(joValue, key, filterValue, filterName);
 				LinkedList<Double> stats = s.getStats(dataset);
-				
-				wf= new WeatherFilter(filterName.toString(),filterValue);
+				wf= new WeatherFilter(filterName.toString(), filterValue);
 				int i = 0;
 				for(String name : s.getNames(dataset)) {
 					if(wf.getResponse(stats.get(i)))
 						final_names.add(name);
-				
 				i++;
 				}
 				return final_names;
 			}
 			else {
-				//E' un and o un or
+				try {
+					String className = "bg.Weather.util.filter." + key.substring(0,1).toUpperCase() + key.substring(1, key.length()).toLowerCase() + "Filter";
+					Operator o;
+					Class<?> cls = Class.forName(className);
+					Constructor<?> ct = cls.getDeclaredConstructor();
+					o = (Operator)ct.newInstance();
+					
+					Set<String> ks = joValue.keySet();
+					
+					for(String stkey : ks) {
+						
+						Vector<Double> filterValue = new Vector<Double>();
+						StringBuffer filterName = new StringBuffer();
+						LinkedHashMap<String, Object> joValueOne = new LinkedHashMap<String, Object>();
+						joValueOne.put(stkey, joValue.get(stkey));
+						Stat s = this.statParser(joValueOne, stkey, filterValue, filterName);
+						LinkedList<Double> stats = s.getStats(dataset);
+						wf= new WeatherFilter(filterName.toString(), filterValue);
+						int i = 0;
+						for(String name : s.getNames(dataset)) {
+							if(wf.getResponse(stats.get(i))) {
+								o.addCondition(true, i);
+							} else {
+								o.addCondition(false, i);
+							}
+						i++;
+						}
+					}
+					int j = 0;
+					for(String name : s.getNames(dataset)) {
+						if(o.getResponse(j))
+							final_names.add(name);
+						j++;
+					}
+					return final_names;
+					
+				} catch (ClassNotFoundException e) {
+					throw new UserErrorException("This operator doesn't exist");
+				}
+				catch(InvocationTargetException e) {
+					throw new InternalServerException("Error in filterParser");
+				}
+				catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
+					throw new InternalServerException("General error, try later...");
+				}
 			}
 		}
-		return null;
+		throw new InternalServerException("Something has gone bad");
 	}
 
-	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Double> valore, StringBuffer filterName) {
+	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Double> valore, StringBuffer filterName) { //valore e filtername sono inizialmente vuoti, quindi da riempire
 		StatsService statService = new StatsService();
 		Stat s = statService.getStat(stat,this.days);	
 		Set<String> filterKeys = joValue.keySet();
@@ -74,7 +120,7 @@ public class FilterService {
 					valore.add((Double)elem);
 				}
 			}
-		break;	
+		break;
 		}
 		return s;
 	}
