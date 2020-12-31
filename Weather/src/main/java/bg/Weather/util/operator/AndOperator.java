@@ -1,8 +1,8 @@
-package bg.Weather.util.filter;
+package bg.Weather.util.operator;
 
-public class AndFilter extends OperatorFilter implements Operator{
+public class AndOperator extends OperatorImpl implements Operator{
 
-	public AndFilter() {}
+	public AndOperator() {}
 	
 	public boolean getResponse(int index) {
 		for(Boolean b : conditions.get(index)) {

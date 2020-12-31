@@ -1,8 +1,8 @@
-package bg.Weather.util.filter;
+package bg.Weather.util.operator;
 
-public class OrFilter extends OperatorFilter implements Operator{
+public class OrOperator extends OperatorImpl implements Operator{
 
-	public OrFilter() {}
+	public OrOperator() {}
 	
 	public boolean getResponse(int index) {
 		for(Boolean b : conditions.get(index)) {
