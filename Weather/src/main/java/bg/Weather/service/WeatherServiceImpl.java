@@ -58,7 +58,7 @@ public class WeatherServiceImpl implements WeatherService {
 		capital.setNome(cap);
 		verifica.getCoord(capital);//Metodo di VerifyCap che aggiunge le coordinate all' attributo capital
 		
-		BoxCalculating bc = new BoxCalculating(capital.getLatitudine(), capital.getLongitudine());
+		BoxCalculator bc = new BoxCalculator(capital.getLatitudine(), capital.getLongitudine());
 		
 		try {
 			Number l = (Number)ub.get("length");

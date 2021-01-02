@@ -8,6 +8,12 @@ package bg.Weather.exception;
  */
 public class InternalServerException extends RuntimeException{
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5328568523499779731L;
+
 	public InternalServerException() {
 		super();
 	}

@@ -14,7 +14,7 @@ import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.HourCities;
 import bg.Weather.util.operator.Operator;
-import bg.Weather.util.operator.OperatorImpl;
+import bg.Weather.util.operator.WeatherOperator;
 import bg.Weather.util.filter.WeatherFilter;
 import bg.Weather.util.stats.Stat;
 
@@ -24,12 +24,12 @@ public class FilterService {
 	private WeatherFilter wf;
 	private JSONObject jof;
 	private LinkedList<String> tot_names;
-	private OperatorImpl of;
+	private WeatherOperator of;
 	
 	public FilterService(JSONObject jof) {
 		this.jof = jof;
 		tot_names = new LinkedList<String>();
-		of = new OperatorImpl();
+		of = new WeatherOperator();
 	}
 	
 	public Vector<String> filterParser(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{

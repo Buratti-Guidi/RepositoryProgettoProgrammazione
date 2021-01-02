@@ -7,11 +7,11 @@ import java.util.Vector;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 
-public class OperatorImpl {
+public class WeatherOperator {
 
 	protected Vector<Vector<Boolean>> conditions;
 	
-	public OperatorImpl() {
+	public WeatherOperator() {
 		conditions = new Vector<Vector<Boolean>>();
 	}
 	

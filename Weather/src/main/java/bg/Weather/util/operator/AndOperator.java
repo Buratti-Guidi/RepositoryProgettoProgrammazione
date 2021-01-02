@@ -1,6 +1,6 @@
 package bg.Weather.util.operator;
 
-public class AndOperator extends OperatorImpl implements Operator{
+public class AndOperator extends WeatherOperator implements Operator{
 
 	public AndOperator() {}
 	

@@ -10,15 +10,17 @@ import bg.Weather.exception.UserErrorException;
 public class WeatherFilter {
 
 	protected String filter;
-	protected static Vector<Double> value = new Vector<Double>();
+	protected Vector<Double> value;
 	
-	public WeatherFilter() {}
+	public WeatherFilter() {
+		value = new Vector<Double>();
+	}
 
 	public WeatherFilter(String filter, Vector<Double> values) {
 		this.filter = filter;
-		value.clear();
+		value = new Vector<Double>();
 		for(int i = 0; i < values.size(); i++)
-			value.add(values.get(i));
+			this.value.add(values.get(i));
 	}
 
 	public boolean getResponse(double vfrValue){

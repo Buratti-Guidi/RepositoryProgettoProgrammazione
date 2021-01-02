@@ -9,7 +9,7 @@ import bg.Weather.model.Box;
  * @author Luca Guidi
  */
 
-public class BoxCalculating {
+public class BoxCalculator {
 
 	private double lat_centro; //latitudine del centro del box (ovvero della capitale)
 	private double long_centro; //longitudine " " " "
@@ -19,7 +19,7 @@ public class BoxCalculating {
 
 	final double km_to_deg = 0.009; //costante per convertire una grandezza da km in gradi decimali
 	
-	public BoxCalculating(double lat_centro, double long_centro) {
+	public BoxCalculator(double lat_centro, double long_centro) {
 		this.lat_centro = lat_centro;
 		this.long_centro = long_centro;
 	}

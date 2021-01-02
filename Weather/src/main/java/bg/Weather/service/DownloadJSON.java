@@ -57,58 +57,26 @@ public class DownloadJSON {
 		} 
 	}
 	
-	//DA VEDERE SE SERVE
-	//Legge da una chiamata API un array
-	public JSONArray chiamataAPIArr(String url) {
-		try {
-			JSONArray ja = new JSONArray();
-			URLConnection openConnection = new URL(url).openConnection();
-			InputStream in = openConnection.getInputStream();
-			
-			String data = "";
-			String line = "";
-			
-			try {
-			   InputStreamReader inR = new InputStreamReader( in );
-			   BufferedReader buf = new BufferedReader( inR );
-			  
-			   while ( ( line = buf.readLine() ) != null ) {
-				   data+= line;
-			   }
-			} finally {
-			   in.close();
-			}
-			
-			ja = (JSONArray) JSONValue.parseWithException(data);	//parse JSON Array
-			return ja;
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un array");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Errore lettura chiamata API di un array");
-		}
-	}
 	
-	//DA VEDERE SE SERVE
+	
+	//Serve per APIKey
 	//Legge da file.json un oggetto
 	public JSONObject caricaFileObj(String nome_file) {
 		
 		JSONObject jo = new JSONObject();
 		JSONParser parser = new JSONParser();
-		try {
-			//ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nome_file)));	
+		try {	
 			Object json_file = parser.parse(new FileReader(nome_file));
 			jo = (JSONObject) json_file;
 			return jo;
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore lettura file.json di un oggetto");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Errore lettura file.json di un oggetto");
-		}
+		} catch (FileNotFoundException e) {
+			throw new InternalServerException("File per lettura di un oggetto non trovato");
+		} catch (IOException  e) {
+			throw new InternalServerException("Errore lettura file di un oggetto");
+		} catch (ParseException ex) {
+			throw new InternalServerException("Errore parsing JSONObject");
+		} 
 	}
 	
 	//Legge da file.json un array
