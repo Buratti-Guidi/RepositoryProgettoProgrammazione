@@ -33,7 +33,6 @@ public class FilterService {
 	}
 	
 	public Vector<String> filterParser(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
-		
 		Vector<String> final_names = new Vector<String>();
 		Set<String> keys = this.jof.keySet();
 			
