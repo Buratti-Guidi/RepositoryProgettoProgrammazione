@@ -14,7 +14,15 @@ Prima di ritornare le informazioni all'utente, viene attivata una scheduled task
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/InizializationSeq.png?raw=true">
 
-* ### **GET /Data**
+* ### **GET /data**
 Attraverso il metodo `getData` di WeatherService viene creato un JSONArray con tutte le informazioni contenute nel database.
 Il JSONArray viene poi ritornato al controller che lo ritorna al client.
+
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/GetDataSeq.png?raw=true">
+
+* ### **POST /stats**
+Attraverso il metodo `getStats` di WeatherService viene prima effettuato il parsing della richiesta, che contiene quali statistiche calcolare.
+La classe `StatsService` si occuperà di calcolare le statistiche richieste, attraverso `Calculate`, sui dati contenuti nel database.
+Il WeatherService creerà un JSONArray con le statistiche che viene poi ritornato al controller, il quale lo ritornerà al client.
+
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/PostStatsSeq.png?raw=true">
