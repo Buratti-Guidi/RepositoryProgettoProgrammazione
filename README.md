@@ -11,6 +11,7 @@ Se esiste un file JSON che contiene delle "vecchie" chiamate, viene letto e vien
 Infine viene fatta la chiamata all' API che ci permette di avere le informazioni climatiche delle città contenute nel box di coordinate nell' ora corrente.
 L' oggetto JSON ottenuto viene parsato dal `JSONWeatherParser`, i dati ottenuti vengono salvati nel database.
 Prima di ritornare le informazioni all'utente, viene attivata una scheduled task che fa la chiamata API ogni ora.
+
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/InizializationSeq.png?raw=true">
 
 * ### **GET /Data**
