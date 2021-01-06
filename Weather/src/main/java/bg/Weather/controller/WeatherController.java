@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
@@ -31,12 +29,13 @@ public class WeatherController {
 	@Autowired
 	WeatherServiceImpl weatherService;
 	private boolean initialized = false;
-
+	
+	private Timer timer;
+	
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject userBox)
 			throws InternalServerException, UserErrorException {
 
-		this.initialized = true;
 		weatherService.initialize(nameCap, userBox);
 		
 		HashSet<CityData> hs = weatherService.getCities();
@@ -44,20 +43,28 @@ public class WeatherController {
 		for (CityData ct : hs) {
 			towns.add(ct.getAllHashMap());
 		}
-		// METODO CHE AVVIA IL TIMER DI UN'ORA
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() { // Classe ANONIMA PER LA TASK ORARIA
 
+		TimerTask task = new TimerTask() { // Classe ANONIMA PER LA TASK ORARIA
+			
 			@Override
 			public void run() {
 				weatherService.getCities();
 			}
-		}, TimeUnit.HOURS.toMillis(1), TimeUnit.HOURS.toMillis(1));
+		};
+		
+		try {
+			timer.cancel();
+			timer.purge();
+		}catch(NullPointerException e) {}
+		
+		timer = new Timer();
+		timer.schedule(task, TimeUnit.HOURS.toMillis(1), TimeUnit.HOURS.toMillis(1));
 
+		this.initialized = true;
+		
 		return new ResponseEntity<>(towns, new HttpHeaders(), HttpStatus.OK);
-
 	}
-
+	
 	@GetMapping(value = "/data")
 	public JSONArray getData() throws InternalServerException, UserErrorException{
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -76,7 +83,7 @@ public class WeatherController {
 	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
 
-		return weatherService.getStats(stat);
+		return weatherService.postStats(stat);
 	}
 	
 	@PostMapping(value = "/filters")

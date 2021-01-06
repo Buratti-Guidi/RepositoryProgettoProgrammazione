@@ -66,7 +66,7 @@ public class JSONWeatherParser{
 		}
 	}
 	
-	public void parseCity(JSONObject jo, CityData citta) throws InternalServerException {
+	public void parseCity(JSONObject jo, CityData city) throws InternalServerException {
 
 		JSONObject coord = new JSONObject();
 		coord = (JSONObject) jo.get("coord");
@@ -76,9 +76,9 @@ public class JSONWeatherParser{
 
 		long id = ((Number) jo.get("id")).longValue();
 
-		citta.setLongitudine(((Number) coord.get("lon")).doubleValue());
-		citta.setLatitudine(((Number) coord.get("lat")).doubleValue());
-		citta.setId(id);
+		city.setLongitudine(((Number) coord.get("lon")).doubleValue());
+		city.setLatitudine(((Number) coord.get("lat")).doubleValue());
+		city.setId(id);
 	}
 
 	//parsa il jsonArray delle hourcities

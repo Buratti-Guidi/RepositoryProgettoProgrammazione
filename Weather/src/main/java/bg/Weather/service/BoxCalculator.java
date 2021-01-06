@@ -17,7 +17,7 @@ public class BoxCalculator {
 	private double lungh_in_gradi; //lunghezza del box in gradi decimali
 	private double largh_in_gradi; //larghezza del box in gradi decimali
 
-	final double km_to_deg = 0.009; //costante per convertire una grandezza da km in gradi decimali
+	private final double km_to_deg = 0.009; //costante per convertire una grandezza da km in gradi decimali
 	
 	public BoxCalculator(double lat_centro, double long_centro) {
 		this.lat_centro = lat_centro;

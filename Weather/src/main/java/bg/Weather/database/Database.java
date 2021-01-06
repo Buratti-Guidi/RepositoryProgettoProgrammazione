@@ -21,7 +21,7 @@ import bg.Weather.model.HourCities;
 
 public class Database {
 
-	final int daysMax = 30; //Numero di giorni massimo per cui vogliamo salvare tutte le informazioni riguardanti le città appartenenti al box (scelto inizialmente all'avvio del programma)
+	private final int daysMax = 30; //Numero di giorni massimo per cui vogliamo salvare tutte le informazioni riguardanti le città appartenenti al box (scelto inizialmente all'avvio del programma)
 	
 	private LinkedList<HashSet<HourCities>> dataset = new LinkedList<HashSet<HourCities>>(); //Dataset contenente i valori delle città appartenenti al box negli ultimi "daysMax" giorni
 	

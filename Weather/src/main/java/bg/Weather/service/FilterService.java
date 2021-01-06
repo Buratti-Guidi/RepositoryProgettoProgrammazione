@@ -32,7 +32,7 @@ public class FilterService {
 		of = new WeatherOperator();
 	}
 	
-	public Vector<String> filterParser(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
+	public Vector<String> filterCalc(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
 		Vector<String> final_names = new Vector<String>();
 		Set<String> keys = this.jof.keySet();
 			
@@ -182,8 +182,8 @@ public class FilterService {
 		return s;
 	}	
 	
-	public JSONArray response(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
-		Vector<String> final_names = this.filterParser(dataset);
+	public JSONArray getResponse(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
+		Vector<String> final_names = this.filterCalc(dataset);
 		JSONArray result = new JSONArray();
 		Stat s;
 		StatsService ss = new StatsService(this.days);

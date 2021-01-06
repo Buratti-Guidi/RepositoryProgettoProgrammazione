@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.json.simple.JSONArray;
@@ -39,10 +40,10 @@ import bg.Weather.util.stats.*; //da lasciare per il cast a una classe generica 
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
-	DownloadJSON fileJSON = new DownloadJSON();
-	Database dataset;
-	String nomeFile;
-	Box b = new Box();
+	private DownloadJSON fileJSON = new DownloadJSON();
+	private Database dataset;
+	private String nomeFile;
+	private Box b = new Box();
 	
 	@Override
 	public void initialize(String cap, JSONObject ub)throws UserErrorException,InternalServerException{
@@ -118,25 +119,27 @@ public class WeatherServiceImpl implements WeatherService {
 	
 
 	@SuppressWarnings("unchecked")
-	public JSONArray postData(JSONObject jo)  {
+	public JSONArray postData(JSONObject jo) throws UserErrorException,InternalServerException {
 		
 		String from = (String)jo.get("from");
 		String to = (String)jo.get("to");
 		try {
 
-			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+			df.setLenient(false);
+			
 			Date fromDate = df.parse(from);
 			Calendar fromCal = Calendar.getInstance();
 			fromCal.setTime(fromDate);
-
+			
 			Date toDate = df.parse(to);
 			Calendar toCal = Calendar.getInstance();
 			toCal.setTime(toDate);
+			
 			toCal.add(Calendar.DAY_OF_MONTH, 1); // aggiungiamo un giorno perche altrimenti non lo prende
 			
 			if (fromCal.compareTo(toCal) > 0)
-				throw new UserErrorException("Formato della data non corretto");
+				throw new UserErrorException("Try to invert from and to");
 
 			JSONArray tot = new JSONArray();
 
@@ -160,7 +163,7 @@ public class WeatherServiceImpl implements WeatherService {
 		}
 	}
 	
-	public JSONArray getStats(JSONObject stat) throws InternalServerException {
+	public JSONArray postStats(JSONObject stat) throws InternalServerException {
 		Vector<String> param = new Vector<String>();
 		boolean flag = true;
 		for(int i = 1; flag; i++) {
@@ -208,7 +211,7 @@ public class WeatherServiceImpl implements WeatherService {
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
 		
-		response = fs.response(dataset.getDataset());
+		response = fs.getResponse(dataset.getDataset());
 		
 		return response;
 	}
