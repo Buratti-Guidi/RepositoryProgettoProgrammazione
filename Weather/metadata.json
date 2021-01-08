@@ -1,0 +1,7 @@
+[{"alias":"temp","sourceField":"Temperatura", "type":"double"},{"alias":"temp_feels_like","sourceField":"Temperatura percepita", "type":"double"},{"alias":"windSpeed","sourceField":"Velocità del vento", "type":"double"},
+{"alias":"name","sourceField":"Nome città", "type":"String"},{"alias":"lat","sourceField":"Latitudine", "type":"double"},{"alias":"lon","sourceField":"Longitudine", "type":"double"},
+{"alias":"time","sourceField":"Data", "type":"Date"},{"alias":"avg","sourceField":"Media Temperature", "type":"double"},{"alias":"var","sourceField":"Varianza Temperature", "type":"double"},
+{"alias":"tempMax","sourceField":"Temperatura massima della città", "type":"double"},{"alias":"tempMin","sourceField":"Temperatura minima della città", "type":"double"},
+{"alias":"std","sourceField":"Deviazione standard", "type":"double"},{"alias":"greater","sourceField":"Maggiore (>)", "type":"filter"},{"alias":"greaterEqual","sourceField":"Maggiore o uguale (>=)", "type":"filter"},
+{"alias":"less","sourceField":"Minore (<)", "type":"filter"},{"alias":"lessEqual","sourceField":"Minore o uguale (<=)", "type":"filter"},{"alias":"included","sourceField":"Incluso (a, b)", "type":"filter"},
+{"alias":"includedEqual","sourceField":"Incluso o uguale [a, b]", "type":"filter"}]

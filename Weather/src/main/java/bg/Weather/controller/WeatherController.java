@@ -1,5 +1,6 @@
 package bg.Weather.controller;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Timer;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.CityData;
+import bg.Weather.service.DownloadJSON;
 import bg.Weather.service.WeatherServiceImpl;
 
 @RestController
@@ -91,6 +93,18 @@ public class WeatherController {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
 		
 		return weatherService.getFilteredStats(filters);
+	}
+	
+	@GetMapping(value = "/metadata")
+	public JSONArray getMetadata() {
+		DownloadJSON d = new DownloadJSON();
+		try {
+			JSONArray ja = d.caricaFileArr("metadata.json");
+			return ja;
+		} catch (FileNotFoundException | InternalServerException e) {
+			
+		}
+		return null;
 	}
 
 	@GetMapping(value = "/save")
