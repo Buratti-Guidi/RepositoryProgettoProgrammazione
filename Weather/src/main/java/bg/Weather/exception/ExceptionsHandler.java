@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(value = { UserErrorException.class, InternalServerException.class })
-	public ResponseEntity<Object> handleUserException(Exception ex, WebRequest request) {
+	public ResponseEntity<Object> handleExceptions(Exception ex, WebRequest request) {
 		
 		String errorMessageDescription = ex.getLocalizedMessage();
 		if(errorMessageDescription == null) errorMessageDescription = ex.toString();

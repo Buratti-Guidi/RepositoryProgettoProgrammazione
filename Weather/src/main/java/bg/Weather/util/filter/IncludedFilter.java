@@ -14,7 +14,7 @@ public class IncludedFilter extends WeatherFilter implements Filter{
 		if(super.getValue().size() != 2)
 			throw new InternalServerException("Number of values wrong in IncludedFilter");
 		
-		if(this.vrfValue > super.getValue().get(0) && this.vrfValue < super.getValue().get(1))
+		if(this.vrfValue > ((Number)super.getValue().get(0)).doubleValue() && this.vrfValue < ((Number)super.getValue().get(1)).doubleValue())
 			return true;
 		return false;
 	}

@@ -182,15 +182,18 @@ public class WeatherServiceImpl implements WeatherService {
 		LinkedList<String> nomi = new LinkedList<String>();
 		
 		JSONArray ja = new JSONArray();
-
-		for(int j = 0; j < param.size(); j++) {
-			s = sc.getStat(param.get(j), numDays);
-			statistics.add(s.getStats(dataset.getDataset()));
-			nomi = s.getNames(dataset.getDataset());
-			
-			if(param.size() == 1)
-				s.sortStats(nomi, statistics.get(j), false);
-		}	
+		try {
+			for(int j = 0; j < param.size(); j++) {
+				s = sc.getStat(param.get(j), numDays);
+				statistics.add(s.getStats(dataset.getDataset()));
+				nomi = s.getNames(dataset.getDataset());
+				
+				if(param.size() == 1)
+					s.sortStats(nomi, statistics.get(j), false);
+			}	
+		}catch(Exception e) {
+			throw new InternalServerException("errore");
+		}
 		int i = 0;
 		for(String name : nomi) {
 			LinkedHashMap<String, Object> jo = new LinkedHashMap<String, Object>();

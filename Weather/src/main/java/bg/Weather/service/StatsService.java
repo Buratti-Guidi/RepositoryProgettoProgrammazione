@@ -44,7 +44,7 @@ public class StatsService {
 			throw new InternalServerException("Error in getStats");
 		}
 		catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
-			throw new InternalServerException("General error, try later...");
+			throw new InternalServerException("GetStat in StatService error, try later...");
 		}
 	}
 

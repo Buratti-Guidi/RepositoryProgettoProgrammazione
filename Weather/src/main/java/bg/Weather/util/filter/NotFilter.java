@@ -14,7 +14,7 @@ private double vrfValue;
 		if(super.getValue().size() != 1)
 			throw new InternalServerException("Number of values wrong in NotFilter");
 		
-		if(this.vrfValue != super.getValue().firstElement().doubleValue())
+		if(this.vrfValue != ((Number)super.getValue().firstElement()).doubleValue())
 			return true;
 		return false;
 	}

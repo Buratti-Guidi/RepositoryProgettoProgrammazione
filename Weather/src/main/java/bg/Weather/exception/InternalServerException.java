@@ -12,7 +12,7 @@ public class InternalServerException extends RuntimeException{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5328568523499779731L;
+	private static final long serialVersionUID = 1L;
 
 	public InternalServerException() {
 		super();

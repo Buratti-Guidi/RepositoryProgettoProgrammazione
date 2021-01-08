@@ -13,7 +13,7 @@ public class UserErrorException extends RuntimeException {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8273075997457788489L;
+	private static final long serialVersionUID = 1L;
 
 	public UserErrorException() {
 		super();

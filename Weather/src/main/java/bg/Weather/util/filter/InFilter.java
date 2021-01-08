@@ -1,18 +1,26 @@
 package bg.Weather.util.filter;
 
+import java.util.Vector;
+
+import bg.Weather.exception.UserErrorException;
+
 public class InFilter extends WeatherFilter implements Filter{
 
-	private double vrfValue;
+	private String vrfValue;
 	
-	public InFilter(double vrfValue) {
+	public InFilter(String vrfValue) {
 		this.vrfValue = vrfValue;
 	}
 	
-	public boolean response() {
-		for(Double d : super.getValue()) {
-			if(this.vrfValue == d)
-				return true;
+	public boolean response() throws UserErrorException {
+		try {
+			for(Object o : super.getValue()) {
+				if(this.vrfValue.equals((String)o))
+					return true;
+			}
+			return false;
+		}catch(ClassCastException e) {
+			throw new UserErrorException("Il filtro 'in' accetta solo stringhe");
 		}
-		return false;
 	}
 }

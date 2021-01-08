@@ -48,22 +48,36 @@ public class FilterService {
 			LinkedHashMap<String, Object> joValue = (LinkedHashMap<String, Object>)value;
 			
 			if(joValue.size() == 1) {
-				Vector<Double> filterValue = new Vector<Double>();
+				Vector<Object> filterValue = new Vector<Object>();
 				StringBuffer filterName = new StringBuffer();
-				LinkedList<Double> stats;
+				
 				
 				Stat s = this.statParser(joValue, key, filterValue, filterName);
-				tot_names = s.getNames(dataset);
-				stats = s.getStats(dataset);
+				tot_names = s.getNames(dataset);				
 				
-				wf = new WeatherFilter(filterName.toString(), filterValue);
-				int i = 0;
-				for(String name : s.getNames(dataset)) {
-					if(wf.getResponse(stats.get(i)))
-						final_names.add(name);
-				i++;
+				try {
+					LinkedList<Double> stats = s.getStats(dataset);
+					wf = new WeatherFilter(filterName.toString(), filterValue);
+					int i = 0;
+					for(String name : s.getNames(dataset)) {
+						if(wf.getResponse(stats.get(i)))
+							final_names.add(name);
+					i++;
+					}
+					return final_names;
+					
+				}catch(ClassCastException | NullPointerException | InternalServerException e) {
+					
+					LinkedList<String> stats = s.getNames(dataset);
+					wf = new WeatherFilter(filterName.toString(), filterValue);
+					int i = 0;
+					for(String name : s.getNames(dataset)) {
+						if(wf.getResponse(stats.get(i)))
+							final_names.add(name);
+					i++;
+					}
+					return final_names;
 				}
-				return final_names;
 			}
 			else {
 				Operator o = of.getOperator(key);
@@ -95,7 +109,7 @@ public class FilterService {
 
 		for (String stkey : keys) {
 
-			Vector<Double> filterValue = new Vector<Double>();
+			Vector<Object> filterValue = new Vector<Object>();
 			StringBuffer filterName = new StringBuffer();
 			LinkedHashMap<String, Object> joValueOne = new LinkedHashMap<String, Object>();
 
@@ -104,19 +118,38 @@ public class FilterService {
 			try { // prima controllo se la chiave e' una stat
 				Stat s = this.statParser(joValueOne, stkey, filterValue, filterName);
 				tot_names = s.getNames(dataset);
-
-				LinkedList<Double> stats = s.getStats(dataset);
-				wf = new WeatherFilter(filterName.toString(), filterValue);
-				int i = 0;
-				// tot_names = s.getNames(dataset);
-				for (String name : s.getNames(dataset)) {
-					if (wf.getResponse(stats.get(i))) {
-						o.addCondition(true, i);
-					} else {
-						o.addCondition(false, i);
+				
+				try {
+					LinkedList<Double> stats = s.getStats(dataset);
+					wf = new WeatherFilter(filterName.toString(), filterValue);
+					int i = 0;
+					// tot_names = s.getNames(dataset);
+					for (String name : s.getNames(dataset)) {
+						if (wf.getResponse(stats.get(i))) {
+							o.addCondition(true, i);
+						} else {
+							o.addCondition(false, i);
+						}
+						i++;
 					}
-					i++;
+					
+				}catch(ClassCastException | NullPointerException | InternalServerException e) {
+					
+					LinkedList<String> stats = s.getNames(dataset);
+					wf = new WeatherFilter(filterName.toString(), filterValue);
+					int i = 0;
+					// tot_names = s.getNames(dataset);
+					for (String name : s.getNames(dataset)) {
+						if (wf.getResponse(stats.get(i))) {
+							o.addCondition(true, i);
+						} else {
+							o.addCondition(false, i);
+						}
+						i++;
+					}
 				}
+				
+				
 			} catch (UserErrorException e) {// da mettere InternalServerException(?)
 
 				try { // se non e' una stat controllo se e' un operatore
@@ -151,7 +184,7 @@ public class FilterService {
 	
 	
 	//valore e filtername sono inizialmente vuoti, quindi da riempire
-	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Double> valore, StringBuffer filterName) 
+	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Object> valore, StringBuffer filterName) 
 	throws UserErrorException,InternalServerException { 
 		
 		StatsService statService = new StatsService();
@@ -168,13 +201,24 @@ public class FilterService {
 				if(filterValue instanceof Double)
 					valore.add((Double)filterValue);
 			}
-			if(filterValue instanceof Collection) {
-				for(Object elem : (Collection)filterValue) {
-					if(elem instanceof Integer)
-						valore.add(((Integer)elem).doubleValue());
-					
-					if(elem instanceof Double)
-						valore.add((Double)elem);
+			else {
+				if(filterValue instanceof String) {
+					valore.add((String)filterValue);
+				}
+				else {
+					if(filterValue instanceof Collection) {
+						for(Object elem : (Collection)filterValue) {
+							if(elem instanceof Integer)
+								valore.add(((Integer)elem).doubleValue());
+							
+							if(elem instanceof Double)
+								valore.add((Double)elem);
+							
+							if(elem instanceof String) {
+								valore.add((String)elem);
+							}
+						}
+					}
 				}
 			}
 		break;
