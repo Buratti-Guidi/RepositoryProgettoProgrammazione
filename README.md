@@ -3,8 +3,35 @@ Christopher Buratti & Luca Guidi
 
 ## Descrizione generale
 Il progetto tratta l'implementazione di un servizio meteo in grado di fornire dati e statistiche riguardanti le temperature delle città circostanti una capitale (scelta dall'utente) all'interno di un "box" rettangolare delle dimensioni desiderate.   
-In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituirne una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
-Per l'ottenimento dei dati riguardanti le temperature delle città si è utilizzata l'API `OpenWeather`, la quale consente di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
+In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituire una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
+Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di `OpenWeatherMap`, le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
+
+Tipo | Rotta | Descrizione
+---- | ----- | -----------
+POST | /capital/{nomeCapitale} | Inizializza il dataset e restituisce la chiamata in tempo reale
+GET  | /data | Restituisce tutti i valori contenuti nel dataset
+POST | /data | Restituisce i valori del dataset che sono compresi tra le date specificate
+POST | /stats | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
+POST | /filters | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
+GET  | /save | Salva l'intero dataset su un file JSON
+
+### Filtri per campi numerici
+Nome filtro | Descrizione | Esempio
+----------- | ----------- | -------
+Greater | Maggiore | `"stat":{"Greater":3.5}`
+GreaterEqual | Maggiore e uguale | `"stat":{"GreaterEqual":3}`
+Less | Minore | `"stat":{"Less":5}`
+LessEqual | Minore | `"stat":{"LessEqual":5.0}`
+Included | Compreso tra | `"stat":{"Included":[2, 5]}`
+IncludedEqual | Compreso (e uguale) tra | `"stat":{"IncludedEqual":[1.5, 7]}`
+NotIncluded | Non compreso tra | `"stat":{"NotIncluded":[1.5, 7]}`
+Not | ? | ...
+
+### Filtri per nome delle città
+Nome filtro | Descrizione | Esempio
+----------- | ----------- | -------
+In | Se trova una corrispondenza con i nomi specificati | `"Name":{"In":["Paris","Cergy"]}`
+Nin | Se non viene trovata una corrispondenza con i nomi specificati | `"Name":{"Nin":["Paris","Cergy","Evry"]}`
 
 ## CHIAMATE
 Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
