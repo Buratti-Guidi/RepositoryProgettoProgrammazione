@@ -2,8 +2,7 @@
 Christopher Buratti & Luca Guidi
 
 ## Descrizione generale
-Il progetto riguarda l'implementazione di un servizio meteo in grado di fornire dati e statistiche riguardanti le temperature delle città circostanti una capitale (scelta dall'utente) all'interno di un "box" rettangolare delle dimensioni desiderate.
-
+Il progetto tratta l'implementazione di un servizio meteo in grado di fornire dati e statistiche riguardanti le temperature delle città circostanti una capitale (scelta dall'utente) all'interno di un "box" rettangolare delle dimensioni desiderate.   
 In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituirne una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
 Per l'ottenimento dei dati riguardanti le temperature delle città si è utilizzata l'API `OpenWeather`, la quale consente di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
