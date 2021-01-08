@@ -1,12 +1,14 @@
 package bg.Weather.model;
 
+import java.util.Date;
+
 /**
  * Classe contenente i valori "fissi" di ogni città
  * @author Christopher Buratti
  * @author Luca Guidi
  */
 
-public class City {
+public abstract class City {
 
 	protected String name; //nome della città
 	protected long id; //id della città
@@ -45,4 +47,18 @@ public class City {
 	public void setLongitudine(double lon) {
 		this.lon = lon;
 	}
+	
+	public abstract Date getTime();
+	public abstract void setTime(Date time);
+	
+	public abstract double getTemperatura();
+	public abstract void setTemperatura(double temp);
+	
+	public abstract double getTemp_feels_like();
+	public abstract void setTemp_feels_like(double temp_feels_like);
+	
+	public abstract double getWindSpeed();
+	public abstract void setWindSpeed(double windSpeed);
+	
+	public abstract String toString();
 }
