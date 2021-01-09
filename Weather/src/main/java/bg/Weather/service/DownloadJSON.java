@@ -20,7 +20,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import bg.Weather.database.Database;
+import bg.Weather.dataset.Dataset;
 import bg.Weather.exception.InternalServerException;
 
 

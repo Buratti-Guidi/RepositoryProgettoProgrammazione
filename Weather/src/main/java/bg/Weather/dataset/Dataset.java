@@ -1,4 +1,4 @@
-package bg.Weather.database;
+package bg.Weather.dataset;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -19,14 +19,14 @@ import bg.Weather.model.HourCities;
  *
  */
 
-public class Database {
+public class Dataset {
 
 	private final int daysMax = 30; //Numero di giorni massimo per cui vogliamo salvare tutte le informazioni riguardanti le città appartenenti al box (scelto inizialmente all'avvio del programma)
 	
 	private LinkedList<HashSet<HourCities>> dataset = new LinkedList<HashSet<HourCities>>(); //Dataset contenente i valori delle città appartenenti al box negli ultimi "daysMax" giorni
 	
 	//Metodo che inserisce nel dataset i valori delle città appartenenti al box ordinati secondo il giorno in cui abbiamo ottenuto i dati
-	public void aggiornaDatabase(HourCities cities) {
+	public void aggiornaDataset(HourCities cities) {
 		
 		//Se il dataset è vuoto...
 		if(dataset.size() == 0) {
@@ -101,25 +101,6 @@ public class Database {
 	
 	public LinkedList<HashSet<HourCities>> getDataset() {
 		return this.dataset;
-	}
-	
-	
-	public HashSet<HourCities> getDay(Calendar cal)throws InternalServerException{
-		
-		boolean flag = false; //quando un hourcities di un giorno ha lo stesso giorno del param ritorna l intero giorno
-		
-		for(HashSet<HourCities> hs : this.dataset) {
-			for(HourCities hourc : hs) {
-				
-				if(hourc.getCalendar().DAY_OF_MONTH == cal.DAY_OF_MONTH && hourc.getCalendar().MONTH == cal.MONTH) { 
-					flag = true;
-					break;
-				}
-			}
-			if(flag) return hs;
-		}
-		
-		throw new InternalServerException("Il giorno non e' presente nel database");
 	}
 	
 }

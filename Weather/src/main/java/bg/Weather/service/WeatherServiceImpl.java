@@ -22,7 +22,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import bg.Weather.database.Database;
+import bg.Weather.dataset.Dataset;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.Box;
@@ -41,13 +41,13 @@ import bg.Weather.util.stats.*; //da lasciare per il cast a una classe generica 
 public class WeatherServiceImpl implements WeatherService {
 
 	private DownloadJSON fileJSON = new DownloadJSON();
-	private Database dataset;
+	private Dataset dataset;
 	private String nomeFile;
 	private Box b = new Box();
 	
 	@Override
 	public void initialize(String cap, JSONObject ub)throws UserErrorException,InternalServerException{
-		dataset = new Database();
+		dataset = new Dataset();
 		CityInfo verifica = new CityInfo();
 		CityData capital = new CityData();
 		String nomeCap;
@@ -92,7 +92,7 @@ public class WeatherServiceImpl implements WeatherService {
 			
 			jwp.parseBox(jo, cities);//viene parsato il JSONObject e inseriti i dati su cities
 			
-			dataset.aggiornaDatabase(cities);//viene aggiornato il database
+			dataset.aggiornaDataset(cities);//viene aggiornato il database
 			return cities.getHourCities();
 	}
 	
@@ -257,7 +257,7 @@ public class WeatherServiceImpl implements WeatherService {
 						HourCities cities = new HourCities();
 						JSONArray city = (JSONArray) ((JSONArray) ((JSONArray) ja.get(i))).get(j);
 						jwp.parseBoxFile(city, cities);
-						this.dataset.aggiornaDatabase(cities);
+						this.dataset.aggiornaDataset(cities);
 				}
 			}
 		} catch (FileNotFoundException ex) {
