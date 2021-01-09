@@ -3,7 +3,7 @@ package bg.Weather.model;
 import java.util.Date;
 
 /**
- * Classe contenente i valori "fissi" di ogni città
+ * Classe astratta contenente i valori "fissi" di ogni città
  * @author Christopher Buratti
  * @author Luca Guidi
  */
@@ -16,34 +16,66 @@ public abstract class City {
 	protected double lat; //latitudine
 	protected double lon; //longitudine
 	
+	/**
+	 * Ottieni il nome della città
+	 * @return nome città
+	 */
 	public String getNome() {
 		return name;
 	}
 	
+	/**
+	 * Imposta il nome della città
+	 * @param name nome città
+	 */
 	public void setNome(String name) {
 		this.name = name;
 	}
 	
+	/**
+	 * Ottieni l'id della città
+	 * @return id città
+	 */
 	public long getId() {
 		return id;
 	}
 	
+	/**
+	 * Imposta l'id della città
+	 * @param id id città
+	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 	
+	/**
+	 * Ottieni la latitudine della città
+	 * @return latitudine città
+	 */
 	public double getLatitudine() {
 		return lat;
 	}
 	
+	/**
+	 * Imposta la latitudine della città
+	 * @param lat latitudine città
+	 */
 	public void setLatitudine(double lat) {
 		this.lat = lat;
 	}
 	
+	/**
+	 * Ottieni la longitudine della città
+	 * @return longitudine città
+	 */
 	public double getLongitudine() {
 		return lon;
 	}
 	
+	/**
+	 * Imposta la longitudine della città
+	 * @param lon longitudine città
+	 */
 	public void setLongitudine(double lon) {
 		this.lon = lon;
 	}

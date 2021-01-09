@@ -6,10 +6,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.json.simple.JSONArray;
-
-import bg.Weather.exception.InternalServerException;
-import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
 /**
@@ -25,7 +21,10 @@ public class Dataset {
 	
 	private LinkedList<HashSet<HourCities>> dataset = new LinkedList<HashSet<HourCities>>(); //Dataset contenente i valori delle città appartenenti al box negli ultimi "daysMax" giorni
 	
-	//Metodo che inserisce nel dataset i valori delle città appartenenti al box ordinati secondo il giorno in cui abbiamo ottenuto i dati
+	/**
+	 * Metodo che inserisce nel dataset i valori delle città appartenenti al box ordinati secondo il giorno in cui abbiamo ottenuto i dati
+	 * @param cities contenente le informazioni di una chiamata oraria
+	 */
 	public void aggiornaDataset(HourCities cities) {
 		
 		//Se il dataset è vuoto...
@@ -99,8 +98,11 @@ public class Dataset {
 		}
 	}
 	
+	/**
+	 * Metodo per ottenere l'intero dataset
+	 * @return dataset intero
+	 */
 	public LinkedList<HashSet<HourCities>> getDataset() {
 		return this.dataset;
 	}
-	
 }
