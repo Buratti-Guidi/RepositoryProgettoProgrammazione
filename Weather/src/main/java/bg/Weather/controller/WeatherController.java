@@ -111,7 +111,7 @@ public class WeatherController {
 	public ResponseEntity<Object> saveDB() throws InternalServerException,UserErrorException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
 
-		weatherService.salvaDB();
+		weatherService.salvaDT();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}
 

@@ -4,14 +4,11 @@
 package bg.Weather.service;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -29,11 +26,11 @@ import bg.Weather.model.Box;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 import bg.Weather.util.APIKey;
-import bg.Weather.util.filter.WeatherFilter;
 
 import bg.Weather.util.stats.*; //da lasciare per il cast a una classe generica di questo package
 
 /**
+ * Classe che gestisce tutte le chiamate del controller
  * @author Luca Guidi
  * @author Christopher Buratti
  */
@@ -45,6 +42,12 @@ public class WeatherServiceImpl implements WeatherService {
 	private String nomeFile;
 	private Box b = new Box();
 	
+	/**
+	 * Inizializza il dataset. Se è presente un file di tipo "capLengthXWidth.json" viene letto e aggiornato il dataset.
+	 * Effettua inoltre una chiamata API ad OpenWeatherMap e aggiorna il dataset con i dati della chiamata n tempo reale
+	 * @param cap nome della capitale
+	 * @param ub JSONObject contenente le dimensioni in km del box
+	 */
 	@Override
 	public void initialize(String cap, JSONObject ub)throws UserErrorException,InternalServerException{
 		dataset = new Dataset();
@@ -70,12 +73,16 @@ public class WeatherServiceImpl implements WeatherService {
 			Integer wid = (Integer)w;
 			
 			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json";
-			this.leggiDB();
+			this.leggiDT();
 		}catch(ClassCastException ex) {
 			throw new UserErrorException("The body format is incorrect");	
 		}
 	}
 	
+	/**
+	 * Effettua la chiamata all'API in tempo reale 
+	 * @return lista non ordinata delle citta della chiamata all' API in tempo reale
+	 */
 	public HashSet<CityData> getCities() throws InternalServerException {
 		
 		String url;
@@ -97,12 +104,13 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	
-	
+	/**
+	 * Ritorna l' intero dataset
+	 * @return il dataset
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray getData() {
 		JSONArray tot = new JSONArray();
-		
-		//if(this.dataset.getDataset() == null)throw new UserErrorException("Capital initialization is needed");
 			
 		for (HashSet<HourCities> hs : this.dataset.getDataset()) {
 			for (HourCities hourc : hs) {
@@ -117,7 +125,13 @@ public class WeatherServiceImpl implements WeatherService {
 		
 	}
 	
-
+	/**
+	 * Ritorna le chiamate che sono state salvate nel dataset nel periodo di tempo specificato in jo
+	 * @param jo Contiene il periodo di tempo sul quale si vogliono le chiamate
+	 * @return le chiamate nel periodo di tempo
+	 * @throws UserErrorException Se l' utente sbaglia ad inserire il formato della data
+	 * @throws InternalServerException ?????????
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray postData(JSONObject jo) throws UserErrorException,InternalServerException {
 		
@@ -163,6 +177,12 @@ public class WeatherServiceImpl implements WeatherService {
 		}
 	}
 	
+	/**
+	 * Effettua le statistiche su un periodo di tempo e sui metadati specificati in stat
+	 * @param stat Contiene parametro "days" che contiene su quanti giorni effettuare le statistiche e le statische da calcolare
+	 * @return Statistiche sui metadati
+	 * @throws InternalServerException
+	 */
 	public JSONArray postStats(JSONObject stat) throws InternalServerException {
 		Vector<String> param = new Vector<String>();
 		boolean flag = true;
@@ -210,6 +230,13 @@ public class WeatherServiceImpl implements WeatherService {
 		return ja;
 	}
 	
+	/**
+	 * Calcola le statistiche sui metadati applicando i filtri specificati
+	 * @param jo JSONObject che contiene i filtri sulle statistiche 
+	 * @return Statistiche filtrate
+	 * @throws UserErrorException
+	 * @throws InternalServerException
+	 */
 	public JSONArray getFilteredStats(JSONObject jo)throws UserErrorException,InternalServerException {
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
@@ -219,8 +246,12 @@ public class WeatherServiceImpl implements WeatherService {
 		return response;
 	}
 	
+	/**
+	 * Salva il dataset su un file
+	 * @throws InternalServerException
+	 */
 	@SuppressWarnings("unchecked")
-	public void salvaDB() throws InternalServerException {
+	public void salvaDT() throws InternalServerException {
 		JSONArray tot = new JSONArray();
 
 		for (int i = this.dataset.getDataset().size() - 1; i >= 0; i--) {
@@ -244,7 +275,11 @@ public class WeatherServiceImpl implements WeatherService {
 		fileJSON.scriviFile(nomeFile, tot);
 	}
 	
-	public void leggiDB() throws InternalServerException {
+	/**
+	 * Legge il dataset da file, se esiste
+	 * @throws InternalServerException
+	 */
+	public void leggiDT() throws InternalServerException {
 		JSONArray ja = new JSONArray();
 
 		JSONWeatherParser jwp = new JSONWeatherParser();
