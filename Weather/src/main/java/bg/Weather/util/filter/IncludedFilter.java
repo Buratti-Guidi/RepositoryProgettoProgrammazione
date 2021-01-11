@@ -3,10 +3,20 @@ package bg.Weather.util.filter;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 
+/**
+ * Filtro che rappresenta il simbolo matematico "(a, b)"
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class IncludedFilter extends WeatherFilter implements Filter{
 
 	private double vrfValue;
 	
+	/**
+	 * Assegna il valore da verificare preso in input all'attributo della classe
+	 * @param vrfValue valore da verificare preso in input
+	 */
 	public IncludedFilter(double vrfValue) {
 		this.vrfValue = vrfValue;
 	}
