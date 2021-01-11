@@ -44,7 +44,7 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	/**
 	 * Inizializza il dataset. Se è presente un file di tipo "capLengthXWidth.json" viene letto e aggiornato il dataset.
-	 * Effettua inoltre una chiamata API ad OpenWeatherMap e aggiorna il dataset con i dati della chiamata n tempo reale
+	 * Effettua inoltre una chiamata API ad OpenWeatherMap e aggiorna il dataset con i dati della chiamata in tempo reale
 	 * @param cap nome della capitale
 	 * @param ub JSONObject contenente le dimensioni in km del box
 	 */
@@ -122,7 +122,6 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 		}
 		return tot;
-		
 	}
 	
 	/**
@@ -130,7 +129,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @param jo Contiene il periodo di tempo sul quale si vogliono le chiamate
 	 * @return le chiamate nel periodo di tempo
 	 * @throws UserErrorException Se l' utente sbaglia ad inserire il formato della data
-	 * @throws InternalServerException ?????????
+	 * @throws InternalServerException
 	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray postData(JSONObject jo) throws UserErrorException,InternalServerException {
@@ -178,7 +177,7 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	/**
-	 * Effettua le statistiche su un periodo di tempo e sui metadati specificati in stat
+	 * Effettua le statistiche specificate su un periodo di tempo
 	 * @param stat Contiene parametro "days" che contiene su quanti giorni effettuare le statistiche e le statische da calcolare
 	 * @return Statistiche sui metadati
 	 * @throws InternalServerException
@@ -231,7 +230,7 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 	
 	/**
-	 * Calcola le statistiche sui metadati applicando i filtri specificati
+	 * Calcola le statistiche applicando i filtri specificati
 	 * @param jo JSONObject che contiene i filtri sulle statistiche 
 	 * @return Statistiche filtrate
 	 * @throws UserErrorException
@@ -287,7 +286,6 @@ public class WeatherServiceImpl implements WeatherService {
 			ja = fileJSON.caricaFileArr(nomeFile);
 
 			for (int i = 0; i < ja.size(); i++) {
-				// for(JSONArray jsonArr : (JSONArray)(ja.get(i))) {
 				for (int j = 0; j < ((JSONArray) ja.get(i)).size(); j++) {
 						HourCities cities = new HourCities();
 						JSONArray city = (JSONArray) ((JSONArray) ((JSONArray) ja.get(i))).get(j);

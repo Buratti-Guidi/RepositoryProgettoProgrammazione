@@ -18,33 +18,50 @@ import bg.Weather.util.operator.WeatherOperator;
 import bg.Weather.util.filter.WeatherFilter;
 import bg.Weather.util.stats.Stat;
 
+/**
+ * Gestisce la chiamata dei filtri
+ * @author Luca Guidi
+ * @author Christopher Buratti
+ */
 public class FilterService {
 
 	private int days;
 	private WeatherFilter wf;
-	private JSONObject jof;
+	private JSONObject joFilter;
 	private LinkedList<String> tot_names;
-	private WeatherOperator of;
+	private WeatherOperator operatorFilter;
 	
+	/**
+	 * Costruttore
+	 * @param jof JSONObject contenente la chiamata con i filtri
+	 */
 	public FilterService(JSONObject jof) {
-		this.jof = jof;
+		this.joFilter = jof;
 		tot_names = new LinkedList<String>();
-		of = new WeatherOperator();
+		operatorFilter = new WeatherOperator();
 	}
 	
+	/**
+	 * Interpreta il JSONObject joFilter per capire quali città rispettano i filtri
+	 * 
+	 * @param dataset tutto il dataset
+	 * @return i nomi delle citta che rispettano i filtri
+	 * @throws InternalServerException
+	 * @throws UserErrorException
+	 */
 	public Vector<String> filterCalc(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
 		Vector<String> final_names = new Vector<String>();
-		Set<String> keys = this.jof.keySet();
+		Set<String> keys = this.joFilter.keySet();
 			
-		if(!this.jof.containsKey("days"))
+		if(!this.joFilter.containsKey("days"))
 			throw new UserErrorException("days parameter is missing");
 			
-		days = (Integer)this.jof.get("days");
+		days = (Integer)this.joFilter.get("days");
 		keys.remove("days");
 			
 		for(String key : keys) { //finto for che scorre per ottenere la chiave "esterna" oltre a "days"
 			
-			Object value = this.jof.get(key);
+			Object value = this.joFilter.get(key);
 			LinkedHashMap<String, Object> joValue = (LinkedHashMap<String, Object>)value;
 			
 			if(joValue.size() == 1) {
@@ -80,7 +97,7 @@ public class FilterService {
 				}
 			}
 			else {
-				Operator o = of.getOperator(key);
+				Operator o = operatorFilter.getOperator(key);
 				Set<String> ks = joValue.keySet();    //nomi delle statistiche annidate ad un operator
 				
 				this.opResult(o, ks, joValue, dataset);
@@ -100,10 +117,10 @@ public class FilterService {
 
 	/**
 	 *  Riempe le condizioni dell operator o
-	 * @param o : Operator piu a monte
-	 * @param keys : nomi parametri dentro un operator
-	 * @param joValue : Tutto il contenuto (stat + filtri) 
-	 * @param dataset : database
+	 * @param o  Operatore
+	 * @param keys  nomi dei parametri dentro un operator
+	 * @param joValue  Tutto il contenuto (stat + filtri) 
+	 * @param dataset  tutto il dataset
 	 */
 	public void opResult(Operator o, Set<String> keys, LinkedHashMap<String, Object> joValue, LinkedList<HashSet<HourCities>> dataset) {
 
@@ -158,7 +175,7 @@ public class FilterService {
 
 					for (String keyAnn : keysAnnidate) { // finto for che controlla se la chiave e' un operatore
 
-						oAnnidato = of.getOperator(stkey); // deve essere stkey
+						oAnnidato = operatorFilter.getOperator(stkey); // deve essere stkey
 
 						this.opResult(oAnnidato, joValueOne.keySet(), joValueOne, dataset);// joValueAnnidate ->
 																							// joValueOne
@@ -182,9 +199,17 @@ public class FilterService {
 		} // fine for delle chiavi
 	}
 	
-	
-	//valore e filtername sono inizialmente vuoti, quindi da riempire
-	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Object> valore, StringBuffer filterName) 
+	/**
+	 * Si occupa di 
+	 * @param joValue contiene il filtro in forma di JSONObject
+	 * @param stat nome della statistica su cui calcolare il filtro
+	 * @param fValues vettore di oggetti VUOTO che deve essere riempito con i valori del filtro
+	 * @param filterName StringBuffer VUOTA che deve essere riempita con il nome del filtro
+	 * @return una statistica specifica 
+	 * @throws UserErrorException
+	 * @throws InternalServerException
+	 */
+	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Object> fValues, StringBuffer filterName) 
 	throws UserErrorException,InternalServerException { 
 		
 		StatsService statService = new StatsService();
@@ -194,28 +219,29 @@ public class FilterService {
 		for(String filterN : filterKeys) {			//finto for che scorre solo per il nome del filtro
 			filterName.insert(0, filterN);
 			Object filterValue = joValue.get(filterN);
+			
 			if(filterValue instanceof Number) {
 				if(filterValue instanceof Integer)
-					valore.add(((Integer)filterValue).doubleValue());
+					fValues.add(((Integer)filterValue).doubleValue());
 				
 				if(filterValue instanceof Double)
-					valore.add((Double)filterValue);
+					fValues.add((Double)filterValue);
 			}
 			else {
 				if(filterValue instanceof String) {
-					valore.add((String)filterValue);
+					fValues.add((String)filterValue);
 				}
 				else {
 					if(filterValue instanceof Collection) {
 						for(Object elem : (Collection)filterValue) {
 							if(elem instanceof Integer)
-								valore.add(((Integer)elem).doubleValue());
+								fValues.add(((Integer)elem).doubleValue());
 							
 							if(elem instanceof Double)
-								valore.add((Double)elem);
+								fValues.add((Double)elem);
 							
 							if(elem instanceof String) {
-								valore.add((String)elem);
+								fValues.add((String)elem);
 							}
 						}
 					}
@@ -226,6 +252,13 @@ public class FilterService {
 		return s;
 	}	
 	
+	/**
+	 * Filtra le statistiche e crea un JSONArray in risposta
+	 * @param dataset tutto il dataset
+	 * @return il JSONArray che contiene le statstiche filtrate
+	 * @throws InternalServerException
+	 * @throws UserErrorException
+	 */
 	public JSONArray getResponse(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
 		Vector<String> final_names = this.filterCalc(dataset);
 		JSONArray result = new JSONArray();
