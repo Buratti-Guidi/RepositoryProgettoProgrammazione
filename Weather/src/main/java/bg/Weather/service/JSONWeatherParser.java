@@ -25,8 +25,12 @@ import org.json.simple.JSONObject;
 
 public class JSONWeatherParser{
 	
-	//Richiede come parametro un file json contenente le informazioni riguardanti una lista di città,
-	//lo "parsa" e assegna i valori di ogni singola città ad un oggetto City
+	/**
+	 *  Effettua il parsing del JSONObject e assegna i vaori delle città ad un oggetto HourCities
+	 * @param jo contiene le informazioni meteorologiche riguardanti un "box" di città
+	 * @param cities oggetto VUOTO che viene riempito con tutte le informazioni meteorologiche delle città
+	 * @throws InternalServerException
+	 */
 	public void parseBox(JSONObject jo, HourCities cities) throws InternalServerException {
 		JSONArray citiesList = new JSONArray();
 		citiesList = (JSONArray) jo.get("list");
@@ -66,6 +70,13 @@ public class JSONWeatherParser{
 		}
 	}
 	
+	
+	/**
+	 * Effettua il parsing del JSONObject di una città
+	 * @param jo contiene le informazioni meteorologiche e e coordinate di una città
+	 * @param city oggetto VUOTO che viene riempito con le informazioni della città
+	 * @throws InternalServerException
+	 */
 	public void parseCity(JSONObject jo, CityData city) throws InternalServerException {
 
 		JSONObject coord = new JSONObject();
@@ -81,7 +92,12 @@ public class JSONWeatherParser{
 		city.setId(id);
 	}
 
-	//parsa il jsonArray delle hourcities
+	/**
+	 *  Effettua il parsing del JSONObject del "box" di città dal file
+	 * @param ja contiene le informazioni meteorologiche riguardanti un "box" di città
+	 * @param ct oggetto VUOTO che viene riempito con tutte le informazioni meteorologiche delle città
+	 * @throws InternalServerException
+	 */
 	public void parseBoxFile(JSONArray ja, HourCities ct) throws InternalServerException{
 		
 		for (Object o : ja) {

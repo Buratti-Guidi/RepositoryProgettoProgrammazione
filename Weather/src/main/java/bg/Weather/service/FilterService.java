@@ -67,9 +67,10 @@ public class FilterService {
 			if(joValue.size() == 1) {
 				Vector<Object> filterValue = new Vector<Object>();
 				StringBuffer filterName = new StringBuffer();
+				StatsService statService = new StatsService();
 				
-				
-				Stat s = this.statParser(joValue, key, filterValue, filterName);
+				Stat s = statService.getStat(key,this.days);
+				this.filterParser(joValue, filterValue, filterName);
 				tot_names = s.getNames(dataset);				
 				
 				try {
@@ -116,7 +117,7 @@ public class FilterService {
 	}
 
 	/**
-	 *  Riempe le condizioni dell operator o
+	 *  Riempe le condizioni dell' operator o
 	 * @param o  Operatore
 	 * @param keys  nomi dei parametri dentro un operator
 	 * @param joValue  Tutto il contenuto (stat + filtri) 
@@ -133,7 +134,9 @@ public class FilterService {
 			joValueOne = (LinkedHashMap<String, Object>) joValue.get(stkey);
 
 			try { // prima controllo se la chiave e' una stat
-				Stat s = this.statParser(joValueOne, stkey, filterValue, filterName);
+				StatsService statService = new StatsService();
+				Stat s = statService.getStat(stkey,this.days);
+				this.filterParser(joValueOne, filterValue, filterName);
 				tot_names = s.getNames(dataset);
 				
 				try {
@@ -200,20 +203,16 @@ public class FilterService {
 	}
 	
 	/**
-	 * Si occupa di 
+	 * Effettua il parsing del filtro e assegna i valori ai parametri
 	 * @param joValue contiene il filtro in forma di JSONObject
-	 * @param stat nome della statistica su cui calcolare il filtro
 	 * @param fValues vettore di oggetti VUOTO che deve essere riempito con i valori del filtro
 	 * @param filterName StringBuffer VUOTA che deve essere riempita con il nome del filtro
-	 * @return una statistica specifica 
 	 * @throws UserErrorException
 	 * @throws InternalServerException
 	 */
-	public Stat statParser(LinkedHashMap<String, Object> joValue, String stat, Vector<Object> fValues, StringBuffer filterName) 
+	public void filterParser(LinkedHashMap<String, Object> joValue, Vector<Object> fValues, StringBuffer filterName) 
 	throws UserErrorException,InternalServerException { 
-		
-		StatsService statService = new StatsService();
-		Stat s = statService.getStat(stat,this.days);
+	
 		Set<String> filterKeys = joValue.keySet();
 		
 		for(String filterN : filterKeys) {			//finto for che scorre solo per il nome del filtro
@@ -249,7 +248,6 @@ public class FilterService {
 			}
 		break;
 		}
-		return s;
 	}	
 	
 	/**
