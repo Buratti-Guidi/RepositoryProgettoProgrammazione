@@ -59,7 +59,10 @@ public class FilterService {
 			
 		days = (Integer)this.joFilter.get("days");
 		keys.remove("days");
-			
+		
+		if(days > dataset.size() || days <= 0)
+			throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " +  dataset.size());
+		
 		for(String key : keys) { //finto for che scorre per ottenere la chiave "esterna" oltre a "days"
 			
 			Object value = this.joFilter.get(key);
@@ -70,10 +73,11 @@ public class FilterService {
 				StringBuffer filterName = new StringBuffer();
 				WeatherStats statService = new WeatherStats();
 				
+				
 				Stat s = statService.getStat(key,this.days);
 				this.filterParser(joValue, filterValue, filterName);
 				tot_names = s.getNames(dataset);				
-				
+					
 				try {
 					LinkedList<Double> stats = s.getStats(dataset);
 					wf = new WeatherFilter(filterName.toString(), filterValue);
@@ -84,9 +88,9 @@ public class FilterService {
 					i++;
 					}
 					return final_names;
-					
+						
 				}catch(ClassCastException | NullPointerException | InternalServerException e) {
-					
+						
 					LinkedList<String> stats = s.getNames(dataset);
 					wf = new WeatherFilter(filterName.toString(), filterValue);
 					int i = 0;
@@ -144,7 +148,7 @@ public class FilterService {
 					LinkedList<Double> stats = s.getStats(dataset);
 					wf = new WeatherFilter(filterName.toString(), filterValue);
 					int i = 0;
-					// tot_names = s.getNames(dataset);
+					
 					for (String name : s.getNames(dataset)) {
 						if (wf.getResponse(stats.get(i))) {
 							o.addCondition(true, i);
@@ -159,7 +163,7 @@ public class FilterService {
 					LinkedList<String> stats = s.getNames(dataset);
 					wf = new WeatherFilter(filterName.toString(), filterValue);
 					int i = 0;
-					// tot_names = s.getNames(dataset);
+					
 					for (String name : s.getNames(dataset)) {
 						if (wf.getResponse(stats.get(i))) {
 							o.addCondition(true, i);
