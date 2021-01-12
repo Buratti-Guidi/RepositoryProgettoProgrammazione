@@ -1,4 +1,4 @@
-package bg.Weather.service;
+package bg.Weather.util.stats;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,26 +8,40 @@ import java.util.LinkedList;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.HourCities;
-import bg.Weather.util.stats.Stat;
+import bg.Weather.service.Calculate;
 
 /**
- * Classe che si occupa di restituire i dati riguardanti le statistiche richieste dall'utente
+ * Classe madre delle statistiche
  * @author Christopher Buratti
  * @author Luca Guidi
  */
-
-public class StatsService {
+public class WeatherStats {
 	
 	private LinkedList<String> names = new LinkedList<String>();
 	
 	protected Calculate calc; //Calcolatore utilizzato per eseguire i calcoli per le varie statistiche
 	
-	public StatsService() {}
+	/**
+	 * Costruttore vuoto
+	 */
+	public WeatherStats() {}
 	
-	public StatsService(int numeroGiorni) {
+	/**
+	 * Istanzia il Calcluate con il numero di giorni
+	 * @param numeroGiorni
+	 */
+	public WeatherStats(int numeroGiorni) {
 		calc = new Calculate(numeroGiorni);
 	}
 	
+	/**
+	 * Identifica la statistica a partire dal suo nome
+	 * @param statType nome della statistica
+	 * @param numDays numero di giorni su cui calcolare la statistica
+	 * @return la Stat identificata
+	 * @throws UserErrorException non è stata trovate nessuna statistica con il nome statType
+	 * @throws InternalServerException
+	 */
 	public Stat getStat(String statType, int numDays) throws UserErrorException, InternalServerException{
 		try {
 			String className = "bg.Weather.util.stats." + statType.substring(0,1).toUpperCase() + statType.substring(1, statType.length()).toLowerCase() + "Stats";
@@ -48,11 +62,23 @@ public class StatsService {
 		}
 	}
 
+	/**
+	 * Restituisce i nomi delle città
+	 * @param dataset L' intero dataset
+	 * @return LinkedList contenente i nomi delle città
+	 */
 	public LinkedList<String> getNames(LinkedList<HashSet<HourCities>> dataset) {
 		this.names = this.calc.ottieniNomi(dataset);
 		return names;
 	}
 	
+	/**
+	 * Ordina il vettore dei nomi e quello della statistica in modo crescente o decrescente
+	 * @param cityNames nomi delle citta
+	 * @param values valori della statistica
+	 * @param ascending true per crescente, false per decrescente
+	 * @throws InternalServerException
+	 */
 	public void sortStats(LinkedList<String> cityNames, LinkedList<Double> values, boolean ascending) throws InternalServerException{
 		LinkedList<String> n_final = new LinkedList<String>();
 		LinkedList<Double> v_final = new LinkedList<Double>();

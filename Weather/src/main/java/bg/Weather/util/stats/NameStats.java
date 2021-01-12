@@ -4,9 +4,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.model.HourCities;
-import bg.Weather.service.StatsService;
 
-public class NameStats extends StatsService implements Stat{
+public class NameStats extends WeatherStats implements Stat{
 
 	public NameStats(int numeroGiorni) {
 		super(numeroGiorni);

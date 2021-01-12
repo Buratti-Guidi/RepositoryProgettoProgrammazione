@@ -4,8 +4,6 @@ import bg.Weather.exception.InternalServerException;
 import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,10 +15,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- * Classe che contiene i metodi per "parsare" i file JSON in risposta alle chiamate API
- * 
- * @author Christopher Buratti
+ * Classe che permette di effettuare il parsing di oggetti JSON
  * @author Luca Guidi
+ * @author Christopher Buratti
  */
 
 public class JSONWeatherParser{

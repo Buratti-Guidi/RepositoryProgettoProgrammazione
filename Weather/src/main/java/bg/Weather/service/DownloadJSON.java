@@ -17,16 +17,22 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import bg.Weather.dataset.Dataset;
 import bg.Weather.exception.InternalServerException;
 
-
+/**
+ * Classe che permette la lettura e la scrittura di oggetti JSON sia da file che da una chiamata API
+ * @author Luca Guidi
+ *@author Christopher Buratti
+ */
 public class DownloadJSON {
 
-	//Legge da chiamata API un oggetto
+	/**
+	 * Legge un JSONObject da una chiamata API (ur)
+	 * @param url link della chiamata API
+	 * @return il JSONObject letto
+	 * @throws InternalServerException
+	 */
 	public JSONObject chiamataAPIObj(String url) throws InternalServerException{
 		JSONObject jo = new JSONObject();
 		try {
@@ -57,10 +63,11 @@ public class DownloadJSON {
 		} 
 	}
 	
-	
-	
-	//Serve per APIKey
-	//Legge da file.json un oggetto
+	/**
+	 * Legge un JSONObject da un file
+	 * @param nome_file nome del file da cui leggere il JSONObject
+	 * @return il JSONObject letto
+	 */
 	public JSONObject caricaFileObj(String nome_file) {
 		
 		JSONObject jo = new JSONObject();
@@ -79,7 +86,11 @@ public class DownloadJSON {
 		} 
 	}
 	
-	//Legge da file.json un array
+	/**
+	 * Legge un JSONArray da un file
+	 * @param nome_file nome del file da cui leggere il JSONArray
+	 * @return il JSONArray letto
+	 */
 	public JSONArray caricaFileArr(String nome_file) throws FileNotFoundException, InternalServerException {
 
 		JSONArray ja = new JSONArray();
@@ -99,6 +110,12 @@ public class DownloadJSON {
 		}
 	}
 	
+	/**
+	 * Scrive un JSONArray su un file
+	 * @param nome_file nome del file su cuoi scrivere
+	 * @param ja il JSONArray da scrivere
+	 * @throws InternalServerException
+	 */
 	public void scriviFile(String nome_file, JSONArray ja) throws InternalServerException {
 		String txt = ja.toString();
 		try {

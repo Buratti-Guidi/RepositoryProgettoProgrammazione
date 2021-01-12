@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.model.HourCities;
-import bg.Weather.service.StatsService;
 
 /**
  * Ottiene e restituisce la media delle temperature delle città
@@ -12,7 +11,7 @@ import bg.Weather.service.StatsService;
  * @author Luca Guidi
  */
 
-public class AvgStats extends StatsService implements Stat{
+public class AvgStats extends WeatherStats implements Stat{
 
 	private LinkedList<Double> averages = new LinkedList<Double>();
 	

@@ -182,7 +182,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return Statistiche sui metadati
 	 * @throws InternalServerException
 	 */
-	public JSONArray postStats(JSONObject stat) throws InternalServerException {
+	public JSONArray postStats(JSONObject stat) throws UserErrorException,InternalServerException {
 		Vector<String> param = new Vector<String>();
 		boolean flag = true;
 		for(int i = 1; flag; i++) {
@@ -194,7 +194,7 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 		}
 		Integer numDays = (Integer)stat.get("days");
-		StatsService sc = new StatsService();
+		WeatherStats sc = new WeatherStats();
 		Stat s;
 		
 		LinkedList<LinkedList<Double>> statistics = new LinkedList<LinkedList<Double>>();
@@ -210,9 +210,9 @@ public class WeatherServiceImpl implements WeatherService {
 				if(param.size() == 1)
 					s.sortStats(nomi, statistics.get(j), false);
 			}	
-		}catch(Exception e) {
-			throw new InternalServerException("errore");
-		}
+		}catch(IndexOutOfBoundsException e) {
+			throw new UserErrorException("Il numero massimo di giorni è 30");
+		}																	//DA VEDERE ALTRE ECCEZIONI
 		int i = 0;
 		for(String name : nomi) {
 			LinkedHashMap<String, Object> jo = new LinkedHashMap<String, Object>();

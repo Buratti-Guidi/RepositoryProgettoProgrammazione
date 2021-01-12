@@ -10,20 +10,20 @@ import org.junit.jupiter.api.Test;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.CityData;
 import bg.Weather.service.JSONWeatherParser;
-import bg.Weather.service.StatsService;
 import bg.Weather.service.WeatherServiceImpl;
 import bg.Weather.util.stats.AvgStats;
 import bg.Weather.util.stats.Stat;
+import bg.Weather.util.stats.WeatherStats;
 
 class JTest {
 
-	private StatsService statS;
+	private WeatherStats statS;
 	private WeatherServiceImpl ws;
 	private JSONWeatherParser jwp;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		statS = new StatsService();
+		statS = new WeatherStats();
 		ws = new WeatherServiceImpl();
 		jwp = new JSONWeatherParser();
 	}

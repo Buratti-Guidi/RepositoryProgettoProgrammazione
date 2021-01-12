@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import bg.Weather.model.HourCities;
-import bg.Weather.service.StatsService;
 
 /**
  * Ottiene e restituisce la deviazione standard delle temperature delle città
@@ -12,7 +11,7 @@ import bg.Weather.service.StatsService;
  * @author Luca Guidi
  */
 
-public class StdStats extends StatsService implements Stat{
+public class StdStats extends WeatherStats implements Stat{
 
 	private LinkedList<Double> devStd = new LinkedList<Double>();
 	

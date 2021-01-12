@@ -17,6 +17,7 @@ import bg.Weather.util.operator.Operator;
 import bg.Weather.util.operator.WeatherOperator;
 import bg.Weather.util.filter.WeatherFilter;
 import bg.Weather.util.stats.Stat;
+import bg.Weather.util.stats.WeatherStats;
 
 /**
  * Gestisce la chiamata dei filtri
@@ -32,7 +33,7 @@ public class FilterService {
 	private WeatherOperator operatorFilter;
 	
 	/**
-	 * Costruttore
+	 * Costruttore che assegna il JSONObject della chiamata, e inizializza la lista dei nomi e il WeatherOperator
 	 * @param jof JSONObject contenente la chiamata con i filtri
 	 */
 	public FilterService(JSONObject jof) {
@@ -67,7 +68,7 @@ public class FilterService {
 			if(joValue.size() == 1) {
 				Vector<Object> filterValue = new Vector<Object>();
 				StringBuffer filterName = new StringBuffer();
-				StatsService statService = new StatsService();
+				WeatherStats statService = new WeatherStats();
 				
 				Stat s = statService.getStat(key,this.days);
 				this.filterParser(joValue, filterValue, filterName);
@@ -134,7 +135,7 @@ public class FilterService {
 			joValueOne = (LinkedHashMap<String, Object>) joValue.get(stkey);
 
 			try { // prima controllo se la chiave e' una stat
-				StatsService statService = new StatsService();
+				WeatherStats statService = new WeatherStats();
 				Stat s = statService.getStat(stkey,this.days);
 				this.filterParser(joValueOne, filterValue, filterName);
 				tot_names = s.getNames(dataset);
@@ -261,7 +262,7 @@ public class FilterService {
 		Vector<String> final_names = this.filterCalc(dataset);
 		JSONArray result = new JSONArray();
 		Stat s;
-		StatsService ss = new StatsService(this.days);
+		WeatherStats ss = new WeatherStats(this.days);
 		
 		s = ss.getStat("avg", this.days);
 		LinkedList<Double> avg = new LinkedList<Double>();

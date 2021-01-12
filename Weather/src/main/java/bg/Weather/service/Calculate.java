@@ -7,21 +7,30 @@ import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 
 /**
- * Classe utilizzata per lo svolgimento dei calcoli aritmetici per il calcolo delle statistiche sulle temperature (media, varianza, temperatura massima/minima)
- * in un "numeroGiorni" di giorni e per l'ottenimento dei nomi delle città ordinato in modo tale da riuscire ad accedere per ogni città alle proprie statistiche
+ * Calcola i nomi delle città e le statistiche sulle temperature (media, varianza, temperatura massima/minima) in un "numeroGiorni" di giorni,
+ * in modo tale che le liste di nomi e statistiche siano sempre appaiate
  * @author Christopher Buratti
  * @author Luca Guidi
  */
-
 public class Calculate {
 	
-	private int numeroGiorni; //numero di giorni a partire da oggi in cui ottenere le statistiche
+	private int numeroGiorni;
 	
+	/**
+	 * Costruttore che inizializza il numero di giorni
+	 * @param numeroGiorni
+	 */
 	public Calculate(int numeroGiorni) {
 		this.numeroGiorni = numeroGiorni;
 	}
 
+	/**
+	 * Ritorna una lista con i nomi delle città
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i nomi delle città
+	 */
 	public LinkedList<String> ottieniNomi(LinkedList<HashSet<HourCities>> dataset) {
+		
 		LinkedList<String> nomi = new LinkedList<String>();
 		for(HourCities hc: dataset.getFirst()) {
 			for(CityData c : hc.getHourCities()) {
@@ -32,16 +41,20 @@ public class Calculate {
 		return nomi;
 	}
 	
+	/**
+	 * Calcola la media delle temperature a partire da tutti i valori del dataset
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i valori delle medie ordinate secondo "ottieniNomi"
+	 */
 	public LinkedList<Double> ottieniMedie(LinkedList<HashSet<HourCities>> dataset) {
-		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora)
-		
-		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
 		
 		LinkedList<String> names = this.ottieniNomi(dataset);
-		
 		LinkedList<Double> sums = new LinkedList<Double>();
 		LinkedList<Double> averages = new LinkedList<Double>();
 		
+		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora)
+		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
+	
 		for(int i = 0; i < this.numeroGiorni; i++) {
 			HashSet<HourCities> temp = new HashSet<HourCities>();
 			temp = dataset.get(i);
@@ -81,10 +94,15 @@ public class Calculate {
 		return averages;
 	}
 	
+	/**
+	 * Calcola i massimi delle temperature a partire da tutti i valori del dataset
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i valori dei massimi ordinati secondo "ottieniNomi"
+	 */
 	public LinkedList<Double> ottieniMassimi(LinkedList<HashSet<HourCities>> dataset) {
+		
 		LinkedList<Double> tempMax = new LinkedList<Double>();
 		LinkedList<String> names = this.ottieniNomi(dataset);
-		
 		boolean flag = false;
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
@@ -120,10 +138,15 @@ public class Calculate {
 		return tempMax;
 	}
 	
+	/**
+	 * Calcola i minimi delle temperature a partire da tutti i valori del dataset
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i valori dei minimi ordinati secondo "ottieniNomi"
+	 */
 	public LinkedList<Double> ottieniMinimi(LinkedList<HashSet<HourCities>> dataset) {
+		
 		LinkedList<Double> tempMin = new LinkedList<Double>();
 		LinkedList<String> names = this.ottieniNomi(dataset);
-		
 		boolean flag = false;
 		
 		for(int i = 0; i < this.numeroGiorni; i++) {
@@ -159,13 +182,16 @@ public class Calculate {
 		return tempMin;
 	}
 	
+	/**
+	 * Calcola la varianza delle temperature a partire da tutti i valori del dataset
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i valori delle varianze ordinate secondo "ottieniNomi"
+	 */
 	public LinkedList<Double> ottieniVarianze(LinkedList<HashSet<HourCities>> dataset) {
+		
 		LinkedList<Double> averages = this.ottieniMedie(dataset);
 		LinkedList<String> names = this.ottieniNomi(dataset);
-		
 		LinkedList<Double> variances = new LinkedList<Double>();
-		
-		boolean flag = false; //Se è false, il ciclo for each è al primo giro (alla prima ora) e salva il numero di città (count)
 		
 		int tot_hours = 0; //Numero totale delle ore "lette" in un numero di "numeroGiorni" giorni
 		
@@ -200,6 +226,11 @@ public class Calculate {
 		return variances;
 	}
 	
+	/**
+	 * Calcola la deviazione standard delle temperature a partire da tutti i valori del dataset
+	 * @param dataset L'intero dataset
+	 * @return LinkedList con i valori delle deviazioni standard ordinate secondo "ottieniNomi"
+	 */
 	public LinkedList<Double> ottieniDevStd(LinkedList<HashSet<HourCities>> dataset) {
 		LinkedList<Double> std = this.ottieniVarianze(dataset);
 		for(int i = 0; i < std.size(); i++) 
@@ -209,6 +240,11 @@ public class Calculate {
 		return std;
 	}
 	
+	/**
+	 * Tronca i valori della LinkedList
+	 * @param unroundedNumber Lista di double da troncare
+	 * @param decimalPlaces Numeri
+	 */
 	public void truncateTo(LinkedList<Double> unroundedNumber, int decimalPlaces){
 		LinkedList<Integer> truncatedNumberInt = new LinkedList<Integer>();
 		LinkedList<Double> truncatedNumber = new LinkedList<Double>();
