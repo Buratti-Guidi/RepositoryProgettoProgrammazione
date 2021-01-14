@@ -90,7 +90,7 @@ public class JSONWeatherParser{
 	}
 
 	/**
-	 *  Effettua il parsing del JSONObject del "box" di città dal file
+	 *  Effettua il parsing del JSONArray del "box" di città dal file
 	 * @param ja contiene le informazioni meteorologiche riguardanti un "box" di città
 	 * @param ct oggetto VUOTO che viene riempito con tutte le informazioni meteorologiche delle città
 	 * @throws InternalServerException
@@ -125,5 +125,4 @@ public class JSONWeatherParser{
 			ct.addCity(citta);
 		}
 	}
-	
 }

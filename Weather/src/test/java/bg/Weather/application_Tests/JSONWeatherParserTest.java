@@ -163,17 +163,17 @@ public class JSONWeatherParserTest {
 		c2.setTemperatura(9.86);
 		c2.setTime(Date.from(time2));
 		
-		HourCities testing = new HourCities();
-		testing.addCity(c1);
-		testing.addCity(c2);
+		CityData[] testing = new CityData[2];
+		testing[0] = c2;
+		testing[1] = c1;
 		
 		HourCities hc = new HourCities();
 		jwp.parseBox(jo, hc);
-		for(int i=0; i<hc.getSize(); i++) {
-			if(hc.toString().equals("" + c1 + ", " + c2))
-				assertEquals(hc.getHourCities().toString(), ("" + c1 + ", " + c2));
-			else
-				assertEquals(hc.getHourCities().toString(), ("" + c2 + ", " + c1));
+		
+		int i = 0;
+		for(CityData c : hc.getHourCities()) {
+			assertEquals(c.getAllHashMap(), testing[i].getAllHashMap());
+			i++;
 		}
 	}
 	

@@ -28,7 +28,10 @@ class WeatherStatsTest {
 	void test1() {
 		Stat s = statS.getStat("avg", 3);
 		assertEquals(new AvgStats(3).getClass(), s.getClass());
-		
+	}
+	
+	@Test
+	void test2() {
 		UserErrorException e = assertThrows(UserErrorException.class, () -> {
 			statS.getStat("xxx", 4);
 		});
