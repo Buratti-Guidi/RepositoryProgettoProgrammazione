@@ -10,9 +10,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Classe che gestisce gli errori lanciati dal Controller
+ * @author Luca Guidi
+ * @author Christopher Buratti
+ */
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
+	/**
+	 * Gestisce le eccezioni UserErrorException e InternalServerException lanciate dal controller 
+	 * @param ex Eccezione da gestire
+	 * @param request 
+	 * @return Risposta che contiene il tipo di eccezione,il messaggio e l' ora 
+	 */
 	@ExceptionHandler(value = { UserErrorException.class, InternalServerException.class })
 	public ResponseEntity<Object> handleExceptions(Exception ex, WebRequest request) {
 		
