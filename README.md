@@ -7,20 +7,88 @@ In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restfu
 Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di `OpenWeatherMap`, le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
 ## Utilizzo
-Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare (attraverso POST /capital/{nomeCapitale}). (Vogliamo scrivere del file già esistente?). Una volta inizializzato il programma permette di utilizzare diverse
+Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`.
+Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, il programma 
+mette a disposizione diverse rotte per la consultazione dei dati e delle statistiche.
 
-> Vai al paragrafo: <a href="#chiamate"> chiamateAPI </a>
-
-
+### Rotte
 Tipo | Rotta | Descrizione
 ---- | ----- | -----------
-POST | <a href="#postCap"> /capital/{nomeCapitale} </a> | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
-GET  | <a href="#getData"> /data </a> | Restituisce tutti i valori contenuti nel dataset
-POST | <a href="#postData"> /data </a> | Restituisce i valori del dataset che sono compresi tra le date specificate
-POST | <a href="#postStats"> /stats </a> | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
-POST | <a href="#postFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
+POST | <a href="#rottaCap"> /capital/{nomeCapitale} </a> | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
+GET  | <a href="#rottaData"> /data </a> | Restituisce tutti i valori contenuti nel dataset
+POST | /data | Restituisce i valori del dataset che sono compresi tra le date specificate
+POST | <a href="#rottaStats"> /stats </a> | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
+POST | <a href="#rottaFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
 GET  | /save | Salva l'intero dataset su un file JSON
 GET  | /metadata | Restituisce il tipo e il nome per esteso dei metadati
+
+### Esempi Rotte di tipo POST
+
+* #### /capital/Paris <a name="rottaCap"></a>
+```
+{
+    "length" : 100,
+    "width": 150
+}
+```
+Permette di inizializzare il programma con il nome di una capitale, in questo caso "Paris", e con la grandezza del box.
+In questo esempio la lunghezza (length) viene impostata a 100 km, mentre la larghezza (width) a 150 km.
+> <a href="#postCap"> Informazioni aggiuntive </a>
+
+* #### /data <a name="rottaData"></a>
+```
+{
+    "from" : "10/01/2021", 
+    "to" : "16/01/2021"
+}
+```
+Permette di ottenere i dati contenuti nel dataset tra le date specificate.
+> <a href="#getData"> Informazioni aggiuntive </a>
+
+* #### /stats <a name="rottaStats"></a>
+```
+{
+    "stat1" : "avg",
+    "stat2" : "tempMax",
+    "days" : 22
+}
+```
+Permette di ottenere le <a href="#Stat"> statistiche</a>, che devono essere specificate in ordine progressivo, nel numero di giorni specificato su "days".
+Inoltre se si vogliono visualizzare i dati di una statistica ordinati in modo decrescente è necessario richiedere una statistica sola. Infatti se si richiedono più statistiche insieme, la visualizzazione delle città non rispetterà nessun ordine particolare.
+> <a href="#postStats"> Informazioni aggiuntive </a>
+
+* #### /filters <a name="rottaFilters"></a>
+```
+{
+   "days" : 18,
+   "and" : {
+       "tempmin":{
+           "greater":-1
+       },
+       "name" : {
+           "nin" : "Paris"
+       },
+       "or" : {
+           "var" : {
+               "lessEqual" : 0.014
+           },
+           "avg" :{
+               "included" : [
+                   2.2,
+                   3
+               ]
+           }
+       }
+   }
+}
+```
+Permette di ottenere tutte le statistiche delle città che rispettano i filtri.
+Semplici regole della sintassi:
+1 - E' necessario specificare il numero di giorni a partire dal giorno corrente ("days"), su cui si vogliono calcolare le statistiche.
+2 - Se si inserisce un operator, esso si aspetta un numero indefinito di parametri di tipo <a href="#Operator">operatore </a> o <a href="#Stats">statistiche </a>.
+3 - Quando si inserisce una <a href="#Stats">statistica</a> 
+
+> <a href="#postFilters"> Informazioni aggiuntive </a>
 
 ### Filtri per campi numerici
 Nome filtro | Descrizione | Esempio
@@ -41,13 +109,13 @@ Nome filtro | Descrizione | Esempio
 In | Se trova una corrispondenza con i nomi specificati | `"Name":{"In":["Paris","Cergy"]}`
 Nin | Se non viene trovata una corrispondenza con i nomi specificati | `"Name":{"Nin":["Paris","Cergy","Evry"]}`
 
-### Operatori logici da applicare sui filtri
+### Operatori logici da applicare sui filtri <a name="Operator"></a>
 Nome operatore | Descrizione | Esempio
 -------------- | ----------- | -------
 And | Ritorna le città che soddisfano tutte le condizioni | `"and":{"avg":{"notIncluded":[10,15.9]},"var":{"lessEqual":2},"tempMax":{"greaterEqual":9}}`
 Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Included":[7.1,8.7]},"std":{"greater":0.5}}`
 
-### Stat
+### Stat <a name="Stat"></a>
 Stat | Descrizione
 ---- | -----------
 Avg  | Temperatura media
@@ -56,7 +124,39 @@ TempMax | Temperatura massima
 Var  | Varianza
 Std  | Deviazione standard
 
-# CHIAMATE <a name="chiamate"></a>
+# UML
+## Use Case Diagram
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/UseCase.png?raw=true">
+
+## Class Diagram
+* ### All Packages
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/allClassesDiagramWAssociation.png?raw=true">
+
+* ### Package bg.Weather.controller
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/controller.png?raw=true">
+
+* ### Package bg.Weather.service
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/service.png?raw=true">
+
+* ### Package bg.Weather.model
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/model.png?raw=true">
+
+* ### Package bg.Weather.dataset
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/dataset.png?raw=true">
+
+* ### Package bg.Weather.util.stats
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/statsClass.png?raw=true">
+
+* ### Package bg.Weather.util.filter
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/filter.png?raw=true">
+
+* ### Package bg.Weather.util.operator
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/operatorClass.png?raw=true">
+
+* ### Package bg.Weather.exception
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/exceptionClass.png?raw=true">
+
+## CHIAMATE <a name="chiamate"></a>
 Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
 
 * ### **POST /capital/{nome capitale}** <a name="postCap"></a>
