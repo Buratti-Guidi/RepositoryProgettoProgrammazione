@@ -93,6 +93,16 @@ Semplici regole della sintassi:
 > <a href="#postFilters"> Informazioni aggiuntive </a>
 
 ## INFO su Filtri e Stat
+
+### Stat <a name="Stat"></a>
+Stat | Descrizione
+---- | -----------
+Avg  | Temperatura media
+TempMin | Temperatura minima
+TempMax | Temperatura massima
+Var  | Varianza
+Std  | Deviazione standard
+
 ### Filtri per campi numerici <a name="filterNumber"></a>
 Nome filtro | Descrizione | Esempio
 ----------- | ----------- | -------
@@ -117,15 +127,6 @@ Nome operatore | Descrizione | Esempio
 -------------- | ----------- | -------
 And | Ritorna le città che soddisfano tutte le condizioni | `"and":{"avg":{"notIncluded":[10,15.9]},"var":{"lessEqual":2},"tempMax":{"greaterEqual":9}}`
 Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Included":[7.1,8.7]},"std":{"greater":0.5}}`
-
-### Stat <a name="Stat"></a>
-Stat | Descrizione
----- | -----------
-Avg  | Temperatura media
-TempMin | Temperatura minima
-TempMax | Temperatura massima
-Var  | Varianza
-Std  | Deviazione standard
 
 # UML
 ## Use Case Diagram
