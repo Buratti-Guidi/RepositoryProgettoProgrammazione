@@ -6,7 +6,7 @@ Il progetto tratta l'implementazione di un servizio meteo in grado di fornire da
 In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituire una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
 Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di `OpenWeatherMap`, le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
-## Utilizzo
+## Utilizzo <a name="utilizzo"></a>
 Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`.
 Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, il programma 
 mette a disposizione diverse rotte per la consultazione dei dati e delle statistiche.
@@ -92,9 +92,9 @@ Permette di ottenere tutte le statistiche delle città che rispettano i filtri.
 
 > <a href="#postFilters"> Informazioni aggiuntive </a>
 
-## INFO su Filtri e Stat
+## INFO su Stats e Filtri
 
-### Stat <a name="Stat"></a>
+### Stats <a name="Stat"></a>
 Stat | Descrizione
 ---- | -----------
 Avg  | Temperatura media
@@ -160,7 +160,7 @@ Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Inc
 * ### Package bg.Weather.exception
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/exceptionClass.png?raw=true">
 
-## CHIAMATE <a name="chiamate"></a>
+## Chiamate <a name="chiamate"></a>
 Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
 
 * ### **POST /capital/{nome capitale}** <a name="postCap"></a>
@@ -173,12 +173,14 @@ L' oggetto JSON ottenuto viene parsato dal `JSONWeatherParser`, i dati ottenuti 
 Prima di ritornare le informazioni all'utente, viene attivata una scheduled task che fa la chiamata API ogni ora.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/InizializationSeq.png?raw=true">
+> <a href="#rottaCap"> Come si usa </a>
 
 * ### **GET /data** <a name="getData"></a>
 Attraverso il metodo `getData` di WeatherService viene creato un JSONArray con tutte le informazioni contenute nel dataset.
 Il JSONArray viene poi ritornato al controller che lo ritorna al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/GetDataSeq.png?raw=true">
+> <a href="#rottaData"> Come si usa </a>
 
 * ### **POST /stats** <a name="postStats"></a>
 Attraverso il metodo `getStats` di WeatherService viene prima effettuato il parsing della richiesta, che contiene quali statistiche calcolare.
@@ -186,11 +188,13 @@ La classe `StatsService` si occuperà di calcolare le statistiche richieste, att
 Il WeatherService creerà un JSONArray con le statistiche che viene poi ritornato al controller, il quale lo ritornerà al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/PostStatsSeq.png?raw=true">
+> <a href="#rottaStats"> Come si usa </a>
 
 * ### **POST /filters** <a name="postFilters"></a>
 Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `FilterService`, il quale effettua il parsing della richiesta e interpreta i valori come statistiche o operatori. Vengono poi calcolate le statistiche attraverso `StatsService` e filtrate per mezzo dei filtri specificati. FilterCalc si occupera poi di creare un JSONArray contenente le città che rispettano i filtri e lo ritornerà al WeatherService, il quale lo ritornerà al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/FiltersSeq.png?raw=true">
+> <a href="#rottaFilters"> Come si usa </a>
 
 ## Software utilizzati
 * #### [IDE Eclipse](https://www.eclipse.org/) - per la scrittura e lo sviluppo dell'intero programma in Java
