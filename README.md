@@ -1,10 +1,16 @@
 # RepositoryProgettoProgrammazione
 Christopher Buratti & Luca Guidi
 
-## Descrizione generale
+## Panoramica
 Il progetto tratta l'implementazione di un servizio meteo in grado di fornire dati e statistiche riguardanti le temperature delle città circostanti una capitale (scelta dall'utente) all'interno di un "box" rettangolare delle dimensioni desiderate.   
 In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituire una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
 Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di `OpenWeatherMap`, le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
+
+## Utilizzo
+Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare (attraverso POST /capital/{nomeCapitale}). (Vogliamo scrivere del file già esistente?). Una volta inizializzato il programma permette di utilizzare diverse
+
+> Vai al paragrafo: <a href="#chiamate"> chiamateAPI </a>
+
 
 Tipo | Rotta | Descrizione
 ---- | ----- | -----------
@@ -41,10 +47,19 @@ Nome operatore | Descrizione | Esempio
 And | Ritorna le città che soddisfano tutte le condizioni | `"and":{"avg":{"notIncluded":[10,15.9]},"var":{"lessEqual":2},"tempMax":{"greaterEqual":9}}`
 Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Included":[7.1,8.7]},"std":{"greater":0.5}}`
 
-## CHIAMATE
+### Stat
+Stat | Descrizione
+---- | -----------
+Avg  | Temperatura media
+TempMin | Temperatura minima
+TempMax | Temperatura massima
+Var  | Varianza
+Std  | Deviazione standard
+
+# CHIAMATE <a name="chiamate">
 Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
 
-* ### **POST /capital/{nome capitale}**
+### **POST /capital/{nome capitale}**
 L' applicazione necessita di una inizializzazione, che consiste nella scelta del nome della capitale e di un box rettangolare, i cui lati sono espressi in km.
 La città inserita viene controllata da `CityInfo`, che verifica da un file JSON interno se sia una effettiva capitale.
 Successivamente, a partire dalle coordinate della capitale (ottenute attraverso una chiamata API) e dalla grandezza in km del box, vengono calcolate le coordinate in gradi decimali in cui sono presenti i 4 vertici del box rettangolare, attraverso `Box Calculator`.
@@ -68,12 +83,12 @@ Il WeatherService creerà un JSONArray con le statistiche che viene poi ritornat
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/PostStatsSeq.png?raw=true">
 
-## Strumenti di cui ci siamo serviti
-* #### **IDE Eclipse** - per la scrittura e lo sviluppo dell'intero programma in Java
-* #### **Framework Spring** - per lo sviluppo di applicazioni enterprise
-* #### **Postman** - per interfacciarsi in modo chiaro e veloce con la porta "localhost:8080" e verificare il corretto funzionamento dell'intero progetto
-* #### **Visual Paradigm** - per la creazione e modellazione dei diagrammi UML
-* #### **JUnit5** - per lo svolgimento degli Unit Test
+## Software utilizzati
+* #### [IDE Eclipse](https://www.eclipse.org/) - per la scrittura e lo sviluppo dell'intero programma in Java
+* #### [Framework Spring](https://spring.io/projects/spring-framework) - per lo sviluppo di applicazioni enterprise
+* #### [Postman](https://www.postman.com/) - per interfacciarsi in modo chiaro e veloce con la porta "localhost:8080" e verificare il corretto funzionamento dell'intero progetto
+* #### [Visual Paradigm](https://www.visual-paradigm.com/) - per la creazione e modellazione dei diagrammi UML
+* #### [JUnit5](https://junit.org/junit5/) - per lo svolgimento degli Unit Test
 
 ## Autori & contributo
 [Christopher Buratti](https://github.com/christopherburatti) - 50%                                                             
