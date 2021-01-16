@@ -25,6 +25,12 @@ import bg.Weather.model.CityData;
 import bg.Weather.service.DownloadJSON;
 import bg.Weather.service.WeatherServiceImpl;
 
+/**
+ * Classe Controller che gestisce le richieste effettuate dall'utente tramite la porta "localhost:8080/"
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 @RestController
 public class WeatherController {
 
@@ -34,6 +40,14 @@ public class WeatherController {
 	
 	private Timer timer;
 	
+	/**
+	 * Rotta per l'inizializzazione della capitale e del box
+	 * @param nameCap nome della capitale
+	 * @param userBox contiene larghezza e lunghezza del box in km
+	 * @return JSONArray contenente le informazioni metereologiche attuali delle città interne al box
+	 * @throws InternalServerException
+	 * @throws UserErrorException
+	 */
 	@PostMapping(value = "/capital/{name}")
 	public ResponseEntity<Object> initialization(@PathVariable("name") String nameCap, @RequestBody JSONObject userBox)
 			throws InternalServerException, UserErrorException {
@@ -67,6 +81,12 @@ public class WeatherController {
 		return new ResponseEntity<>(towns, new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	/**
+	 * Rotta per ottenere l'intero dataset
+	 * @return dataset contenente le informazioni metereologiche delle città interne al box per ogni chiamata oraria effettuata
+	 * @throws InternalServerException
+	 * @throws UserErrorException
+	 */
 	@GetMapping(value = "/data")
 	public JSONArray getData() throws InternalServerException, UserErrorException{
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -74,6 +94,13 @@ public class WeatherController {
 		return weatherService.getData();
 	}
 
+	/**
+	 * Rotta per ottenere le informazioni salvate nel dataset nell'intervallo di tempo scelto
+	 * @param from_to JSONObject contenente la data di "inizio" e quella di "fine" per rappresentare l'intervallo temporale in cui si vuole ottenere il dataset
+	 * @return dataset contenente le informazioni metereologiche delle città interne al box per ogni chiamata oraria effettuata nell'intervallo temporale scelto
+	 * @throws UserErrorException
+	 * @throws InternalServerException
+	 */
 	@PostMapping(value = "/data")
 	public JSONArray postData(@RequestBody JSONObject from_to) throws UserErrorException, InternalServerException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -81,6 +108,13 @@ public class WeatherController {
 		return weatherService.postData(from_to);
 	}
 
+	/**
+	 * Rotta per ottenere le statistiche
+	 * @param stat JSONObject contenente il numero di giorni a partire da oggi in cui si vogliono ottenere le statistiche e i nomi delle statistiche richieste
+	 * @return elenco città e relative statistiche
+	 * @throws UserErrorException
+	 * @throws InternalServerException
+	 */
 	@PostMapping(value = "/stats")
 	public JSONArray postStats(@RequestBody JSONObject stat) throws UserErrorException, InternalServerException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -88,6 +122,14 @@ public class WeatherController {
 		return weatherService.postStats(stat);
 	}
 	
+	/**
+	 * Rotta per ottenere le statistiche filtrate secondo qualche criterio
+	 * @param filters JSONObject contenente il numero di giorni a partire da oggi in cui si vogliono ottenere le statistiche, i nomi delle statistiche richieste e
+	 * i filtri da rispettare
+	 * @return elenco città che rispettano i filtri richiesti, e relative statistiche
+	 * @throws UserErrorException
+	 * @throws InternalServerException
+	 */
 	@PostMapping(value = "/filters")
 	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -95,6 +137,10 @@ public class WeatherController {
 		return weatherService.getFilteredStats(filters);
 	}
 	
+	/**
+	 * Rotta per visualizzare i metadati con relativo tipo e spiegazione sintetica
+	 * @return  elenco metadati
+	 */
 	@GetMapping(value = "/metadata")
 	public JSONArray getMetadata() {
 		DownloadJSON d = new DownloadJSON();
@@ -107,6 +153,12 @@ public class WeatherController {
 		return null;
 	}
 
+	/**
+	 * Rotta per salvare il dataset su file in formato JSON
+	 * @return esito della richiesta
+	 * @throws InternalServerException
+	 * @throws UserErrorException
+	 */
 	@GetMapping(value = "/save")
 	public ResponseEntity<Object> saveDB() throws InternalServerException,UserErrorException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
@@ -114,5 +166,4 @@ public class WeatherController {
 		weatherService.salvaDT();
 		return new ResponseEntity<>("File saved correctly", HttpStatus.OK);
 	}
-
 }
