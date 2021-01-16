@@ -4,7 +4,7 @@ import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 
 /**
- * Filtro che rappresenta il simbolo matematico "!(a, b)"
+ * Filtro che rappresenta il simbolo matematico "non incluso"
  * @author Christopher Buratti
  * @author Luca Guidi
  */

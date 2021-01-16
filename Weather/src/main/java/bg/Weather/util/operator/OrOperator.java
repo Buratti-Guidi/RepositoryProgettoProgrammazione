@@ -1,7 +1,7 @@
 package bg.Weather.util.operator;
 
 /**
- * Operatore che rappresenta l'and logico (||)
+ * Operatore che rappresenta l'and logico
  * @author Christopher Buratti
  * @author Luca Guidi
  */

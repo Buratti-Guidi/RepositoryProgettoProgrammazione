@@ -15,7 +15,7 @@ import bg.Weather.model.HourCities;
 /**
  * Interfaccia di un weather service
  * @author Luca Guidi
- *@author Christopher Buratti
+ * @author Christopher Buratti
  */
 public interface WeatherService {
 
@@ -23,7 +23,6 @@ public interface WeatherService {
 	 * Inizializza il dataset  
 	 * @param cap nome della capitale
 	 * @param ub contiene le coordinate in km del box
-	 * @throws Exception
 	 */
 	public void initialize(String cap,JSONObject ub);
 	

@@ -44,7 +44,7 @@ public class WeatherController {
 	 * Rotta per l'inizializzazione della capitale e del box
 	 * @param nameCap nome della capitale
 	 * @param userBox contiene larghezza e lunghezza del box in km
-	 * @return JSONArray contenente le informazioni metereologiche attuali delle città interne al box
+	 * @return informazioni metereologiche attuali delle città interne al box
 	 * @throws InternalServerException
 	 * @throws UserErrorException
 	 */

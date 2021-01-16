@@ -4,7 +4,7 @@ import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 
 /**
- * Filtro che rappresenta il simbolo matematico "!="
+ * Filtro che rappresenta il simbolo matematico "diverso da"
  * @author Christopher Buratti
  * @author Luca Guidi
  */
