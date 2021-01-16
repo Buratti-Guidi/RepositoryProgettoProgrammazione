@@ -83,12 +83,12 @@ Inoltre se si vogliono visualizzare i dati di una statistica ordinati in modo de
 }
 ```
 Permette di ottenere tutte le statistiche delle città che rispettano i filtri.
-Semplici regole della sintassi:
+* Semplici regole della sintassi:
 1. E' necessario specificare il numero di giorni a partire dal giorno corrente ("days"), su cui si vogliono calcolare le statistiche.
-2. Quando si inserisce una <a href="#Stats">statistica</a> bisogna specificare un filtro da applicare.
+2. Quando si inserisce una <a href="#Stat">statistica</a> bisogna specificare un filtro da applicare.
 3. Se si vogliono filtrare le statistiche in base ad una statistica, è necessario utilizzare il nome della statistica e si potranno utilizzare i <a href="#filterNumber">filtri di tipo numerico </a>
 4. Se si vogliono filtrare le statistiche in base al nome delle città, è necessario utilizzare il parametro *"Name"* al posto del nome della statistica e si potranno allora utilizzare i <a href="#filterName">filtri dedicati ai nomi </a>
-5. Se si inserisce un operator, esso si aspetta un numero indefinito di parametri di tipo <a href="#Operator">operatore </a> o <a href="#Stats">statistiche </a>. E' perciò possibile annidare più operatori.
+5. Se si inserisce un operator, esso si aspetta un numero indefinito di parametri di tipo <a href="#Operator">operatore </a> o <a href="#Stat">statistiche </a>. E' perciò possibile annidare più operatori.
 
 > <a href="#postFilters"> Informazioni aggiuntive </a>
 
