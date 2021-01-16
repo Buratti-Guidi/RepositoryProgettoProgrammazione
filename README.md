@@ -14,11 +14,11 @@ Il programma necessita di una prima inizializzazione, che richiede il nome di un
 
 Tipo | Rotta | Descrizione
 ---- | ----- | -----------
-POST | /capital/{nomeCapitale} | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
-GET  | /data | Restituisce tutti i valori contenuti nel dataset
-POST | /data | Restituisce i valori del dataset che sono compresi tra le date specificate
-POST | /stats | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
-POST | /filters | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
+POST | <a href="#postCap"> /capital/{nomeCapitale} </a> | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
+GET  | <a href="#getData"> /data </a> | Restituisce tutti i valori contenuti nel dataset
+POST | <a href="#postData"> /data </a> | Restituisce i valori del dataset che sono compresi tra le date specificate
+POST | <a href="#postStats"> /stats </a> | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
+POST | <a href="#postFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
 GET  | /save | Salva l'intero dataset su un file JSON
 GET  | /metadata | Restituisce il tipo e il nome per esteso dei metadati
 
@@ -56,10 +56,10 @@ TempMax | Temperatura massima
 Var  | Varianza
 Std  | Deviazione standard
 
-# CHIAMATE <a name="chiamate">
+# CHIAMATE <a name="chiamate"></a>
 Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
 
-### **POST /capital/{nome capitale}**
+* ### **POST /capital/{nome capitale}** <a name="postCap"></a>
 L' applicazione necessita di una inizializzazione, che consiste nella scelta del nome della capitale e di un box rettangolare, i cui lati sono espressi in km.
 La città inserita viene controllata da `CityInfo`, che verifica da un file JSON interno se sia una effettiva capitale.
 Successivamente, a partire dalle coordinate della capitale (ottenute attraverso una chiamata API) e dalla grandezza in km del box, vengono calcolate le coordinate in gradi decimali in cui sono presenti i 4 vertici del box rettangolare, attraverso `Box Calculator`.
@@ -70,18 +70,23 @@ Prima di ritornare le informazioni all'utente, viene attivata una scheduled task
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/InizializationSeq.png?raw=true">
 
-* ### **GET /data**
+* ### **GET /data** <a name="getData"></a>
 Attraverso il metodo `getData` di WeatherService viene creato un JSONArray con tutte le informazioni contenute nel dataset.
 Il JSONArray viene poi ritornato al controller che lo ritorna al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/GetDataSeq.png?raw=true">
 
-* ### **POST /stats**
+* ### **POST /stats** <a name="postStats"></a>
 Attraverso il metodo `getStats` di WeatherService viene prima effettuato il parsing della richiesta, che contiene quali statistiche calcolare.
 La classe `StatsService` si occuperà di calcolare le statistiche richieste, attraverso `Calculate`, sui dati contenuti nel database.
 Il WeatherService creerà un JSONArray con le statistiche che viene poi ritornato al controller, il quale lo ritornerà al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/PostStatsSeq.png?raw=true">
+
+* ### **POST /filters** <a name="postFilters"></a>
+Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `FilterService`, il quale effettua il parsing della richiesta e interpreta i valori come statistiche o operatori. Vengono poi calcolate le statistiche attraverso `StatsService` e filtrate per mezzo dei filtri specificati. FilterCalc si occupera poi di creare un JSONArray contenente le città che rispettano i filtri e lo ritornerà al WeatherService, il quale lo ritornerà al client.
+
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/FiltersSeq.png?raw=true">
 
 ## Software utilizzati
 * #### [IDE Eclipse](https://www.eclipse.org/) - per la scrittura e lo sviluppo dell'intero programma in Java
