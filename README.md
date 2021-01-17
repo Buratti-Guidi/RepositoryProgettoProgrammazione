@@ -200,6 +200,7 @@ Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `Filter
 * #### [IDE Eclipse](https://www.eclipse.org/) - per la scrittura e lo sviluppo dell'intero programma in Java
 * #### [Framework Spring](https://spring.io/projects/spring-framework) - per lo sviluppo di applicazioni enterprise
 * #### [Postman](https://www.postman.com/) - per interfacciarsi in modo chiaro e veloce con la porta "localhost:8080" e verificare il corretto funzionamento dell'intero progetto
+* #### [Maven](https://maven.apache.org/) - per un'organizzazione efficiente del progetto Java
 * #### [Visual Paradigm](https://www.visual-paradigm.com/) - per la creazione e modellazione dei diagrammi UML
 * #### [JUnit5](https://junit.org/junit5/) - per lo svolgimento degli Unit Test
 * #### [OpenWeatherMap](https://openweathermap.org/current#rectangle) - per l'ottenimento delle informazioni metereologiche
