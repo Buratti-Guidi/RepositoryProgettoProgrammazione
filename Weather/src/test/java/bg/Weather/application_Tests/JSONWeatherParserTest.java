@@ -33,7 +33,7 @@ public class JSONWeatherParserTest {
 	 * @throws Exception
 	 */
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		jwp = new JSONWeatherParser();
 		jo = new JSONObject();
 		JSONParser jp = new JSONParser();
@@ -125,7 +125,7 @@ public class JSONWeatherParserTest {
 	 * @throws Exception
 	 */
 	@AfterEach
-	void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class JSONWeatherParserTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	void test1() {
+	public void test1() {
 		CityData emptyCity = new CityData();
 		CityData fullCity = new CityData();
 		JSONObject tot = new JSONObject();
@@ -162,7 +162,7 @@ public class JSONWeatherParserTest {
 	 * controlla che il contenuto dell'oggetto HourCities "riempito" parsando un JSONObject, contenente le informazioni tipo, sia come da aspettative
 	 */
 	@Test
-	void test2() {
+	public void test2() {
 		CityData c1 = new CityData();
 		Instant time1 = Instant.ofEpochSecond(1610471385);
 		c1.setId(2267057);
@@ -204,7 +204,7 @@ public class JSONWeatherParserTest {
 	 * controlla la gestione dell'eccezione derivata dal parsing di un JSONObject contenente informazioni errate
 	 */
 	@Test
-	void test3() {
+	public void test3() {
 		JSONObject j = new JSONObject();
 		j.put("prova", "false");
 		j.put("altra prova", 1000);

@@ -26,7 +26,7 @@ public class WeatherStatsTest {
 	 * @throws Exception
 	 */
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		statS = new WeatherStats();
 	}
 
@@ -35,7 +35,7 @@ public class WeatherStatsTest {
 	 * @throws Exception
 	 */
 	@AfterEach
-	void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class WeatherStatsTest {
 	 * controlla che venga correttamente restituito un oggetto della classe richiesta tramite il proprio nome
 	 */
 	@Test
-	void test1() {
+	public void test1() {
 		Stat s = statS.getStat("avg", 3);
 		assertEquals(new AvgStats(3).getClass(), s.getClass());
 	}
@@ -53,7 +53,7 @@ public class WeatherStatsTest {
 	 * controlla la gestione dell'eccezione derivata da una richiesta errata, ovvero la richiesta di una classe non esistente
 	 */
 	@Test
-	void test2() {
+	public void test2() {
 		UserErrorException e = assertThrows(UserErrorException.class, () -> {
 			statS.getStat("xxx", 4);
 		});

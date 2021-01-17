@@ -25,7 +25,7 @@ public class WeatherServiceImplTest {
 	 * @throws Exception
 	 */
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		ws = new WeatherServiceImpl();
 	}
 
@@ -34,7 +34,7 @@ public class WeatherServiceImplTest {
 	 * @throws Exception
 	 */
 	@AfterEach
-	void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class WeatherServiceImplTest {
 	 * controlla la gestione dell'eccezione derivata da una richiesta errata dell'utente, ovvero la richiesta di un box troppo grande
 	 */
 	@Test
-	void test1() {
+	public void test1() {
 		JSONObject jo = new JSONObject();
 		jo.put("length", 80);
 		jo.put("width", 1000000);
@@ -58,7 +58,7 @@ public class WeatherServiceImplTest {
 	 * controlla la gestione dell'eccezione derivata da una richiesta errata dell'utente, ovvero l'errato inserimento del nome di una capitale
 	 */
 	@Test
-	void test2() {
+	public void test2() {
 		JSONObject jo = new JSONObject();
 		jo.put("length", 80);
 		jo.put("width", 220);
