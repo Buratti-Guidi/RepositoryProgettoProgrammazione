@@ -67,12 +67,20 @@ public class WeatherServiceImpl implements WeatherService {
 		try {
 			Number l = (Number)ub.get("length");
 			Number w = (Number)ub.get("width");
-			b = bc.generaBox(l.doubleValue(),w.doubleValue());
 			
-			Integer len = (Integer)l;
-			Integer wid = (Integer)w;
+			b = bc.generaBox(l.doubleValue(), w.doubleValue());
 			
-			nomeFile = nomeCap.replace(" ","_") + len.toString() + "x" + wid.toString() + ".json";
+			if(l instanceof Double)
+				l = l.doubleValue();
+			else
+				l = l.intValue();
+			
+			if(w instanceof Double)
+				w = w.doubleValue();
+			else
+				w = w.intValue();
+			
+			nomeFile = nomeCap.replace(" ","_") + l.toString() + "x" + w.toString() + ".json";
 			this.leggiDT();
 		}catch(ClassCastException ex) {
 			throw new UserErrorException("The body format is incorrect");	
