@@ -1,10 +1,10 @@
 # RepositoryProgettoProgrammazione
-Christopher Buratti & Luca Guidi
+Autori: [Christopher Buratti](https://github.com/christopherburatti) & [Luca Guidi](https://github.com/LucaGuidi5)
 
 ## Panoramica
 Il progetto tratta l'implementazione di un servizio meteo in grado di fornire dati e statistiche riguardanti le temperature delle città circostanti una capitale (scelta dall'utente) all'interno di un "box" rettangolare delle dimensioni desiderate.   
 In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restful Web Service in grado di interfacciarsi con la porta `localhost:8080` tramite la quale è possibile gestire le richieste effettuate dall'utente e restituire una risposta. Le richieste e le risposte vengono effettuate interamente in formato JSON.
-Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di `OpenWeatherMap`, le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
+Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di [`OpenWeatherMap`](https://openweathermap.org/current#rectangle), le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
 ## Utilizzo <a name="utilizzo"></a>
 Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`.
@@ -18,11 +18,11 @@ POST | <a href="#rottaCap"> /capital/{nomeCapitale} </a> | Inizializza il datase
 GET  | <a href="#rottaData"> /data </a> | Restituisce tutti i valori contenuti nel dataset
 POST | /data | Restituisce i valori del dataset che sono compresi tra le date specificate
 POST | <a href="#rottaStats"> /stats </a> | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
-POST | <a href="#rottaFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri
+POST | <a href="#rottaFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri e degli operatori logici
 GET  | /save | Salva l'intero dataset su un file JSON
 GET  | /metadata | Restituisce il tipo e il nome per esteso dei metadati
 
-### Esempi Rotte di tipo POST
+### Esempi richieste sulle rotte di tipo POST
 
 * #### /capital/Paris <a name="rottaCap"></a>
 ```
@@ -54,7 +54,7 @@ Permette di ottenere i dati contenuti nel dataset tra le date specificate.
 }
 ```
 Permette di ottenere le <a href="#Stat"> statistiche</a>, che devono essere specificate in ordine progressivo, nel numero di giorni specificato su "days".
-Inoltre se si vogliono visualizzare i dati di una statistica ordinati in modo decrescente è necessario richiedere una statistica sola. Infatti se si richiedono più statistiche insieme, la visualizzazione delle città non rispetterà nessun ordine particolare.
+Inoltre se si vogliono visualizzare i dati di una statistica ordinati in modo decrescente, così da visualizzare in modo semplice la città avente valore massimo della statistica richiesta, è necessario richiedere una statistica sola. Infatti se si richiedono più statistiche insieme, la visualizzazione delle città non rispetterà nessun ordine particolare.
 > <a href="#postStats"> Informazioni aggiuntive </a>
 
 * #### /filters <a name="rottaFilters"></a>
@@ -161,16 +161,16 @@ Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Inc
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/exceptionClass.png?raw=true">
 
 ## Chiamate <a name="chiamate"></a>
-Il controller inoltra tutte le richieste che gli vengono fatte al WeatherService, che si occuperà di elaborarle
+Il controller inoltra tutte le richieste dell'utente al WeatherService, il quale si occuperà di elaborarle.
 
 * ### **POST /capital/{nome capitale}** <a name="postCap"></a>
 L' applicazione necessita di una inizializzazione, che consiste nella scelta del nome della capitale e di un box rettangolare, i cui lati sono espressi in km.
 La città inserita viene controllata da `CityInfo`, che verifica da un file JSON interno se sia una effettiva capitale.
-Successivamente, a partire dalle coordinate della capitale (ottenute attraverso una chiamata API) e dalla grandezza in km del box, vengono calcolate le coordinate in gradi decimali in cui sono presenti i 4 vertici del box rettangolare, attraverso `Box Calculator`.
-Se esiste già un file JSON contenente delle "vecchie" chiamate effettuate dall'utente in merito ad una capitale e ad un box, viene letto e viene conseguentemente aggiornato il dataset, altrimenti ne viene creato uno nuovo.
-Infine viene fatta la chiamata all' API che ci permette di avere le informazioni climatiche delle città contenute nel box di coordinate nell' ora corrente.
+Successivamente, a partire dalle coordinate della capitale (ottenute attraverso una chiamata API ad [OpenWeatherMap](https://openweathermap.org/current#rectangle)) e dalla grandezza in km del box, vengono calcolate le coordinate in gradi decimali dei 4 vertici del box rettangolare, attraverso `Box Calculator`.
+Se esiste già un file JSON contenente delle "vecchie" chiamate effettuate dall'utente in merito ad una capitale e ad un box, viene letto e viene conseguentemente aggiornato il dataset, altrimenti viene creato un nuovo file.
+Infine viene fatta la chiamata API ad [OpenWeatherMap](https://openweathermap.org/current#rectangle) che ci permette di avere le informazioni climatiche delle città contenute nel box di coordinate nell' ora corrente.
 L' oggetto JSON ottenuto viene parsato dal `JSONWeatherParser`, i dati ottenuti vengono salvati nel dataset.
-Prima di ritornare le informazioni all'utente, viene attivata una scheduled task che fa la chiamata API ogni ora.
+Prima di ritornare le informazioni all'utente, viene attivata una scheduled task che consente l'esecuzione oraria automatica per l'ottenimento dei dati.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/InizializationSeq.png?raw=true">
 > <a href="#rottaCap"> Come si usa </a>
@@ -202,6 +202,7 @@ Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `Filter
 * #### [Postman](https://www.postman.com/) - per interfacciarsi in modo chiaro e veloce con la porta "localhost:8080" e verificare il corretto funzionamento dell'intero progetto
 * #### [Visual Paradigm](https://www.visual-paradigm.com/) - per la creazione e modellazione dei diagrammi UML
 * #### [JUnit5](https://junit.org/junit5/) - per lo svolgimento degli Unit Test
+* #### [OpenWeatherMap](https://openweathermap.org/current#rectangle) - per l'ottenimento delle informazioni metereologiche
 
 ## Autori & contributo
 [Christopher Buratti](https://github.com/christopherburatti) - 50%                                                             
