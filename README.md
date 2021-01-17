@@ -15,8 +15,8 @@ mette a disposizione diverse rotte per la consultazione dei dati e delle statist
 Tipo | Rotta | Descrizione
 ---- | ----- | -----------
 POST | <a href="#rottaCap"> /capital/{nomeCapitale} </a> | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
-GET  | <a href="#rottaData"> /data </a> | Restituisce tutti i valori contenuti nel dataset
-POST | /data | Restituisce i valori del dataset che sono compresi tra le date specificate
+GET  | /data | Restituisce tutti i valori contenuti nel dataset
+POST | <a href="#rottaData"> /data </a> | Restituisce i valori del dataset che sono compresi tra le date specificate
 POST | <a href="#rottaStats"> /stats </a> | Restituisce i valori delle statistiche specificate, nel numero di giorni indicato
 POST | <a href="#rottaFilters"> /filters </a> | Restituisce solamente i valori delle statistiche di quelle città che rispettano le condizioni dei filtri e degli operatori logici
 GET  | /save | Salva l'intero dataset su un file JSON
@@ -180,7 +180,6 @@ Attraverso il metodo `getData` di WeatherService viene creato un JSONArray con t
 Il JSONArray viene poi ritornato al controller che lo ritorna al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/GetDataSeq.png?raw=true">
-> <a href="#rottaData"> Come si usa </a>
 
 * ### **POST /stats** <a name="postStats"></a>
 Attraverso il metodo `getStats` di WeatherService viene prima effettuato il parsing della richiesta, che contiene quali statistiche calcolare.
