@@ -10,19 +10,37 @@ import org.junit.jupiter.api.Test;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.service.WeatherServiceImpl;
 
+/**
+ * Classe che testa alcuni metodi di WeatherServiceImpl
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class WeatherServiceImplTest {
 
 	private WeatherServiceImpl ws;
 	
+	/**
+	 * Viene eseguito prima dell’esecuzione di ogni test, inizializza gli oggetti necessari per l'esecuzione dei test
+	 * @throws Exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 		ws = new WeatherServiceImpl();
 	}
 
+	/**
+	 * Viene eseguito dopo ogni caso di test, resetta le postcondizioni
+	 * @throws Exception
+	 */
 	@AfterEach
 	void tearDown() throws Exception {
 	}
 	
+	/**
+	 * Test per verificare la corretta gestione delle eccezioni del metodo "initialize"
+	 * controlla la gestione dell'eccezione derivata da una richiesta errata dell'utente, ovvero la richiesta di un box troppo grande
+	 */
 	@Test
 	void test1() {
 		JSONObject jo = new JSONObject();
@@ -35,6 +53,10 @@ public class WeatherServiceImplTest {
 		assertEquals("The box isn't acceptable", e.getMessage());
 	}
 	
+	/**
+	 * Test per verificare la corretta gestione delle eccezioni del metodo "initialize"
+	 * controlla la gestione dell'eccezione derivata da una richiesta errata dell'utente, ovvero l'errato inserimento del nome di una capitale
+	 */
 	@Test
 	void test2() {
 		JSONObject jo = new JSONObject();

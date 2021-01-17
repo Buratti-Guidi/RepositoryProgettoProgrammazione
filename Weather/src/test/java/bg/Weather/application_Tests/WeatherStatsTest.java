@@ -11,25 +11,47 @@ import bg.Weather.util.stats.AvgStats;
 import bg.Weather.util.stats.Stat;
 import bg.Weather.util.stats.WeatherStats;
 
-class WeatherStatsTest {
+/**
+ * Classe che testa alcuni metodi di WeatherStats
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
+public class WeatherStatsTest {
 
 	private WeatherStats statS;
 	
+	/**
+	 * Viene eseguito prima dell’esecuzione di ogni test, inizializza gli oggetti necessari per l'esecuzione dei test
+	 * @throws Exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 		statS = new WeatherStats();
 	}
 
+	/**
+	 * Viene eseguito dopo ogni caso di test, resetta le postcondizioni
+	 * @throws Exception
+	 */
 	@AfterEach
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * Test per verificare il corretto funzionamento del metodo "getStat"
+	 * controlla che venga correttamente restituito un oggetto della classe richiesta tramite il proprio nome
+	 */
 	@Test
 	void test1() {
 		Stat s = statS.getStat("avg", 3);
 		assertEquals(new AvgStats(3).getClass(), s.getClass());
 	}
 	
+	/**
+	 * Test per verificare la corretta gestione delle eccezioni del metodo "getStat"
+	 * controlla la gestione dell'eccezione derivata da una richiesta errata, ovvero la richiesta di una classe non esistente
+	 */
 	@Test
 	void test2() {
 		UserErrorException e = assertThrows(UserErrorException.class, () -> {

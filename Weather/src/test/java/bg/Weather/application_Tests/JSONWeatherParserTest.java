@@ -17,11 +17,21 @@ import bg.Weather.model.CityData;
 import bg.Weather.model.HourCities;
 import bg.Weather.service.JSONWeatherParser;
 
+/**
+ * Classe che testa alcuni metodi di JSONWeatherParser
+ * @author Christopher Buratti
+ * @author Luca Guidi
+ */
+
 public class JSONWeatherParserTest {
 
 	private JSONWeatherParser jwp;
 	private JSONObject jo;
 	
+	/**
+	 * Viene eseguito prima dell’esecuzione di ogni test, inizializza gli oggetti necessari per l'esecuzione dei test
+	 * @throws Exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 		jwp = new JSONWeatherParser();
@@ -110,10 +120,18 @@ public class JSONWeatherParserTest {
 		}
 	}
 
+	/**
+	 * Viene eseguito dopo ogni caso di test, resetta le postcondizioni
+	 * @throws Exception
+	 */
 	@AfterEach
 	void tearDown() throws Exception {
 	}
 	
+	/**
+	 * Test per verificare il corretto funzionamento del metodo "parseCity"
+	 * controlla che il contenuto dell'oggetto CityData "riempito" parsando un JSONObject, contenente le informazioni tipo, sia come da aspettative
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	void test1() {
@@ -139,6 +157,10 @@ public class JSONWeatherParserTest {
 		assertEquals(fullCity.getLongitudine(), emptyCity.getLongitudine());
 	}
 	
+	/**
+	 * Test per verificare il corretto funzionamento del metodo "parseBox"
+	 * controlla che il contenuto dell'oggetto HourCities "riempito" parsando un JSONObject, contenente le informazioni tipo, sia come da aspettative
+	 */
 	@Test
 	void test2() {
 		CityData c1 = new CityData();
@@ -177,6 +199,10 @@ public class JSONWeatherParserTest {
 		}
 	}
 	
+	/**
+	 * Test per verificare la corretta gestione delle eccezioni del metodo "parseBox"
+	 * controlla la gestione dell'eccezione derivata dal parsing di un JSONObject contenente informazioni errate
+	 */
 	@Test
 	void test3() {
 		JSONObject j = new JSONObject();
