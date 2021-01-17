@@ -7,11 +7,19 @@ In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restfu
 Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di [`OpenWeatherMap`](https://openweathermap.org/current#rectangle), le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
 ## Utilizzo <a name="utilizzo"></a>
-Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`.
-Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, il programma 
-mette a disposizione diverse rotte per la consultazione dei dati e delle statistiche.
+Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`. Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, viene avviato un timer orario che consente di effettuare la chiamata API per l'acquisizione dei dati metereologici. E' necessario eseguire la rotta `/save` per salvare il dataset su un file JSON.                                         
+Essendo le API di OpenWeather per i dati storici a pagamento, per simulare un corretto e reale funzionamento del nostro applicativo, abbiamo salvato quotidianamente le informazioni orarie riguardanti alcuni box di città esempio, così da avere accesso a dati reali.                                                        
+I file JSON contenenti i dati messi a disposizione riguardano:
 
-### Rotte
+Nome città | Length | Width
+---------- | ------ | -----
+Paris | 100 | 150
+Kuala Lumpur | 100 | 80
+Berlin | 100 | 100
+Lisbon | 80 | 220
+
+
+## Rotte
 Tipo | Rotta | Descrizione
 ---- | ----- | -----------
 POST | <a href="#rottaCap"> /capital/{nomeCapitale} </a> | Inizializza il dataset e restituisce le informazioni metereologiche in tempo reale
