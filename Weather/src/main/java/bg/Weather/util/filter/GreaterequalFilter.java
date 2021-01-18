@@ -1,6 +1,6 @@
 package bg.Weather.util.filter;
 
-import bg.Weather.exception.UserErrorException;
+import bg.Weather.exception.FilterErrorException;
 
 /**
  * Filtro che rappresenta il simbolo matematico "maggiore o uguale"
@@ -20,16 +20,16 @@ public class GreaterequalFilter extends WeatherFilter implements Filter{
 		this.vrfValue = vrfValue;
 	}
 	
-	public boolean response() throws UserErrorException{
+	public boolean response() throws FilterErrorException{
 		try {
 			if(super.getValue().size() != 1)
-				throw new UserErrorException("The filter 'greaterEqual' accepts only 1 numerical value");
+				throw new FilterErrorException("The filter 'greaterEqual' accepts only 1 numerical value");
 			
 			if(this.vrfValue >= ((Number)super.getValue().firstElement()).doubleValue())
 				return true;
 			return false;
 		} catch (ClassCastException e) {
-			throw new UserErrorException("The filter 'greaterEqual' accepts only numerical values");
+			throw new FilterErrorException("The filter 'greaterEqual' accepts only numerical values");
 		}
 	}
 }

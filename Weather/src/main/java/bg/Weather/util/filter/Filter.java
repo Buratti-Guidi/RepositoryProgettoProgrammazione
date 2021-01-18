@@ -1,6 +1,6 @@
 package bg.Weather.util.filter;
 
-import bg.Weather.exception.UserErrorException;
+import bg.Weather.exception.FilterErrorException;
 
 /**
  * Interfaccia di un filtro generico
@@ -13,7 +13,7 @@ public interface Filter {
 	/**
 	 * Controlla se il valore da verificare rispetta le condizioni del filtro richiesto
 	 * @return "true" se l'oggetto soddisfa le richieste del filtro, "false" altrimenti
-	 * @throws UserErrorException
+	 * @throws FilterErrorException
 	 */
-	public boolean response() throws UserErrorException;
+	public boolean response() throws FilterErrorException;
 }

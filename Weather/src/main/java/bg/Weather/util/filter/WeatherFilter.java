@@ -4,8 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 
+import bg.Weather.exception.FilterErrorException;
 import bg.Weather.exception.InternalServerException;
-import bg.Weather.exception.UserErrorException;
 
 /**
  * Classe madre di un filtro generico
@@ -41,7 +41,7 @@ public class WeatherFilter {
 	 * @param vfrValue valore da controllare preso in input
 	 * @return "true" se il valore rispetta i parametri del filtro richiesto, "false" altrimenti
 	 */
-	public boolean getResponse(double vfrValue) throws UserErrorException, InternalServerException{
+	public boolean getResponse(double vfrValue) throws InternalServerException, FilterErrorException{
 		Filter f;
 		
 		try {
@@ -52,7 +52,7 @@ public class WeatherFilter {
 			
 			return f.response();
 		} catch(ClassNotFoundException e) {
-			throw new UserErrorException("This filter doesn't exist"); 
+			throw new FilterErrorException("Filter not found"); 
 		}
 		catch(InvocationTargetException e) {
 			throw new InternalServerException("Error in getStats");
@@ -67,7 +67,7 @@ public class WeatherFilter {
 	 * @param vfrValue valore da controllare preso in input
 	 * @return "true" se il valore rispetta i parametri del filtro richiesto, "false" altrimenti
 	 */
-	public boolean getResponse(String vfrValue){
+	public boolean getResponse(String vfrValue) throws InternalServerException, FilterErrorException{
 		Filter f;
 		
 		try {
@@ -78,7 +78,7 @@ public class WeatherFilter {
 			
 			return f.response();
 		} catch(ClassNotFoundException e) {
-			throw new UserErrorException("This filter doesn't exist");
+			throw new FilterErrorException("Filter not found");
 		}
 		catch(InvocationTargetException e) {
 			throw new InternalServerException("Error in getStats");

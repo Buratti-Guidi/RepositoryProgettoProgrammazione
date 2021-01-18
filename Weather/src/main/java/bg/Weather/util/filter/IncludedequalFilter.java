@@ -1,6 +1,6 @@
 package bg.Weather.util.filter;
 
-import bg.Weather.exception.UserErrorException;
+import bg.Weather.exception.FilterErrorException;
 
 /**
  * Filtro che rappresenta il simbolo matematico "incluso o uguale"
@@ -20,16 +20,16 @@ public class IncludedequalFilter extends WeatherFilter implements Filter{
 		this.vrfValue = vrfValue;
 	}
 	
-	public boolean response() throws UserErrorException {
+	public boolean response() throws FilterErrorException {
 		try {
 			if(super.getValue().size() != 2)
-				throw new UserErrorException("The filter 'includedEqual' accepts only 2 numerical values");
+				throw new FilterErrorException("The filter 'includedEqual' accepts only 2 numerical values");
 			
 			if(this.vrfValue >= ((Number)super.getValue().get(0)).doubleValue() && this.vrfValue <= ((Number)super.getValue().get(1)).doubleValue())
 				return true;
 			return false;
 		} catch (ClassCastException e) {
-			throw new UserErrorException("The filter 'includedEqual' accepts only numerical values");
+			throw new FilterErrorException("The filter 'includedEqual' accepts only numerical values");
 		}
 	}
 }

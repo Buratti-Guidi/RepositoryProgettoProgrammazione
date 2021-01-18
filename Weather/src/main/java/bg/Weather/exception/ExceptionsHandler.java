@@ -19,12 +19,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
 	/**
-	 * Gestisce le eccezioni UserErrorException e InternalServerException lanciate dal controller 
+	 * Gestisce le eccezioni UserErrorException, InternalServerException e FilterErrorException lanciate dal controller
 	 * @param ex Eccezione da gestire
 	 * @param request 
 	 * @return Risposta che contiene il tipo di eccezione,il messaggio e l' ora 
 	 */
-	@ExceptionHandler(value = { UserErrorException.class, InternalServerException.class })
+	@ExceptionHandler(value = { UserErrorException.class, InternalServerException.class, FilterErrorException.class })
 	public ResponseEntity<Object> handleExceptions(Exception ex, WebRequest request) {
 		
 		String errorMessageDescription = ex.getLocalizedMessage();

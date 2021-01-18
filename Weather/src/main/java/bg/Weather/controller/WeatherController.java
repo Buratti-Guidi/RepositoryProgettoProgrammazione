@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import bg.Weather.exception.FilterErrorException;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.CityData;
@@ -131,7 +132,7 @@ public class WeatherController {
 	 * @throws InternalServerException
 	 */
 	@PostMapping(value = "/filters")
-	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException {
+	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException, FilterErrorException {
 		if (this.initialized == false) throw new UserErrorException("Capital initialization is needed");
 		
 		return weatherService.getFilteredStats(filters);

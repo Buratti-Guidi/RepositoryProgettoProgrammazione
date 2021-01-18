@@ -1,6 +1,6 @@
 package bg.Weather.util.filter;
 
-import bg.Weather.exception.UserErrorException;
+import bg.Weather.exception.FilterErrorException;
 
 /**
  * Filtro che controlla i nomi delle città presenti nel dataset con il nome preso in input
@@ -23,7 +23,7 @@ public class NinFilter extends WeatherFilter implements Filter{
 	/**
 	 * Se il nome è presente nella lista dei nomi da controllare ritorna "false", "true" altrimenti
 	 */
-	public boolean response() throws UserErrorException {
+	public boolean response() throws FilterErrorException {
 		try {
 			for(Object o : super.getValue()) {
 				if(this.vrfValue.equals(((String)o).toUpperCase()))
@@ -31,7 +31,7 @@ public class NinFilter extends WeatherFilter implements Filter{
 			}
 			return true;
 		} catch(ClassCastException e) {
-			throw new UserErrorException("The filter 'nin' accepts only strings");
+			throw new FilterErrorException("The filter 'nin' accepts only strings");
 		}
 	}
 }

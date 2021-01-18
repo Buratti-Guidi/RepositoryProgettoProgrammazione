@@ -51,7 +51,7 @@ public class WeatherOperator {
 			o = (Operator)ct.newInstance();
 			
 		} catch (ClassNotFoundException e) {
-			throw new UserErrorException("This operator doesn't exist");
+			throw new UserErrorException("Operator not found");
 		}
 		catch(InvocationTargetException ex) {
 			throw new InternalServerException("Error in getOperator");

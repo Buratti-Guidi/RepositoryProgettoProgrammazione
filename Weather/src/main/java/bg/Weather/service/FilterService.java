@@ -10,6 +10,7 @@ import java.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import bg.Weather.exception.FilterErrorException;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.HourCities;
@@ -49,8 +50,11 @@ public class FilterService {
 	 * @return i nomi delle citta che rispettano i filtri
 	 * @throws InternalServerException
 	 * @throws UserErrorException
+	 * @throws FilterErrorException
 	 */
-	public Vector<String> filterCalc(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
+	public Vector<String> filterCalc(LinkedList<HashSet<HourCities>> dataset) 
+			throws InternalServerException, UserErrorException, FilterErrorException{
+		
 		Vector<String> final_names = new Vector<String>();
 		Set<String> keys = this.joFilter.keySet();
 			
@@ -81,7 +85,7 @@ public class FilterService {
 				Stat s = statService.getStat(key,this.days);
 				this.filterParser(joValue, filterValue, filterName);
 				tot_names = s.getNames(dataset);				
-					
+				
 				try {
 					LinkedList<Double> stats = s.getStats(dataset);
 					wf = new WeatherFilter(filterName.toString(), filterValue);
@@ -122,7 +126,7 @@ public class FilterService {
 				return final_names;
 			}
 		}
-		throw new InternalServerException("Something has gone bad");
+		throw new InternalServerException("Error, try later...");
 	}
 
 	/**
@@ -132,7 +136,8 @@ public class FilterService {
 	 * @param joValue  Tutto il contenuto (stat + filtri) 
 	 * @param dataset  tutto il dataset
 	 */
-	public void opResult(Operator o, Set<String> keys, LinkedHashMap<String, Object> joValue, LinkedList<HashSet<HourCities>> dataset) {
+	public void opResult(Operator o, Set<String> keys, LinkedHashMap<String, Object> joValue, LinkedList<HashSet<HourCities>> dataset) 
+				throws UserErrorException, FilterErrorException{
 
 		for (String stkey : keys) {
 
@@ -177,8 +182,7 @@ public class FilterService {
 						i++;
 					}
 				}
-			} catch (UserErrorException | InternalServerException e) {// da mettere InternalServerException(?)
-				if(e.getMessage().equals("This stat doesn't exist"))  {
+			} catch (UserErrorException e) {
 				
 					try { // se non e' una stat controllo se e' un operatore
 						Set<String> keysAnnidate = joValueOne.keySet();
@@ -186,10 +190,10 @@ public class FilterService {
 	
 						for (String keyAnn : keysAnnidate) { // finto for che controlla se la chiave e' un operatore
 	
-							oAnnidato = operatorFilter.getOperator(stkey); // deve essere stkey
+							oAnnidato = operatorFilter.getOperator(stkey);
 	
-							this.opResult(oAnnidato, joValueOne.keySet(), joValueOne, dataset);// joValueAnnidate ->
-																								// joValueOne
+							this.opResult(oAnnidato, joValueOne.keySet(), joValueOne, dataset);
+																								
 							int j = 0;
 							for (String name : tot_names) {
 								if (oAnnidato.getResponse(j))
@@ -200,10 +204,8 @@ public class FilterService {
 							}
 						}
 					} catch (UserErrorException ex) {
-						throw new UserErrorException("At least one parameter is not a stat or a operator"); // comando non riconosciuto, non e' una stat ne un operatore
+						throw new UserErrorException("At least one parameter is not a stat or an operator"); // comando non riconosciuto, non e' una stat ne un operatore
 					}
-				} else
-					throw e;
 			}
 		} // fine for delle chiavi
 	}
@@ -263,7 +265,7 @@ public class FilterService {
 	 * @throws InternalServerException
 	 * @throws UserErrorException
 	 */
-	public JSONArray getResponse(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException,UserErrorException{
+	public JSONArray getResponse(LinkedList<HashSet<HourCities>> dataset) throws InternalServerException, UserErrorException, FilterErrorException{
 		Vector<String> final_names = this.filterCalc(dataset);
 		JSONArray result = new JSONArray();
 		Stat s;

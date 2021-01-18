@@ -20,6 +20,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import bg.Weather.dataset.Dataset;
+import bg.Weather.exception.FilterErrorException;
 import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 import bg.Weather.model.Box;
@@ -258,7 +259,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @throws UserErrorException
 	 * @throws InternalServerException
 	 */
-	public JSONArray getFilteredStats(JSONObject jo) throws UserErrorException, InternalServerException {
+	public JSONArray getFilteredStats(JSONObject jo) throws UserErrorException, InternalServerException, FilterErrorException {
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
 		
