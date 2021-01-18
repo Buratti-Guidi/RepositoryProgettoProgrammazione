@@ -130,6 +130,7 @@ public class WeatherController {
 	 * @return elenco città che rispettano i filtri richiesti, e relative statistiche
 	 * @throws UserErrorException
 	 * @throws InternalServerException
+	 * @throws FilterErrorException
 	 */
 	@PostMapping(value = "/filters")
 	public JSONArray postFilters(@RequestBody JSONObject filters) throws UserErrorException, InternalServerException, FilterErrorException {

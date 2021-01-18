@@ -33,7 +33,7 @@ public class JSONWeatherParser{
 		citiesList = (JSONArray) jo.get("list");
 
 		if (citiesList == null)
-			throw new InternalServerException("Errore dal box dell'API");
+			throw new InternalServerException("Error in the box of API");
 
 		for (Object o : citiesList) {
 
@@ -80,7 +80,7 @@ public class JSONWeatherParser{
 		coord = (JSONObject) jo.get("coord");
 
 		if (coord == null)
-			throw new InternalServerException("Error su ParseCity");
+			throw new InternalServerException("Error on ParseCity");
 
 		long id = ((Number) jo.get("id")).longValue();
 
@@ -113,7 +113,7 @@ public class JSONWeatherParser{
 				citta.setTime(data);
 				
 			} catch (DateTimeParseException e) {
-				throw new InternalServerException("Errore nel formato data letto da file");
+				throw new InternalServerException("Error in the date format read on the file");
 			}
 
 			citta.setLongitudine(((Number) city.get("lon")).doubleValue());

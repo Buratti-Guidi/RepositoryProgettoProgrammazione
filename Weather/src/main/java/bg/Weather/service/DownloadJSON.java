@@ -28,7 +28,7 @@ import bg.Weather.exception.InternalServerException;
 public class DownloadJSON {
 
 	/**
-	 * Legge un JSONObject da una chiamata API (ur)
+	 * Legge un JSONObject da una chiamata API (url)
 	 * @param url link della chiamata API
 	 * @return il JSONObject letto
 	 * @throws InternalServerException
@@ -57,9 +57,9 @@ public class DownloadJSON {
 			return jo;
 			
 		} catch (IOException  e) {
-			throw new InternalServerException("Errore lettura chiamata API di un oggetto");
+			throw new InternalServerException("Error while reading an Object from an API call");
 		} catch (ParseException ex) {
-			throw new InternalServerException("Errore parsing JSONObject");
+			throw new InternalServerException("Error while parsing JSONObject");
 		} 
 	}
 	
@@ -78,11 +78,11 @@ public class DownloadJSON {
 			return jo;
 			
 		} catch (FileNotFoundException e) {
-			throw new InternalServerException("File per lettura di un oggetto non trovato");
+			throw new InternalServerException("File for reading a JSONObject not found");
 		} catch (IOException  e) {
-			throw new InternalServerException("Errore lettura file di un oggetto");
+			throw new InternalServerException("Error while reading a JSONObject from a file");
 		} catch (ParseException ex) {
-			throw new InternalServerException("Errore parsing JSONObject");
+			throw new InternalServerException("Error while parsing JSONObject");
 		} 
 	}
 	
@@ -104,15 +104,15 @@ public class DownloadJSON {
 		} catch (FileNotFoundException e) {
 			throw new FileNotFoundException();
 		} catch (IOException e) {
-			throw new InternalServerException("Errore su caricaFileArr");
+			throw new InternalServerException("Error while reading an JSONArray from a file");
 		} catch (ParseException e) {
-			throw new InternalServerException("Errore su parse caricaFileArr");
+			throw new InternalServerException("Error while parsing a JSONArray");
 		}
 	}
 	
 	/**
 	 * Scrive un JSONArray su un file
-	 * @param nome_file nome del file su cuoi scrivere
+	 * @param nome_file nome del file su cui scrivere
 	 * @param ja il JSONArray da scrivere
 	 * @throws InternalServerException
 	 */
@@ -128,7 +128,7 @@ public class DownloadJSON {
 			buf.write(txt);
 			buf.close();
 		} catch (IOException e) {
-			throw new InternalServerException("Errore scrittura sul file");
+			throw new InternalServerException("Error while writing in a file");
 		}
 	}
 }

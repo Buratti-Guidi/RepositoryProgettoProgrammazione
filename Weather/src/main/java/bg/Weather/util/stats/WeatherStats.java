@@ -52,13 +52,13 @@ public class WeatherStats {
 			return s;
 			
 		} catch (ClassNotFoundException e) {
-			throw new UserErrorException("This stat doesn't exist");
+			throw new UserErrorException("Stat not found");
 		}
 		catch(InvocationTargetException e) {
 			throw new InternalServerException("Error in getStats");
 		}
 		catch(LinkageError | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException e) {
-			throw new InternalServerException("GetStat in StatService error, try later...");
+			throw new InternalServerException("General error, try later...");
 		}
 	}
 
@@ -112,7 +112,7 @@ public class WeatherStats {
 				}
 			}
 		}catch(Exception e){
-			throw new InternalServerException("Errore su SortStats");
+			throw new InternalServerException("Error during SortStats");
 		}
 	}
 }

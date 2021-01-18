@@ -44,7 +44,7 @@ public class CityInfo {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			throw new InternalServerException("Errore sulla lettura file delle capitali");
+			throw new InternalServerException("Error while reading the file of capitals");
 		}
 		return false;
 	}

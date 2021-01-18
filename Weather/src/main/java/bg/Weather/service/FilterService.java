@@ -65,11 +65,11 @@ public class FilterService {
 			days = (Integer)this.joFilter.get("days");
 			keys.remove("days");
 		} catch(ClassCastException e) {
-			throw new UserErrorException("Puoi inserire solo un valore di tipo intero su days");
+			throw new UserErrorException("You can only insert an integer value on 'days'");
 		}
 		
 		if(days > dataset.size() || days <= 0)
-			throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " +  dataset.size());
+			throw new UserErrorException("You can only insert a number of days between " + 1 + " and " +  dataset.size());
 		
 		for(String key : keys) { //finto for che scorre per ottenere la chiave "esterna" oltre a "days"
 			

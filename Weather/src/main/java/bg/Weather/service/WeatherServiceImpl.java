@@ -70,10 +70,10 @@ public class WeatherServiceImpl implements WeatherService {
 			Number w = (Number)ub.get("width");
 			
 			if(l == null)
-				throw new UserErrorException("Parametro 'length' mancante");
+				throw new UserErrorException("'length' parameter is missing");
 			
 			if(w == null)
-				throw new UserErrorException("Parametro 'width' mancante");
+				throw new UserErrorException("'width' parameter is missing");
 			
 			b = bc.generaBox(l.doubleValue(), w.doubleValue());
 			
@@ -187,7 +187,7 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 			return tot;
 		} catch (ParseException e) {
-			throw new UserErrorException("Formato della data non corretto");
+			throw new UserErrorException("The date format is not correct");
 		}
 	}
 	
@@ -214,9 +214,11 @@ public class WeatherServiceImpl implements WeatherService {
 		try {
 			numDays = (Integer)stat.get("days");
 			if(numDays > this.dataset.getDataset().size() || numDays <= 0)
-				throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " + this.dataset.getDataset().size());
+				throw new UserErrorException("You can only insert a number of days between " + 1 + " and " + this.dataset.getDataset().size());
 		} catch(ClassCastException e) {
-			throw new UserErrorException("Puoi inserire solo un valore di tipo intero su days");
+			throw new UserErrorException("You can only insert an integer value on 'days'");
+		} catch(NullPointerException ex) {
+			throw new UserErrorException("Days parameter is missing");
 		}
 		
 		WeatherStats sc = new WeatherStats();
@@ -258,6 +260,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return Statistiche filtrate
 	 * @throws UserErrorException
 	 * @throws InternalServerException
+	 * @throws FilterErrorException
 	 */
 	public JSONArray getFilteredStats(JSONObject jo) throws UserErrorException, InternalServerException, FilterErrorException {
 		FilterService fs = new FilterService(jo);
@@ -286,7 +289,7 @@ public class WeatherServiceImpl implements WeatherService {
 					try {
 						cittaOrarie.add(cd.getAllHashMap());
 					} catch (ClassCastException ex) {
-						throw new InternalServerException("Errore nella conversione del dataset in JSON");
+						throw new InternalServerException("An error occurse while converting the dataset in json");
 					}
 				}
 				giornata.add(cittaOrarie);
