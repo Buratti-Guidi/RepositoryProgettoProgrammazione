@@ -168,9 +168,10 @@ Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Inc
 * ### Package bg.Weather.exception
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/exceptionClass.png?raw=true">
 
-## Chiamate <a name="chiamate"></a>
-Il controller inoltra tutte le richieste dell'utente al WeatherService, il quale si occuperà di elaborarle.
+* ### Package bg.Weather.application_Tests
+<img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/test.png?raw=true">
 
+## Sequence Diagram <a name="chiamate"></a>
 * ### **POST /capital/{nome capitale}** <a name="postCap"></a>
 L' applicazione necessita di una inizializzazione, che consiste nella scelta del nome della capitale e di un box rettangolare, i cui lati sono espressi in km.
 La città inserita viene controllata da `CityInfo`, che verifica da un file JSON interno se sia una effettiva capitale.
