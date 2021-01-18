@@ -56,7 +56,7 @@ public class WeatherServiceImpl implements WeatherService {
 		String nomeCap;
 		
 		if(!verifica.verifyCap(cap))
-			throw new UserErrorException( "The city is not a capital");
+			throw new UserErrorException("The city is not a capital");
 		nomeCap = cap.toUpperCase();
 		
 		capital.setNome(cap);
@@ -67,6 +67,12 @@ public class WeatherServiceImpl implements WeatherService {
 		try {
 			Number l = (Number)ub.get("length");
 			Number w = (Number)ub.get("width");
+			
+			if(l == null)
+				throw new UserErrorException("Parametro 'length' mancante");
+			
+			if(w == null)
+				throw new UserErrorException("Parametro 'width' mancante");
 			
 			b = bc.generaBox(l.doubleValue(), w.doubleValue());
 			
@@ -203,9 +209,14 @@ public class WeatherServiceImpl implements WeatherService {
 			}
 		}
 		
-		Integer numDays = (Integer)stat.get("days");
-		if(numDays > this.dataset.getDataset().size() || numDays <= 0)
-			throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " + this.dataset.getDataset().size());
+		Integer numDays;
+		try {
+			numDays = (Integer)stat.get("days");
+			if(numDays > this.dataset.getDataset().size() || numDays <= 0)
+				throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " + this.dataset.getDataset().size());
+		} catch(ClassCastException e) {
+			throw new UserErrorException("Puoi inserire solo un valore di tipo intero su days");
+		}
 		
 		WeatherStats sc = new WeatherStats();
 		Stat s;
@@ -222,9 +233,8 @@ public class WeatherServiceImpl implements WeatherService {
 				
 				if(param.size() == 1)
 					s.sortStats(nomi, statistics.get(j), false);
-			}	
-			
-																//DA VEDERE ALTRE ECCEZIONI
+			}
+		
 		int i = 0;
 		for(String name : nomi) {
 			LinkedHashMap<String, Object> jo = new LinkedHashMap<String, Object>();
@@ -248,7 +258,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @throws UserErrorException
 	 * @throws InternalServerException
 	 */
-	public JSONArray getFilteredStats(JSONObject jo)throws UserErrorException,InternalServerException {
+	public JSONArray getFilteredStats(JSONObject jo) throws UserErrorException, InternalServerException {
 		FilterService fs = new FilterService(jo);
 		JSONArray response = new JSONArray();
 		

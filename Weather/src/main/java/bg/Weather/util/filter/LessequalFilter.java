@@ -1,6 +1,5 @@
 package bg.Weather.util.filter;
 
-import bg.Weather.exception.InternalServerException;
 import bg.Weather.exception.UserErrorException;
 
 /**
@@ -21,10 +20,10 @@ public class LessequalFilter extends WeatherFilter implements Filter{
 		this.vrfValue = vrfValue;
 	}
 	
-	public boolean response() {
+	public boolean response() throws UserErrorException {
 		try {
 			if(super.getValue().size() != 1)
-				throw new InternalServerException("The filter 'lessEqual' accepts only 1 numerical value");
+				throw new UserErrorException("The filter 'lessEqual' accepts only 1 numerical value");
 			
 			if(this.vrfValue <= ((Number)super.getValue().firstElement()).doubleValue())
 				return true;

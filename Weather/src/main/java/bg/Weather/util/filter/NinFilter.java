@@ -23,7 +23,7 @@ public class NinFilter extends WeatherFilter implements Filter{
 	/**
 	 * Se il nome è presente nella lista dei nomi da controllare ritorna "false", "true" altrimenti
 	 */
-	public boolean response() {
+	public boolean response() throws UserErrorException {
 		try {
 			for(Object o : super.getValue()) {
 				if(this.vrfValue.equals(((String)o).toUpperCase()))

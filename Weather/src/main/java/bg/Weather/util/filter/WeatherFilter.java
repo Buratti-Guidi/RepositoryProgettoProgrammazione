@@ -41,7 +41,7 @@ public class WeatherFilter {
 	 * @param vfrValue valore da controllare preso in input
 	 * @return "true" se il valore rispetta i parametri del filtro richiesto, "false" altrimenti
 	 */
-	public boolean getResponse(double vfrValue){
+	public boolean getResponse(double vfrValue) throws UserErrorException, InternalServerException{
 		Filter f;
 		
 		try {
@@ -52,7 +52,7 @@ public class WeatherFilter {
 			
 			return f.response();
 		} catch(ClassNotFoundException e) {
-			throw new UserErrorException("This filter doesn't exist");
+			throw new UserErrorException("This filter doesn't exist"); 
 		}
 		catch(InvocationTargetException e) {
 			throw new InternalServerException("Error in getStats");

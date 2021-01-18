@@ -55,10 +55,14 @@ public class FilterService {
 		Set<String> keys = this.joFilter.keySet();
 			
 		if(!this.joFilter.containsKey("days"))
-			throw new UserErrorException("days parameter is missing");
+			throw new UserErrorException("Days parameter is missing");
 			
-		days = (Integer)this.joFilter.get("days");
-		keys.remove("days");
+		try {
+			days = (Integer)this.joFilter.get("days");
+			keys.remove("days");
+		} catch(ClassCastException e) {
+			throw new UserErrorException("Puoi inserire solo un valore di tipo intero su days");
+		}
 		
 		if(days > dataset.size() || days <= 0)
 			throw new UserErrorException("Puoi inserire un numero di giorni compreso tra " + 1 + " e " +  dataset.size());
@@ -173,37 +177,34 @@ public class FilterService {
 						i++;
 					}
 				}
+			} catch (UserErrorException | InternalServerException e) {// da mettere InternalServerException(?)
+				if(e.getMessage().equals("This stat doesn't exist"))  {
 				
-				
-			} catch (UserErrorException e) {// da mettere InternalServerException(?)
-
-				try { // se non e' una stat controllo se e' un operatore
-					Set<String> keysAnnidate = joValueOne.keySet();
-					Operator oAnnidato;
-
-					for (String keyAnn : keysAnnidate) { // finto for che controlla se la chiave e' un operatore
-
-						oAnnidato = operatorFilter.getOperator(stkey); // deve essere stkey
-
-						this.opResult(oAnnidato, joValueOne.keySet(), joValueOne, dataset);// joValueAnnidate ->
-																							// joValueOne
-						int j = 0;
-						for (String name : tot_names) {
-							if (oAnnidato.getResponse(j))
-								o.addCondition(true, j);
-							else
-								o.addCondition(false, j);
-							j++;
+					try { // se non e' una stat controllo se e' un operatore
+						Set<String> keysAnnidate = joValueOne.keySet();
+						Operator oAnnidato;
+	
+						for (String keyAnn : keysAnnidate) { // finto for che controlla se la chiave e' un operatore
+	
+							oAnnidato = operatorFilter.getOperator(stkey); // deve essere stkey
+	
+							this.opResult(oAnnidato, joValueOne.keySet(), joValueOne, dataset);// joValueAnnidate ->
+																								// joValueOne
+							int j = 0;
+							for (String name : tot_names) {
+								if (oAnnidato.getResponse(j))
+									o.addCondition(true, j);
+								else
+									o.addCondition(false, j);
+								j++;
+							}
 						}
-
+					} catch (UserErrorException ex) {
+						throw new UserErrorException("At least one parameter is not a stat or a operator"); // comando non riconosciuto, non e' una stat ne un operatore
 					}
-
-				} catch (UserErrorException ex) {
-					throw ex; // comando non ricounosciuto, non e' una stat ne un operatore
-				}
-
+				} else
+					throw e;
 			}
-
 		} // fine for delle chiavi
 	}
 	
