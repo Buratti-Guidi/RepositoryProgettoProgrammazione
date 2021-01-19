@@ -140,6 +140,24 @@ Or | Ritorna le città che soddisfano almeno una condizione | `"or":{"avg":{"Inc
 ## Use Case Diagram
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/UseCase.png?raw=true">
 
+Attori | Descrizione
+------ | -----------
+User | E' l'utente del servizio, colui che esegue le richieste tramite le rotte messe a disposizione
+OpenWeather | E' il servizio Web da cui il programma ottiene le informazioni metereologiche
+
+Caso d'uso | Descrizione
+---------- | -----------
+Inizializzazione capitale & box | Chiamata POST per la scelta della capitale e del box
+Acquisizione di tutte le chiamate orarie contenute nel dataset | Chiamata GET per acquisire il dataset
+Acquisizione delle statistiche richieste su un numero di giorni | Chiamata POST per acquisire le statistiche richieste
+Acquisizione delle statistiche filtrate | Chiamata POST per acquisire le statistiche sulla base dei filtri desiderati
+Acquisizione dati da API | Invocazione dell'API di OpenWeather per acquisire le informazioni metereologiche
+Aggiornamento dataset | Aggiunta dei dati della chiamata all'API di OpenWeather al dataset
+Ottieni dati da dataset | Acquisizione dei dati richiesti dal dataset
+Calcolo delle statistiche | Effettua il calcolo delle statistiche richieste sui dati presenti nel dataset
+Applicazione filtri | Filtra le statistiche sulla base dei filtri richiesti
+Analisi degli operatori | Analizza i filtri sulla base degli operatori logici richiesti
+
 ## Class Diagram
 * ### All Packages
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/allClassesDiagramWAssociation.png?raw=true">
