@@ -162,6 +162,16 @@ Analisi degli operatori | Analizza i filtri sulla base degli operatori logici ri
 * ### All Packages
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/allClassesDiagramWAssociation.png?raw=true">
 
+bg.Weather. | Descrizione
+------- | -----------
+controller | Contiene il controller dell' applicazione
+service | Contiene le classi che si occupano di elaborare le richieste del Controller, di interpretare oggetti JSON, di iterfacciarsi con file e chiamate API, ma anche di calcolare le statistiche e filtrarle
+database | Contiene la classe che modella il database
+model | Contiene i modelli degli oggetti utilizzati
+util | Contiene i package che modellano gli oggetti di tipo statistica, filtro e operatore
+exception | Contiene le classi necessarie alla gestione delle eccezioni: il modello di un messaggio di errore, delle eccezioni personalizzate ed un gestore delle eccezioni 
+tests | Contiene le classi per cui sono stati fatti dei test
+
 * ### Package bg.Weather.controller
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/controller.png?raw=true">
 
