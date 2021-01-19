@@ -150,7 +150,13 @@ public class WeatherServiceImpl implements WeatherService {
 	public JSONArray postData(JSONObject jo) throws UserErrorException,InternalServerException {
 		
 		String from = (String)jo.get("from");
+		if(from == null)
+			throw new UserErrorException("'from' parameter is missing");
+		
 		String to = (String)jo.get("to");
+		if(to == null)
+			throw new UserErrorException("'to' parameter is missing");
+		
 		try {
 
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
