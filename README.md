@@ -7,7 +7,7 @@ In particolare, attraverso il framework SpringBoot, abbiamo realizzato un Restfu
 Per acquisire i dati riguardanti le temperature delle città abbiamo utilizzato le API di [`OpenWeatherMap`](https://openweathermap.org/current#rectangle), le quali consentono di ottenere in tempo reale le informazioni metereologiche di una singola città o di un box di città a seconda della chiamata effettuata.
 
 ## Utilizzo <a name="utilizzo"></a>
-Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`. Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, viene avviato un timer orario che consente di effettuare la chiamata API per l'acquisizione dei dati metereologici. E' necessario eseguire la rotta `/save` per salvare il dataset su un file JSON.                                         
+Avviando il programma esso sarà in "ascolto" alla porta locale `localhost:8080`. Il programma necessita di una prima inizializzazione, che richiede il nome di una capitale e la grandezza in km di un "box" rettangolare. Una volta inizializzato, viene avviato un timer orario che permette ad una scheduled task di effettuare la chiamata API per l'acquisizione dei dati metereologici. E' necessario eseguire la rotta `/save` per salvare il dataset su un file JSON.                                         
 Essendo le API di OpenWeather per i dati storici a pagamento, per simulare un corretto e reale funzionamento del nostro applicativo, abbiamo salvato quotidianamente le informazioni orarie riguardanti alcuni box di città esempio, così da avere accesso a dati reali.                                                        
 I file JSON contenenti i dati messi a disposizione riguardano:
 
@@ -30,7 +30,7 @@ POST | <a href="#rottaFilters"> /filters </a> | Restituisce solamente i valori d
 GET  | /save | Salva l'intero dataset su un file JSON
 GET  | /metadata | Restituisce il tipo e il nome per esteso dei metadati
 
-### Esempi richieste sulle rotte di tipo POST
+### Esempi di rotte di tipo POST (in formato json)
 
 * #### /capital/Paris <a name="rottaCap"></a>
 ```
@@ -58,6 +58,7 @@ Permette di ottenere i dati contenuti nel dataset tra le date specificate.
 {
     "stat1" : "avg",
     "stat2" : "tempMax",
+    "stat3" : "var",
     "days" : 22
 }
 ```
@@ -123,6 +124,8 @@ IncludedEqual | Compreso (e uguale) tra | `"stat":{"IncludedEqual":[1.5, 7]}`
 NotIncluded | Non compreso tra | `"stat":{"NotIncluded":[1.5, 7]}`
 NotIncludedEqual | Non compreso (e uguale) tra | `"stat":{"NotIncluded":[1.1, 2.9]}`
 Not | Diverso | `"stat":{"Not":4.7}`
+
+> NOTA: per stat si intende una <a href="#Stat">statistica</a> qualsiasi 
 
 ### Filtri per nome delle città <a name="filterName"></a>
 Nome filtro | Descrizione | Esempio
@@ -227,7 +230,7 @@ Il WeatherService creerà un JSONArray con le statistiche che viene poi ritornat
 > <a href="#rottaStats"> Come si usa </a>
 
 * ### **POST /filters** <a name="postFilters"></a>
-Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `FilterService`, il quale effettua il parsing della richiesta e interpreta i valori come statistiche o operatori. Vengono poi calcolate le statistiche attraverso `StatsService` e filtrate per mezzo dei filtri specificati. FilterCalc si occupera poi di creare un JSONArray contenente le città che rispettano i filtri e lo ritornerà al WeatherService, il quale lo ritornerà al client.
+Attraverso il metodo `getFilteredStats` di WeatherService viene chiamato `FilterService`, il quale effettua il parsing della richiesta e interpreta i valori come statistiche o operatori. Vengono poi calcolate le statistiche attraverso `StatsService` e filtrate per mezzo dei filtri specificati. `FilterService` si occupera poi di creare un JSONArray contenente le città che rispettano i filtri e lo ritornerà al WeatherService, che lo ritorna al controller, il quale lo ritornerà al client.
 
 <img src="https://github.com/Buratti-Guidi/RepositoryProgettoProgrammazione/blob/main/FiltersSeq.png?raw=true">
 > <a href="#rottaFilters"> Come si usa </a>
